@@ -215,31 +215,51 @@ These are the tabs common to all the screens.
   * (Read/GET) Get current user
 * Sign up
   * (Create/POST) Create a new user
-    ```
+    ```java
     ParseUser user = new ParseUser();
-          user.setUsername(username);
-          user.setPassword(password);
-          user.signUpInBackground(new SignUpCallback() {
-              public void done(ParseException e) {
-                  if (e == null) {
-                      Toast.makeText(LoginActivity.this, "Successful!", Toast.LENGTH_SHORT).show();
-                  } else {
-                      Log.i(TAG,"Failed sign up");
-                      Toast.makeText(LoginActivity.this, "Error signing up!", Toast.LENGTH_SHORT).show();
-                  }
-              }
-          });
+    user.setUsername(username);
+    user.setPassword(password);
+    user.signUpInBackground(new SignUpCallback() {
+        public void done(ParseException e) {
+            if (e == null) {
+                Toast.makeText(LoginActivity.this, "Successful!", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.i(TAG,"Failed sign up");
+                Toast.makeText(LoginActivity.this, "Error signing up!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
     ```
 * Home screen
   * (Read/GET) Get all groups of the user
+    ```java
+    List<Group> groups = LoginActivity.currentUser.getGroups();
     ```
-    ParseQuery<Post> query = ParseQuery.getQuery(Group.class);
-    query.include(Group.KEY_CHAT);
-    query.include(Post.KEY_OWNER);
+  * (Read/GET) Get user information (profile pic, name, and id)
+* People screen
+* Friends fragment
+  * (Read/GET) Get all friends of the user
+  * (Update/PUT) Accept or reject a new invite
+    ```java
+    invite.put(KEY_STATUS, currentStatus);
+    invite.save();
+    ```
+* Groups fragment
+  * (Read/GET) Get all groups for the user
+  * (Create/POST) Accept or reject a new invite
+    ```java
+    invite.put(KEY_STATUS, currentStatus);
+    invite.save();
+    ```
+* Join a New Group Screen
+  * (Read/GET) Get all existing groups
+    ```java
+    ParseQuery query = new ParseQuery(Group.class);
+    query.include(KEY_OWNER);
     query.setLimit(MAX_GROUP_NUM);
-    query.findInBackground(new FindCallback<Post>() {
+    query.findInBackground(new FindCallback<Group>() {
         @Override
-        public void done(List<Post> posts, ParseException e) {
+        public void done(List<Group> groups, ParseException e) {
             if (e != null) {
                 Log.e(TAG,"Failure in querying groups.",e);
                 return;
@@ -248,27 +268,35 @@ These are the tabs common to all the screens.
         }
     });
     ```
-  * (Read/GET) Get user information (profile pic, name, and id)
-* People screen
-* Friends fragment
-  * (Read/GET) Get all friends of the user
-  * (Create/POST) Accept or reject a new invite
-* Groups fragment
-  * (Read/GET) Get all groups for the user
-  * (Create/POST) Accept or reject a new invite
-* Join a New Group Screen
-  * (Read/GET) Get all existing groups
   * (Create/POST) Send an invite
+    ```
+    Invite invite = new Invite();
+    invite.setSender(sender);
+    invite.setRecipient(receiver);
+    invite.setStatus(Invite.STATUS_NONE);
+    invite.save();
+    ```
 * Create a New Group fragment
   * (Create/POST) Create a new group object
+    ```
+    invite.put(KEY_STATUS, currentStatus);
+    invite.save();
+    ```
 * All Chats Screen
   * (Read/GET) Get chats for the current user
 * Chat Details Screen
-  * (Read/GET) Get chats for the current user
+  * (Read/GET) Get messages for the current chat
   * (Create/POST) Create a new message
+    ```
+    invite.put(KEY_STATUS, currentStatus);
+    invite.save();
+    ```
   * (Create/POST) Like (or unlike) a message
 * Group Details Screen
   * (Read/GET) Get all users in a group
   * (Create/POST) Create a new invite
-- [Create basic snippets for each Parse network request]
+    ```
+    invite.put(KEY_STATUS, currentStatus);
+    invite.save();
+    ```
 - [OPTIONAL: List endpoints if using existing API such as Yelp]
