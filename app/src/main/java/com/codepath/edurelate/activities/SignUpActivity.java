@@ -8,6 +8,7 @@ import com.codepath.edurelate.R;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    public static final String TAG = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
