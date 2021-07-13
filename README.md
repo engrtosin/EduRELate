@@ -35,6 +35,8 @@ The aim of this app is to make communication in a school community very easy. It
 * User can add optional profile picture.
 * User can see all friends and groups.
 * User can send messages to people.
+* User can reply to a message
+  * User can double tap to reply to a message.
 * Users can create new groups.
 * A group owner can invite a user
 * User can leave a group
@@ -190,6 +192,7 @@ These are the tabs common to all the screens.
 | ----------- | ----------- | -----------            | ---------- |
 | objectId    | String      | unique id for this message object  |      yes    |
 | createdAt    | Date      | date when message was sent                  |     yes         |
+| replyTo    | Message      | the message this object is replying (if any)     |     no         |
 | sender    | User      | instructor for this course                  |     yes         |
 | usersLikingThis   | Array<User>        | users that have liked this message                    |      yes     |
 #### Invite
