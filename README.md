@@ -39,6 +39,7 @@ The aim of this app is to make communication in a school community very easy. It
   * User can double tap to reply to a message.
 * Users can create new groups.
 * A group owner can invite a user
+  * A user can accept or reject an invite.
 * User can leave a group
 * There should be persistence in logged in user
 * Users can send and accept friend requests
