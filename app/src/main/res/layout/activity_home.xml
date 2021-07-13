@@ -61,20 +61,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvYourGroups"
-        android:layout_above="@id/toolbarBelow"
+        android:layout_above="@id/bottomNavigation"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarBelow"
-        android:minHeight="?attr/actionBarSize"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:titleTextColor="@color/white" >
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:menu="@menu/menu_bottom_navigation">
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </RelativeLayout>
