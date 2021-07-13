@@ -3,6 +3,7 @@ package com.codepath.edurelate.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityHomeBinding;
@@ -16,6 +17,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
     }
 }
