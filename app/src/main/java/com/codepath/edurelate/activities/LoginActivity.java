@@ -24,7 +24,6 @@ public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     public static ParseUser currentUser;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
