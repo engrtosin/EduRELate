@@ -1,23 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tbMain"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/edurelate_green"
-    app:menu="@menu/menu_toolbar_main"
-    android:minHeight="?attr/actionBarSize">
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/tbMain"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:fontFamily="sans-serif"
-        android:text="Title"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:gravity="center"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/edurelate_green" >
 
-</androidx.appcompat.widget.Toolbar>
+        <ImageView
+            android:id="@+id/ivBackBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/black"
+            android:text="Title"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivLogoutBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            app:srcCompat="@drawable/outline_logout_black_24dp" />
+
+    </RelativeLayout>
+</merge>

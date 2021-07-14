@@ -11,7 +11,7 @@ import com.codepath.edurelate.databinding.FragmentFriendsBinding;
 
 public class GroupsFragment extends Fragment {
 
-    public static final String TAG = "FriendsFragment";
+    public static final String TAG = "GroupsFragment";
 
     FragmentFriendsBinding binding;
 
