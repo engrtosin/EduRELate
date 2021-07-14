@@ -1,5 +1,6 @@
 package com.codepath.edurelate.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +22,7 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
-    ActivityLoginBinding binding;
+    private ActivityLoginBinding binding;
     public static ParseUser currentUser;
 
     @Override
@@ -51,51 +52,19 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String username = binding.etUsername.getText().toString();
                 String password = binding.etPassword.getText().toString();
-                signUpUser(username,password);
+                goSignUpActivity(username,password);
             }
         });
     }
 
-//    private void queryCurrentUser() {
-//        ParseQuery<ParseUser> query = ParseUser.getQuery();
-//        query.include(PostsAdapter.USER_PIC_KEY);
-//        Log.i(TAG,"current user id: " + currentUser.getObjectId());
-//        query.whereEqualTo("objectId",currentUser.getObjectId());
-//        query.findInBackground(new FindCallback<ParseUser>() {
-//            @Override
-//            public void done(List<ParseUser> objects, ParseException e) {
-//                if (e != null) {
-//                    Log.e(TAG,"Error getting current user: " + e.getMessage(),e);
-//                    return;
-//                }
-//                currentUser = objects.get(0);
-//            }
-//        });
-//    }
-
-    private void signUpUser(String username,String password) {
-        // Create the ParseUser
-        ParseUser user = new ParseUser();
-        // Set core properties
-        user.setUsername(username);
-        user.setPassword(password);
-        // Invoke signUpInBackground
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.i(TAG,"Successful sign up");
-                    Toast.makeText(LoginActivity.this, "Successful!", Toast.LENGTH_SHORT).show();
-                    loginUser(username,password);
-                    // Hooray! Let them use the app now.
-                } else {
-                    Log.i(TAG,"Failed sign up");
-                    Toast.makeText(LoginActivity.this, "Error signing up!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    private void goSignUpActivity(String username, String password) {
+        Intent i = new Intent(LoginActivity.this,SignUpActivity.class);
+        i.putExtra("username",username);
+        i.putExtra("password",password);
+        startActivity(i);
     }
 
-    private void loginUser(String username, String password) {
+    protected void loginUser(String username, String password) {
         Log.i(TAG, "Trying to login in user: " + username);
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
@@ -112,9 +81,22 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void goHomeActivity() {
+    public static void logoutUser(Context context) {
+        ParseUser.logOut();
+        currentUser = ParseUser.getCurrentUser();
+        Intent i = new Intent(context, LoginActivity.class);
+        Log.i(TAG,"in login activity after logout");
+        context.startActivity(i);
+    }
+
+    protected void goHomeActivity() {
         Intent i = new Intent(this, HomeActivity.class);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

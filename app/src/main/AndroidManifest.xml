@@ -13,10 +13,11 @@
         android:roundIcon="@drawable/edurelate_round_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Edurelate">
-        <activity android:name=".activities.GroupDetailsActivity"></activity>
+        <activity android:name=".activities.ProfileActivity"></activity>
+        <activity android:name=".activities.GroupDetailsActivity" />
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.HomeActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

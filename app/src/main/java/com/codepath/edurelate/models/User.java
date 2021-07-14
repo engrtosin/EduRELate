@@ -6,12 +6,8 @@ import com.parse.ParseUser;
 public class User {
 
     public static final String TAG = "UserModel";
-
-    public static void updateInviteStatus(Invite invite) {
-        // add the recipient to the group or as a friend to sender
-        // send a message to the recipient
-        // send a message to the sender
-    }
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_PASSWORD = "password";
 
     public static Message sendMessage(String body, ParseUser sender, Group recipient, Message replyTo) throws ParseException {
         Message message = new Message();
@@ -22,5 +18,11 @@ public class User {
         message.save();
         recipient.getChat().addMessage(message);
         return message;
+    }
+
+    public static void updateInviteStatus(Invite invite) {
+        // add the recipient to the group or as a friend to sender
+        // send a message to the recipient
+        // send a message to the sender
     }
 }

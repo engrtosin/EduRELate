@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".activities.SignUpActivity">
 
     <TextView
@@ -73,14 +74,14 @@
         android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/etLastName"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="156dp"
-        android:layout_marginBottom="329dp"
         android:text="Sign Up" />
 
     <TextView
@@ -130,4 +131,12 @@
         android:layout_marginEnd="59dp"
         android:layout_toStartOf="@+id/etLastName"
         android:text="Last name:" />
+
+    <TextView
+        android:id="@+id/tvLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSignUp"
+        android:layout_centerHorizontal="true"
+        android:text="Do you have an account? Login" />
 </RelativeLayout>
