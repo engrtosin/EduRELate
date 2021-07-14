@@ -50,7 +50,8 @@ The aim of this app is to make communication in a school community very easy. It
 * User cannot use a used username.
 * User can change profile details.
 * User can hide a chat from all chats.
-  * User can show hidden chats.
+  * User can see hidden chats.
+  * User can show a chat.
 * Groups in the Home screen are arranged according to the most used
 * Users can create events
 * Events can be synced with Google Calendar
