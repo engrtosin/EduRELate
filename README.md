@@ -29,30 +29,36 @@ The aim of this app is to make communication in a school community very easy. It
 **Required Must-have Stories**
 
 * User can login
-* User can logout
 * User can register a new account.
   * User can specify their role.
-* User can add optional profile picture.
-* User can see all friends and groups.
+* There should be persistence in logged in user
+* User can logout
+* User can see all friends and groups in people screen.
 * User can send messages to people.
 * User can reply to a message
   * User can double tap to reply to a message.
+* User can like a message.
 * Users can create new groups.
 * A group owner can invite a user
   * A user can accept or reject an invite.
 * User can leave a group
-* There should be persistence in logged in user
 * Users can send and accept friend requests
 * ...
 
 **Optional Nice-to-have Stories**
-
+* User can add optional profile picture.
+* User cannot use a used username.
+* User can change profile details.
+* User can hide a chat from all chats.
+  * User can show hidden chats.
 * Groups in the Home screen are arranged according to the most used
 * Users can create events
 * Events can be synced with Google Calendar
 * Users can send files and photos.
     * Files and images in messages can be previewed.
 * User can see who is typing in chat.
+* User can give different reactions to a message.
+  * User can hold the like button to see the different reactions.
 * Students can set up office hours with their instructors.
     * Students can see the available spaces
     * Students or instructors can cancel an appointment two hours earlier
