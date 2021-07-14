@@ -66,6 +66,7 @@ The aim of this app is to make communication in a school community very easy. It
 * Students can search for other students using the app by name.
     * Students can search for other students by major.
 * Users can make video calls on the app
+* If a list is empty, show a message "No <items> yet".
 * ...
 
 ### 2. Screen Archetypes
