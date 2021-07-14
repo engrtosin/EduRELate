@@ -3,6 +3,7 @@ package com.codepath.edurelate;
 import android.app.Application;
 
 import com.codepath.edurelate.models.Chat;
+import com.codepath.edurelate.models.Friend;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Message;
@@ -20,6 +21,7 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Group.class);
+        ParseObject.registerSubclass(Friend.class);
         ParseObject.registerSubclass(Chat.class);
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Invite.class);
