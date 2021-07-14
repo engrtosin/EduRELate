@@ -1,28 +1,22 @@
 package com.codepath.edurelate.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.codepath.edurelate.R;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.codepath.edurelate.databinding.ActivityAllMembersBinding;
 import com.codepath.edurelate.databinding.ActivityProfileBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 
-public class ProfileActivity extends AppCompatActivity {
+public class AllMembersActivity extends AppCompatActivity {
 
-    public static final String TAG = "ProfileActivity";
+    public static final String TAG = "AllMembersActivity";
 
-    ActivityProfileBinding binding;
+    ActivityAllMembersBinding binding;
     ToolbarMainBinding tbMainBinding;
 
     @Override
@@ -30,7 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Log.i(TAG,"in on create");
-        binding = ActivityProfileBinding.inflate(getLayoutInflater());
+        binding = ActivityAllMembersBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
@@ -43,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG,"logout clicked");
-                LoginActivity.logoutUser(ProfileActivity.this);
+                LoginActivity.logoutUser(AllMembersActivity.this);
             }
         });
     }
