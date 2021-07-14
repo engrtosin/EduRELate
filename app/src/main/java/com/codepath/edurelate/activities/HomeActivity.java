@@ -37,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setClickListeners() {
+
     }
 
     private void goProfileActivity() {

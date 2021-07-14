@@ -1,5 +1,6 @@
 package com.codepath.edurelate.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -81,12 +82,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public static void logoutUser(Context context) {
+    public static void logoutUser(Activity activity) {
         ParseUser.logOut();
-        currentUser = ParseUser.getCurrentUser();
-        Intent i = new Intent(context, LoginActivity.class);
+        Intent i = new Intent(activity, LoginActivity.class);
+        activity.startActivity(i);
+        activity.finish();
         Log.i(TAG,"in login activity after logout");
-        context.startActivity(i);
+        currentUser = ParseUser.getCurrentUser();
     }
 
     protected void goHomeActivity() {
