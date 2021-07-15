@@ -173,4 +173,7 @@
         android:textAllCaps="false"
         android:text="People" />
 
+    <include
+        layout="@layout/bottom_navigation" />
+
 </RelativeLayout>

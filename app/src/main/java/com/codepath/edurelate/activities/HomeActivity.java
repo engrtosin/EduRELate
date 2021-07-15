@@ -3,6 +3,7 @@ package com.codepath.edurelate.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,16 +39,25 @@ public class HomeActivity extends AppCompatActivity {
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
         bottomNavigation.setSelectedItemId(R.id.action_home);
-//        bottomNavBinding = BottomNavigationBinding.inflate(getLayoutInflater(),(ViewGroup) view);
-//        Log.i(TAG,"bottom navigation inflated");
-//        bottomNavBinding.bottomNavigation.setSelectedItemId(R.id.action_home);
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+
         setClickListeners();
     }
 
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
 
+        setToolbarClickListeners();
+        setBottomNavigationListener(bottomNavigation, HomeActivity.this);
+    }
+
+    private void setToolbarClickListeners() {
+        tbMainBinding.ivBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         tbMainBinding.ivLogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,31 +65,48 @@ public class HomeActivity extends AppCompatActivity {
                 LoginActivity.logoutUser(HomeActivity.this);
             }
         });
+    }
 
+    public static void setBottomNavigationListener(BottomNavigationView bottomNavigation, Activity activity) {
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
                 Log.i(TAG,"bottom navigation item selected");
                 // TODO: correct if-else structure to remove else if possible
                 if (item.getItemId() == R.id.action_chats) {
-                    goAllChatsActivity();
+                    if (!(activity instanceof AllChatsActivity)) {
+                        goAllChatsActivity(activity);
+                    }
+                }
+                else if (item.getItemId() == R.id.action_home) {
+                    if (!(activity instanceof HomeActivity)) {
+                        goHomeActivity(activity);
+                    }
                 }
                 else if (item.getItemId() == R.id.action_profile) {
-                    goProfileActivity();
+                    if (!(activity instanceof ProfileActivity)) {
+                        goProfileActivity(activity);
+                    }
                 }
                 return true;
             }
         });
     }
 
-    private void goAllChatsActivity() {
-        Intent i = new Intent(this, AllChatsActivity.class);
-        startActivity(i);
+    /* ------------------ static navigation methods ----------------------- */
+    public static void goAllChatsActivity(Activity activity) {
+        Intent i = new Intent(activity, AllChatsActivity.class);
+        activity.startActivity(i);
     }
 
-    private void goProfileActivity() {
-        Intent i = new Intent(this, ProfileActivity.class);
+    public static void goHomeActivity(Activity activity) {
+        Intent i = new Intent(activity, HomeActivity.class);
+        activity.startActivity(i);
+    }
+
+    public static void goProfileActivity(Activity activity) {
+        Intent i = new Intent(activity, ProfileActivity.class);
         i.putExtra(LoginActivity.KEY_CURRENT_USER, Parcels.wrap(LoginActivity.currentUser));
-        startActivity(i);
+        activity.startActivity(i);
     }
 }

@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
                     // TODO: Notify the user of the error
+                    Toast.makeText(LoginActivity.this,"Error logging in.",Toast.LENGTH_SHORT).show();
                     Log.e(TAG,"Login error occured",e);
                     return;
                 }
