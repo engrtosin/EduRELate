@@ -11,10 +11,15 @@ import android.widget.Toast;
 
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivitySignUpBinding;
+import com.codepath.edurelate.models.Friend;
+import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignUpActivity extends LoginActivity {
 
@@ -70,6 +75,10 @@ public class SignUpActivity extends LoginActivity {
         // Set core properties
         user.setUsername(username);
         user.setPassword(password);
+        user.put(User.KEY_FIRST_NAME,firstName);
+        user.put(User.KEY_LAST_NAME,lastName);
+        user.put(User.KEY_FRIENDS,new ArrayList<>());
+        user.put(User.KEY_GROUPS, new ArrayList<>());
         // Invoke signUpInBackground
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {

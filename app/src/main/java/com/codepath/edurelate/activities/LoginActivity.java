@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.codepath.edurelate.databinding.ActivityLoginBinding;
+import com.codepath.edurelate.models.User;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -25,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
     public static final String KEY_CURRENT_USER = "current_user";
     private ActivityLoginBinding binding;
-    public static ParseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(view);
 
         if (ParseUser.getCurrentUser() != null) {
-            currentUser = ParseUser.getCurrentUser();
+            User.currentUser = ParseUser.getCurrentUser();
             goHomeActivity();
         }
 
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e(TAG,"Login error occured",e);
                     return;
                 }
-                currentUser = ParseUser.getCurrentUser();
+                User.currentUser = ParseUser.getCurrentUser();
                 goHomeActivity();
                 Toast.makeText(LoginActivity.this,"Successful!",Toast.LENGTH_SHORT).show();
             }
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         activity.startActivity(i);
         activity.finish();
         Log.i(TAG,"in login activity after logout");
-        currentUser = ParseUser.getCurrentUser();
+        User.currentUser = ParseUser.getCurrentUser();
     }
 
     protected void goHomeActivity() {

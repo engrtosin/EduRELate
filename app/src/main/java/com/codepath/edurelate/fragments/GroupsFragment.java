@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.codepath.edurelate.databinding.FragmentFriendsBinding;
 import com.codepath.edurelate.databinding.FragmentGroupsBinding;
+import com.codepath.edurelate.interfaces.PeopleFragmentInterface;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +19,9 @@ public class GroupsFragment extends Fragment {
     public static final String TAG = "GroupsFragment";
 
     FragmentGroupsBinding binding;
+    PeopleFragmentInterface peopleListener;
 
+    /* ------------ constructors ------------------ */
     public GroupsFragment() {
         // Required empty public constructor
     }
@@ -31,6 +33,7 @@ public class GroupsFragment extends Fragment {
         return fragment;
     }
 
+    /* ------------ fragment lifecycle methods ------------------ */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,7 @@ public class GroupsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        peopleListener = (PeopleFragmentInterface) getActivity();
         setClickListeners();
     }
 
@@ -57,11 +61,12 @@ public class GroupsFragment extends Fragment {
         binding = null;
     }
 
+    /* ------------- other methods --------------- */
     private void setClickListeners() {
         binding.tvNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                peopleListener.joinNewGroup();
             }
         });
     }

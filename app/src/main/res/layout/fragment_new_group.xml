@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_new_group.xml -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/new_group"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:padding="15dp"
+    android:orientation="vertical"  >
+
+    <TextView
+        android:id="@+id/lblGroupName"
+        android:text="Group Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblGroupName"
+        android:layout_marginTop="10dp"
+        android:inputType="text"
+        android:imeOptions="actionDone" />
+
+    <ImageView
+        android:id="@+id/ivDone"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignEnd="@id/etGroupName"
+        android:layout_below="@id/etGroupName"
+        app:srcCompat="@drawable/ic_baseline_done_24" />
+</RelativeLayout>

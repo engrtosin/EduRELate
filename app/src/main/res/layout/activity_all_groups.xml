@@ -7,11 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".activities.AllGroupsActivity">
 
+    <include
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
     <TextView
         android:id="@+id/tvActNewGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/tbMain"
         android:layout_marginTop="30dp"
         android:text="Create a new group"
         android:textStyle="bold"/>
@@ -23,4 +30,7 @@
         android:layout_below="@id/tvActNewGroup"
         android:padding="10dp"
         android:layout_marginTop="10dp"/>
+
+    <include
+        layout="@layout/bottom_navigation" />
 </RelativeLayout>

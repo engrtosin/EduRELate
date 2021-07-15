@@ -1,11 +1,17 @@
 package com.codepath.edurelate.models;
 
+import android.util.Log;
+
+import com.codepath.edurelate.activities.LoginActivity;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Parcel(analyze = Group.class)
@@ -16,10 +22,31 @@ public class Group extends ParseObject {
     public static final String KEY_GROUP_NAME = "groupName";
     public static final String KEY_IS_FRIEND_GROUP = "isFriendGroup";
     public static final String KEY_OWNER = "owner";
-    public static final String KEY_USERS = "users";
     public static final String KEY_CHAT = "chat";
+    private static final String KEY_MEMBERS = "members";
 
     public Chat chat;
+
+    public static Group newGroup(String groupName) {
+        Group group = new Group();
+        group.setGroupName(groupName);
+        group.setIsFriendGroup(false);
+        group.setNewMembers();
+        group.setNewChat();
+        group.setOwner(User.currentUser);
+        group.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error saving group: " + e.getMessage(), e);
+                    return;
+                }
+                Log.i(TAG,"Group successfully created!");
+            }
+        });
+        User.addNewGroup(group,User.currentUser);
+        return group;
+    }
 
     public String getGroupName() {
         return getString(KEY_GROUP_NAME);
@@ -37,8 +64,8 @@ public class Group extends ParseObject {
         return chat;
     }
 
-    public List<ParseUser> getUsers() {
-        return getList(KEY_USERS);
+    public List<Member> getMembers() {
+        return getList(KEY_MEMBERS);
     }
 
     public void setGroupName(String groupName) {
@@ -53,8 +80,26 @@ public class Group extends ParseObject {
         put(KEY_OWNER,owner);
     }
 
+    public void addMember(Member member) {
+        addUnique(KEY_MEMBERS,member);
+    }
+
+    public void setNewMembers() {
+        List<Member> members = new ArrayList<>();
+        put(KEY_MEMBERS,members);
+    }
+
     public void setNewChat() {
         this.chat = new Chat();
+        setChatFields();
+        chat.saveInBackground();
         put(KEY_CHAT,this.chat);
+    }
+
+    /* ------------- CHAT METHODS ------------------- */
+    public void setChatFields() {
+        this.chat.put(Chat.KEY_ISGROUPCHAT,true);
+        List<Message> messages = new ArrayList<>();
+        this.chat.put(Chat.KEY_MESSAGES,messages);
     }
 }

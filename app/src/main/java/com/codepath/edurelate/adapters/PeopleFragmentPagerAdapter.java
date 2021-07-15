@@ -12,15 +12,25 @@ import com.codepath.edurelate.fragments.GroupsFragment;
 
 public class PeopleFragmentPagerAdapter  extends FragmentPagerAdapter {
 
+    public interface PeopleFragPagerAdapterInterface {
+        public void newFriendsFragment(FriendsFragment friendsFragment);
+        public void newGroupsFragment(GroupsFragment groupsFragment);
+    }
+
     public static final String TAG = "PeopleFragmentPagerAdapter";
 
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Friends", "Groups" };
     private Context context;
+    private PeopleFragPagerAdapterInterface mListener;
 
     public PeopleFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
+    }
+
+    public void setListener(PeopleFragPagerAdapterInterface mListener) {
+        this.mListener = mListener;
     }
 
     @Override
@@ -32,12 +42,14 @@ public class PeopleFragmentPagerAdapter  extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         if (position == 0) {
             Log.i(TAG,"" + position);
-            return FriendsFragment.newInstance();
+            FriendsFragment friendsFragment = FriendsFragment.newInstance();
+            return friendsFragment;
         }
         else if (position == 1) {
             // TODO: remove this else statement
             Log.i(TAG,"" + position);
-            return GroupsFragment.newInstance();
+            GroupsFragment groupsFragment = GroupsFragment.newInstance();
+            return groupsFragment;
         }
         return GroupsFragment.newInstance();
     }

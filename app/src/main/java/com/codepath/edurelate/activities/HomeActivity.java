@@ -11,11 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityHomeBinding;
 import com.codepath.edurelate.databinding.BottomNavigationBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
+import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseFile;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
@@ -27,7 +30,6 @@ public class HomeActivity extends AppCompatActivity {
     ActivityHomeBinding binding;
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
-    BottomNavigationBinding bottomNavBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,22 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigation.setSelectedItemId(R.id.action_home);
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
 
+        initializeViews();
         setClickListeners();
+    }
+
+    private void initializeViews() {
+        ParseFile image = User.currentUser.getParseFile(User.KEY_USER_PIC);
+        Log.i(TAG, User.currentUser.getUsername());
+        Log.i(TAG,"curr user image: " + image);
+        if (image != null) {
+            Log.i(TAG,"about to glide curr user pic");
+            Glide.with(this).load(image.getUrl()).into(binding.ivUserPic);
+        }
+        String firstName = User.currentUser.getString(User.KEY_FIRST_NAME);
+        String lastName = User.currentUser.getString(User.KEY_LAST_NAME);
+        binding.tvName.setText(firstName + " " + lastName);
+        binding.tvUsername.setText("@" + User.currentUser.getUsername());
     }
 
     private void setClickListeners() {
@@ -104,7 +121,7 @@ public class HomeActivity extends AppCompatActivity {
         this.startActivity(i);
     }
 
-    /* ------------------ static navigation methods ----------------------- */
+    /* ------------------ static activity intent methods ----------------------- */
     public static void navAllChatsActivity(Activity activity) {
         Intent i = new Intent(activity, AllChatsActivity.class);
         activity.startActivity(i);
@@ -117,7 +134,17 @@ public class HomeActivity extends AppCompatActivity {
 
     public static void navProfileActivity(Activity activity) {
         Intent i = new Intent(activity, ProfileActivity.class);
-        i.putExtra(LoginActivity.KEY_CURRENT_USER, Parcels.wrap(LoginActivity.currentUser));
+        i.putExtra(LoginActivity.KEY_CURRENT_USER, Parcels.wrap(User.currentUser));
+        activity.startActivity(i);
+    }
+
+    public static void goAllGroupsActivity(Activity activity) {
+        Intent i = new Intent(activity, AllGroupsActivity.class);
+        activity.startActivity(i);
+    }
+
+    public static void goAllUsersActivity(Activity activity) {
+        Intent i = new Intent(activity, AllUsersActivity.class);
         activity.startActivity(i);
     }
 }

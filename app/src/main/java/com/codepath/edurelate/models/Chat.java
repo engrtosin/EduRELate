@@ -10,7 +10,13 @@ import org.parceler.Parcel;
 public class Chat extends ParseObject {
 
     public static final String TAG = "ChatModel";
+    public static final String KEY_ISGROUPCHAT = "isGroupChat";
+    public static final String KEY_MESSAGES = "messages";
 
     public void addMessage(Message message) {
     }
+
+    public void addReply(Message message) {
+    }
+
 }
