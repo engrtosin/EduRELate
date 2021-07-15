@@ -6,6 +6,7 @@ import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Friend;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
+import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.Message;
 import com.codepath.edurelate.models.User;
 import com.parse.Parse;
@@ -25,6 +26,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Chat.class);
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Invite.class);
+        ParseObject.registerSubclass(Member.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.applicationId))

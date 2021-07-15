@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvReplyMsg"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/ivLikeInMsg"
+        android:layout_marginStart="5dp"
         app:cardBackgroundColor="@color/login_blue"
         app:cardCornerRadius="20dp" >
 
@@ -52,4 +52,13 @@
         android:layout_below="@id/tvReplyMsg"
         android:layout_toEndOf="@id/cvInTxt"
         app:srcCompat="@drawable/outline_subdirectory_arrow_right_24" />
+
+    <ImageView
+        android:id="@+id/ivLikeInMsg"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_alignTop="@id/cvInTxt"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/ufi_heart" />
 </RelativeLayout>
