@@ -58,7 +58,8 @@
         android:layout_toEndOf="@id/cvUserPic"
         android:layout_marginTop="5dp"
         android:layout_alignStart="@id/tvName"
-        android:text="/@oluwatosin" />
+        android:text="People"
+        android:textStyle="bold" />
 
     <include
         layout="@layout/line_demarcation"

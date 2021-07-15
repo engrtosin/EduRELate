@@ -1,6 +1,7 @@
 package com.codepath.edurelate.adapters;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -13,8 +14,8 @@ public class PeopleFragmentPagerAdapter  extends FragmentPagerAdapter {
 
     public static final String TAG = "PeopleFragmentPagerAdapter";
 
-    final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3" };
+    final int PAGE_COUNT = 2;
+    private String tabTitles[] = new String[] { "Friends", "Groups" };
     private Context context;
 
     public PeopleFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -29,11 +30,13 @@ public class PeopleFragmentPagerAdapter  extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (position == 1) {
+        if (position == 0) {
+            Log.i(TAG,"" + position);
             return FriendsFragment.newInstance();
         }
-        else if (position == 2) {
+        else if (position == 1) {
             // TODO: remove this else statement
+            Log.i(TAG,"" + position);
             return GroupsFragment.newInstance();
         }
         return GroupsFragment.newInstance();

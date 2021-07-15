@@ -13,6 +13,8 @@
         android:roundIcon="@drawable/edurelate_round_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Edurelate">
+        <activity android:name=".activities.AllGroupsActivity"></activity>
+        <activity android:name=".activities.AllUsersActivity" />
         <activity android:name=".activities.AllChatsActivity" />
         <activity android:name=".activities.AllMembersActivity" />
         <activity android:name=".activities.ChatActivity" />

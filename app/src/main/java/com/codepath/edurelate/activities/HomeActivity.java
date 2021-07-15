@@ -46,9 +46,15 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
-
         setToolbarClickListeners();
         setBottomNavigationListener(bottomNavigation, HomeActivity.this);
+
+        binding.tvActPeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goPeopleActivity();
+            }
+        });
     }
 
     private void setToolbarClickListeners() {
@@ -75,17 +81,17 @@ public class HomeActivity extends AppCompatActivity {
                 // TODO: correct if-else structure to remove else if possible
                 if (item.getItemId() == R.id.action_chats) {
                     if (!(activity instanceof AllChatsActivity)) {
-                        goAllChatsActivity(activity);
+                        navAllChatsActivity(activity);
                     }
                 }
                 else if (item.getItemId() == R.id.action_home) {
                     if (!(activity instanceof HomeActivity)) {
-                        goHomeActivity(activity);
+                        navHomeActivity(activity);
                     }
                 }
                 else if (item.getItemId() == R.id.action_profile) {
                     if (!(activity instanceof ProfileActivity)) {
-                        goProfileActivity(activity);
+                        navProfileActivity(activity);
                     }
                 }
                 return true;
@@ -93,18 +99,23 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    private void goPeopleActivity() {
+        Intent i = new Intent(HomeActivity.this, PeopleActivity.class);
+        this.startActivity(i);
+    }
+
     /* ------------------ static navigation methods ----------------------- */
-    public static void goAllChatsActivity(Activity activity) {
+    public static void navAllChatsActivity(Activity activity) {
         Intent i = new Intent(activity, AllChatsActivity.class);
         activity.startActivity(i);
     }
 
-    public static void goHomeActivity(Activity activity) {
+    public static void navHomeActivity(Activity activity) {
         Intent i = new Intent(activity, HomeActivity.class);
         activity.startActivity(i);
     }
 
-    public static void goProfileActivity(Activity activity) {
+    public static void navProfileActivity(Activity activity) {
         Intent i = new Intent(activity, ProfileActivity.class);
         i.putExtra(LoginActivity.KEY_CURRENT_USER, Parcels.wrap(LoginActivity.currentUser));
         activity.startActivity(i);

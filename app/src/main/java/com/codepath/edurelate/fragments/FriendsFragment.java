@@ -2,6 +2,8 @@ package com.codepath.edurelate.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -10,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.FragmentFriendsBinding;
+
+import org.jetbrains.annotations.NotNull;
 
 public class FriendsFragment extends Fragment {
 
@@ -43,8 +47,23 @@ public class FriendsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setClickListeners();
+    }
+
     @Override public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void setClickListeners() {
+        binding.tvNewFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }
