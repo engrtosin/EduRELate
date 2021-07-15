@@ -23,6 +23,7 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
+    public static final String KEY_CURRENT_USER = "current_user";
     private ActivityLoginBinding binding;
     public static ParseUser currentUser;
 

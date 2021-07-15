@@ -80,7 +80,7 @@
         android:layout_width="30dp"
         android:layout_height="50dp"
         android:scaleType="fitXY"
-        android:scaleX="-1f"
+        android:scaleX="-1"
         android:layout_below="@id/tvReplyMsg"
         android:layout_toEndOf="@id/cvInTxt"
         app:srcCompat="@drawable/outline_subdirectory_arrow_right_24" />

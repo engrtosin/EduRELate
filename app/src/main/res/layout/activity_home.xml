@@ -89,15 +89,7 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:menu="@menu/menu_bottom_navigation">
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+    <include
+        layout="@layout/bottom_navigation" />
 
 </RelativeLayout>
