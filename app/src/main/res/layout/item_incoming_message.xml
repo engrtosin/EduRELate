@@ -6,10 +6,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cvSenderPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@id/tvSenderName"
+        android:layout_marginStart="10dp"
+        app:cardCornerRadius="13dp" >
+
+        <ImageView
+            android:id="@+id/ivSenderPic"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            app:srcCompat="@drawable/baseline_person_18" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvSenderName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="200dp"
+        android:paddingVertical="0dp"
+        android:paddingHorizontal="10dp"
+        android:gravity="center"
+        android:layout_below="@id/tvReplyMsg"
+        android:layout_toEndOf="@id/cvSenderPic"
+        android:layout_marginBottom="5dp"
+        android:text="Friend 1"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/cvInTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvReplyMsg"
+        android:layout_below="@id/tvSenderName"
         android:layout_toEndOf="@id/ivLikeInMsg"
         android:layout_marginStart="5dp"
         app:cardBackgroundColor="@color/login_blue"
