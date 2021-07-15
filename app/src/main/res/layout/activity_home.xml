@@ -50,11 +50,30 @@
         android:text="/@oluwatosin" />
 
     <TextView
+        android:id="@+id/tvActPeople"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvUsername"
+        android:layout_toEndOf="@id/cvUserPic"
+        android:layout_marginTop="5dp"
+        android:layout_alignStart="@id/tvName"
+        android:text="/@oluwatosin" />
+
+    <include
+        layout="@layout/line_demarcation"
+        android:id="@+id/vDemarcate"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tvActPeople"
+        android:layout_marginTop="5dp"
+        android:visibility="invisible"/>
+
+    <TextView
         android:id="@+id/tvYourGroups"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cvUserPic"
-        android:layout_marginTop="20dp"
+        android:layout_below="@id/vDemarcate"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:text="Your Groups" />
 
