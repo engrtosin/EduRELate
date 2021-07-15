@@ -12,4 +12,8 @@
     <color name="boundary_gray">#DCDCDC</color>
     <color name="medium_red">#EA094E</color>
     <color name="edurelate_green">#15C564</color>
+    <color name="incoming_green">#0FE925</color>
+    <color name="outgoing_blue">#1896FA</color>
+    <color name="announcement_background">#CFCECE</color>
+    <color name="announcement_text_gray">#2E2C2C</color>
 </resources>
