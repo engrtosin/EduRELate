@@ -23,6 +23,7 @@
         app:cardCornerRadius="50dp" >
 
         <ImageView
+            android:id="@+id/ivGroupPic"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="fitXY"
@@ -111,6 +112,7 @@
             app:cardCornerRadius="35dp" >
 
             <ImageView
+                android:id="@+id/ivOwnerPic"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:scaleType="fitXY"
