@@ -31,19 +31,32 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
     GroupsAdapterInterface mListener;
 
     public interface GroupsAdapterInterface {
-        public void groupClicked(Group group);
-        public void ownerClicked(ParseUser owner);
+        void groupClicked(Group group);
+        void ownerClicked(ParseUser owner);
     }
 
     public void setAdapterListener(GroupsAdapterInterface groupsAdapterInterface) {
         this.mListener = groupsAdapterInterface;
     }
 
+    /* ---------------- constructor ------------------- */
     public GroupsAdapter(Context context, List<Group> groups) {
         this.context = context;
         this.groups = groups;
     }
 
+    /* ------------------- adapter methods ------------------- */
+    public void addAll(List<Group> objects) {
+        groups.addAll(objects);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        groups.clear();
+        notifyDataSetChanged();
+    }
+
+    /* --------------------- viewholder methods ----------------------- */
     @NonNull
     @NotNull
     @Override
@@ -69,17 +82,20 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         return groups.size();
     }
 
+    /* ---------------------- ViewHolder class ---------------------- */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ItemGroupBinding itemGroupBinding;
         Group group;
 
+        /* ------------- constructor -------------- */
         public ViewHolder(@NonNull @NotNull ItemGroupBinding itemGroupBinding) {
             super(itemGroupBinding.getRoot());
             this.itemGroupBinding = itemGroupBinding;
             setViewOnClickListeners();
         }
 
+        /* ---------------- other helper methods --------------------- */
         private void setViewOnClickListeners() {
             itemGroupBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override

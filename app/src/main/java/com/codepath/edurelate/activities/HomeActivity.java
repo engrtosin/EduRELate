@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.edurelate.R;
@@ -54,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigation.setSelectedItemId(R.id.action_home);
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
 
-        groups = User.getGroups(User.currentUser);
+        groups = User.getNonFriendGroups(User.currentUser);
         Log.i(TAG,"Number of current user's groups: " + groups.size());
         groupsAdapter = new GroupsAdapter(HomeActivity.this,groups);
         setAdapterInterface();
@@ -71,26 +72,8 @@ public class HomeActivity extends AppCompatActivity {
         setClickListeners();
     }
 
-    private void setAdapterInterface() {
-        groupsAdapter.setAdapterListener(new GroupsAdapter.GroupsAdapterInterface() {
-            @Override
-            public void groupClicked(Group group) {
-                goGroupDetailsActivity(group);
-            }
-
-            @Override
-            public void ownerClicked(ParseUser owner) {
-                goProfileActivity(owner);
-            }
-        });
-    }
-
     private void initializeViews() throws ParseException {
-        TitleActivityBinding taBinding = TitleActivityBinding.inflate(getLayoutInflater(),
-                binding.getRoot(),false);
-        taBinding.tvActivityTitle.setText(getString(R.string.home_title));
-        binding.getRoot().addView(taBinding.tvActivityTitle);
-
+        setToolbarTitle(binding.getRoot(),getString(R.string.home_title));
         tbMainBinding.tvActivityTitle.setText(getString(R.string.home_title));
         ParseFile image = User.currentUser.getParseFile(User.KEY_USER_PIC);
         Log.i(TAG, User.currentUser.getUsername());
@@ -101,6 +84,11 @@ public class HomeActivity extends AppCompatActivity {
         }
         binding.tvName.setText(User.getFullName(User.currentUser));
         binding.tvUsername.setText("@" + User.currentUser.getUsername());
+    }
+
+    public static void setToolbarTitle(View rootView, String title) {
+        TextView tvActivityTitle = rootView.findViewById(R.id.tvActivityTitle);
+        tvActivityTitle.setText(title);
     }
 
     private void setClickListeners() {
@@ -179,8 +167,22 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    /* --------------------- intent navigation methods ------------------------ */
+    /* ------------------------- interface methods --------------------------- */
+    private void setAdapterInterface() {
+        groupsAdapter.setAdapterListener(new GroupsAdapter.GroupsAdapterInterface() {
+            @Override
+            public void groupClicked(Group group) {
+                goGroupDetailsActivity(group);
+            }
 
+            @Override
+            public void ownerClicked(ParseUser owner) {
+                goProfileActivity(owner);
+            }
+        });
+    }
+
+    /* --------------------- intent navigation methods ------------------------ */
     private void goPeopleActivity() {
         Intent i = new Intent(HomeActivity.this, PeopleActivity.class);
         this.startActivity(i);
@@ -221,6 +223,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public static void goAllUsersActivity(Activity activity) {
+        Log.i(TAG,"Go to all users activity from " + activity.getLocalClassName());
         Intent i = new Intent(activity, AllUsersActivity.class);
         activity.startActivity(i);
     }

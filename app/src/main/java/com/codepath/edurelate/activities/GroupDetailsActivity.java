@@ -1,6 +1,7 @@
 package com.codepath.edurelate.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,15 +13,18 @@ import com.bumptech.glide.Glide;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityGroupDetailsBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
+import com.codepath.edurelate.fragments.NewPicDialogFragment;
+import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
-public class GroupDetailsActivity extends AppCompatActivity {
+public class GroupDetailsActivity extends AppCompatActivity implements NewPicDialogFragment.NewPicInterface {
 
     public static final String TAG = "GroupDetailsActivity";
 
@@ -89,10 +93,40 @@ public class GroupDetailsActivity extends AppCompatActivity {
         setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation, GroupDetailsActivity.this);
 
+        binding.ivEditPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNewPicDialog();
+            }
+        });
+        binding.ivGroupChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         binding.tvActShowMembers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goAllMembersActivity();
+            }
+        });
+        binding.ivOwnerChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goChatActivity(group.getOwner());
+            }
+        });
+        binding.cvOwnerPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goProfileActivity(group.getOwner());
+            }
+        });
+        binding.tvOwnerName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goProfileActivity(group.getOwner());
             }
         });
     }
@@ -113,8 +147,34 @@ public class GroupDetailsActivity extends AppCompatActivity {
         });
     }
 
+    /* -------------------- new pic methods ---------------------- */
+    private void showNewPicDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        NewPicDialogFragment newPicDialogFragment = NewPicDialogFragment.newInstance("New Pic");
+        newPicDialogFragment.show(fm, "fragment_new_pic");
+    }
+
+    @Override
+    public void picSaved(ParseFile parseFile) {
+        group.setGroupPic(parseFile);
+    }
+
+    /* ------------------ intent methods to activities ---------------- */
     private void goAllMembersActivity() {
         Intent i = new Intent(GroupDetailsActivity.this,AllMembersActivity.class);
         i.putExtra(Group.KEY_GROUP,group);
+        this.startActivity(i);
+    }
+
+    private void goChatActivity(ParseUser owner) {
+        Intent i = new Intent(GroupDetailsActivity.this,ChatActivity.class);
+        i.putExtra(Chat.KEY_CHAT,group.getChat());
+        this.startActivity(i);
+    }
+
+    private void goProfileActivity(ParseUser owner) {
+        Intent i = new Intent(GroupDetailsActivity.this,ProfileActivity.class);
+        i.putExtra(User.KEY_USER,group.getOwner());
+        this.startActivity(i);
     }
 }

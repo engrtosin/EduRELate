@@ -16,6 +16,7 @@
         android:text="Find a new friend" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFriends"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tvNewFriend"

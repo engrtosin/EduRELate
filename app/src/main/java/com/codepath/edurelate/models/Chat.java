@@ -12,6 +12,7 @@ public class Chat extends ParseObject {
     public static final String TAG = "ChatModel";
     public static final String KEY_ISGROUPCHAT = "isGroupChat";
     public static final String KEY_MESSAGES = "messages";
+    public static final String KEY_CHAT = "chat";
 
     public void addMessage(Message message) {
     }

@@ -63,8 +63,10 @@ public class PeopleActivity extends AppCompatActivity implements PeopleFragmentI
         });
     }
 
+    /* --------------------- peopleInterface methods ---------------------- */
     @Override
     public void findNewFriend() {
+        Log.i(TAG,"Find a new friend in people activity");
         HomeActivity.goAllUsersActivity(PeopleActivity.this);
     }
 

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.codepath.edurelate.databinding.ActivityLoginBinding;
 import com.codepath.edurelate.models.User;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -80,6 +81,18 @@ public class LoginActivity extends AppCompatActivity {
                 User.currentUser = ParseUser.getCurrentUser();
                 goHomeActivity();
                 Toast.makeText(LoginActivity.this,"Successful!",Toast.LENGTH_SHORT).show();
+            }
+        });
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.getInBackground(User.BOT_OBJECT_ID, new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser object, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error getting bot from query.");
+                    return;
+                }
+                Log.i(TAG, "Bot getting successful: " + object.getObjectId());
+                User.edurelateBot = object;
             }
         });
     }

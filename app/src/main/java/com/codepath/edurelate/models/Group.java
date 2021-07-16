@@ -13,6 +13,7 @@ import com.parse.SaveCallback;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Parcel(analyze = Group.class)
@@ -27,6 +28,7 @@ public class Group extends ParseObject {
     public static final String KEY_GROUP = "group";
     public static final String KEY_MEMBERS = "members";
     public static final String KEY_GROUP_PIC = "groupPic";
+    public static final String KEY_LATEST_MSG_DATE = "latestMsgDate";
 
     public Chat chat;
 
@@ -44,6 +46,7 @@ public class Group extends ParseObject {
                     Log.e(TAG,"Error saving group: " + e.getMessage(), e);
                     return;
                 }
+                group.setLatestMsgDate(group.getCreatedAt());
                 Log.i(TAG,"Group successfully created!");
             }
         });
@@ -75,6 +78,10 @@ public class Group extends ParseObject {
         return fetchIfNeeded().getParseFile(KEY_GROUP_PIC);
     }
 
+    public Date getLatestMsgDate() throws ParseException {
+        return getDate(KEY_LATEST_MSG_DATE);
+    }
+
     public void setGroupName(String groupName) {
         put(KEY_GROUP_NAME,groupName);
     }
@@ -85,6 +92,10 @@ public class Group extends ParseObject {
 
     public void setOwner(ParseUser owner) {
         put(KEY_OWNER,owner);
+    }
+
+    private void setLatestMsgDate(Date createdAt) {
+        put(KEY_LATEST_MSG_DATE, createdAt);
     }
 
     public void addMember(Member member) {

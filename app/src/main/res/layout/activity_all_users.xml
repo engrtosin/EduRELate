@@ -6,9 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".activities.AllUsersActivity">
 
+    <include
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/tbMain"
+        android:layout_above="@id/bottomNavigation"
         android:padding="10dp" />
+
+    <include
+        layout="@layout/bottom_navigation" />
 </RelativeLayout>

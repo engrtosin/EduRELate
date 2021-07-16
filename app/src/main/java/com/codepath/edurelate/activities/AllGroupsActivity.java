@@ -2,26 +2,47 @@ package com.codepath.edurelate.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.edurelate.R;
+import com.codepath.edurelate.adapters.GroupsAdapter;
+import com.codepath.edurelate.adapters.UsersAdapter;
 import com.codepath.edurelate.databinding.ActivityAllGroupsBinding;
 import com.codepath.edurelate.databinding.ActivityProfileBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.NewGroupDialogFragment;
+import com.codepath.edurelate.models.Chat;
+import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AllGroupsActivity extends AppCompatActivity {
 
-    public static final String TAG = "ProfileActivity";
+    public static final String TAG = "AllGroupsActivity";
+    public static final int SPAN_COUNT = 2;
 
     ActivityAllGroupsBinding binding;
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
+    List<Group > groups = new ArrayList<>();
+    GroupsAdapter groupsAdapter;
+    GridLayoutManager glManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,5 +92,50 @@ public class AllGroupsActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         NewGroupDialogFragment newGroupDialogFragment = NewGroupDialogFragment.newInstance("New Group");
         newGroupDialogFragment.show(fm, "fragment_new_group");
+    }
+
+    private void queryAllGroups() {
+        ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+        query.whereEqualTo(Group.KEY_IS_FRIEND_GROUP,false);
+        query.findInBackground(new FindCallback<Group>() {
+            @Override
+            public void done(List<Group> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error while querying groups: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG, "Groups successfully queried. Size: " + objects.size());
+                groupsAdapter.clear();
+                groupsAdapter.addAll(objects);
+            }
+        });
+    }
+
+    /* ------------------- interface methods ------------------ */
+    private void setAdapterInterface() {
+        groupsAdapter.setAdapterListener(new GroupsAdapter.GroupsAdapterInterface() {
+            @Override
+            public void groupClicked(Group group) {
+                goGroupDetailsActivity(group);
+            }
+
+            @Override
+            public void ownerClicked(ParseUser owner) {
+                goProfileActivity(owner);
+            }
+        });
+    }
+
+    /* --------------------- intent methods to activities --------------------- */
+    private void goProfileActivity(ParseUser owner) {
+        Intent i = new Intent(AllGroupsActivity.this, ProfileActivity.class);
+        i.putExtra(User.KEY_USER, Parcels.wrap(owner));
+        this.startActivity(i);
+    }
+
+    private void goGroupDetailsActivity(Group group) {
+        Intent i = new Intent(AllGroupsActivity.this, GroupDetailsActivity.class);
+        i.putExtra(Group.KEY_GROUP,Parcels.wrap(group));
+        this.startActivity(i);
     }
 }

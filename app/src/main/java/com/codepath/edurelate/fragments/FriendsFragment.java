@@ -6,12 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.FragmentFriendsBinding;
+import com.codepath.edurelate.interfaces.PeopleFragmentInterface;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +22,7 @@ public class FriendsFragment extends Fragment {
     public static final String TAG = "FriendsFragment";
 
     FragmentFriendsBinding binding;
+    PeopleFragmentInterface peopleListener;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -50,6 +53,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        peopleListener = (PeopleFragmentInterface) getActivity();
         setClickListeners();
     }
 
@@ -62,7 +66,8 @@ public class FriendsFragment extends Fragment {
         binding.tvNewFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.i(TAG,"NEW FRIEND CLICKED");
+                peopleListener.findNewFriend();
             }
         });
     }

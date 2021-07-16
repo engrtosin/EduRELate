@@ -16,13 +16,13 @@
         android:gravity="center">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cvGroupPic"
+            android:id="@+id/cvUserPic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="25dp" >
 
             <ImageView
-                android:id="@+id/ivGroupPic"
+                android:id="@+id/ivUserPic"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:scaleType="fitXY"
@@ -30,7 +30,7 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/tvGroupName"
+            android:id="@+id/tvFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Oluwatosin Ajibola" />

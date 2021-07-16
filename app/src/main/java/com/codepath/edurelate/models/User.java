@@ -19,10 +19,14 @@ public class User {
     public static final String KEY_USER_PIC = "userPic";
     public static final String KEY_FRIENDS = "friends";
     public static final String KEY_GROUPS = "groups";
+    public static final String KEY_NON_FRIEND_GROUPS = "nonFriendGroups";
     public static final String KEY_MAJOR = "major";
     public static final String KEY_USER = "user";
+    public static final String KEY_OBJECT_ID = "objectId";
+    public static final String BOT_OBJECT_ID = "kJmCehSRZm";
 
     public static ParseUser currentUser;
+    public static ParseUser edurelateBot;
 
     public static String getFirstName(ParseUser user) throws ParseException {
         String firstName = user.fetchIfNeeded().getString(KEY_FIRST_NAME);
@@ -40,8 +44,13 @@ public class User {
         return firstName + " " + lastName;
     }
 
-    public static List<Group> getGroups(ParseUser user) {
+    public static List<Group> getAllGroups(ParseUser user) {
         return user.getList(KEY_GROUPS);
+    }
+
+    public static List<Group> getNonFriendGroups(ParseUser user) {
+        Log.i(TAG,"User " + user.getUsername() + " has: " + user.has(KEY_NON_FRIEND_GROUPS));
+        return user.getList(KEY_NON_FRIEND_GROUPS);
     }
 
     public static void setFirstName(ParseUser user, String firstName) {
@@ -66,6 +75,9 @@ public class User {
 
     public static void addNewGroup(Group group,ParseUser user) {
         user.add(KEY_GROUPS,group);
+        if (!group.getIsFriendGroup()) {
+            user.add(KEY_NON_FRIEND_GROUPS,group);
+        }
         user.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

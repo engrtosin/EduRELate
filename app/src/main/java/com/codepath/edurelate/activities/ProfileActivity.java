@@ -71,6 +71,11 @@ public class ProfileActivity extends AppCompatActivity implements NewPicDialogFr
             Log.i(TAG,"about to glide user pic");
             Glide.with(this).load(image.getUrl()).into(binding.ivUserPic);
         }
+        // TODO: Use User static method.
+        binding.tvUsername.setText(user.getUsername());
+        binding.tvPassword.setText(user.getString(User.KEY_PASSWORD));
+        binding.tvFirstName.setText(User.getFirstName(user));
+        binding.tvLastName.setText(User.getLastName(user));
     }
 
     private void setIconVisibilities() {
@@ -81,8 +86,6 @@ public class ProfileActivity extends AppCompatActivity implements NewPicDialogFr
             binding.ivChat.setVisibility(View.GONE);
             binding.tvActInvite.setVisibility(View.GONE);
             binding.tvActSendMsg.setVisibility(View.GONE);
-            // TODO: Use User static method.
-            binding.tvPassword.setText(user.getString(User.KEY_PASSWORD));
         }
     }
 
@@ -122,19 +125,22 @@ public class ProfileActivity extends AppCompatActivity implements NewPicDialogFr
         });
     }
 
+    /* -------------------- new pic methods ---------------------- */
     private void showNewPicDialog() {
         FragmentManager fm = getSupportFragmentManager();
         NewPicDialogFragment newPicDialogFragment = NewPicDialogFragment.newInstance("New Pic");
         newPicDialogFragment.show(fm, "fragment_new_pic");
     }
 
-    private void goPeopleActivity() {
-        Intent i = new Intent(ProfileActivity.this, PeopleActivity.class);
-        i.putExtra(User.KEY_USER, Parcels.wrap(user));
-    }
-
     @Override
     public void picSaved(ParseFile parseFile) {
         User.setUserPic(user,parseFile);
+    }
+
+    /* --------------------- intent methods to activities ----------------------- */
+    private void goPeopleActivity() {
+        Intent i = new Intent(ProfileActivity.this, PeopleActivity.class);
+        i.putExtra(User.KEY_USER, Parcels.wrap(user));
+        this.startActivity(i);
     }
 }
