@@ -63,21 +63,6 @@ public class AllUsersActivity extends AppCompatActivity {
         setClickListeners();
     }
 
-    private void setAdapterInterface() {
-        usersAdapter.setAdapterListener(new UsersAdapter.UsersAdapterInterface() {
-            @Override
-            public void userClicked(ParseUser user) {
-                goProfileActivity(user);
-            }
-
-            @Override
-            public void chatClicked(ParseUser user) {
-                Chat chat = findFriendChat(user);
-                goChatActivity(chat);
-            }
-        });
-    }
-
     private void initializeViews() {
         Log.i(TAG,"Initializing views in " + TAG);
     }
@@ -130,6 +115,22 @@ public class AllUsersActivity extends AppCompatActivity {
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
         query.include(Chat.KEY_MESSAGES);
         return chat;
+    }
+
+    /* --------------------- adapter interface methods --------------------- */
+    private void setAdapterInterface() {
+        usersAdapter.setAdapterListener(new UsersAdapter.UsersAdapterInterface() {
+            @Override
+            public void userClicked(ParseUser user) {
+                goProfileActivity(user);
+            }
+
+            @Override
+            public void chatClicked(ParseUser user) {
+                Chat chat = findFriendChat(user);
+                goChatActivity(chat);
+            }
+        });
     }
 
     /* --------------------- intents to activities ------------------ */

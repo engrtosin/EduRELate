@@ -162,19 +162,20 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
     /* ------------------ intent methods to activities ---------------- */
     private void goAllMembersActivity() {
         Intent i = new Intent(GroupDetailsActivity.this,AllMembersActivity.class);
-        i.putExtra(Group.KEY_GROUP,group);
+        i.putExtra(Group.KEY_GROUP,Parcels.wrap(group));
         this.startActivity(i);
     }
 
     private void goChatActivity(ParseUser owner) {
         Intent i = new Intent(GroupDetailsActivity.this,ChatActivity.class);
-        i.putExtra(Chat.KEY_CHAT,group.getChat());
+        i.putExtra(Chat.KEY_CHAT,Parcels.wrap(group.getChat()));
         this.startActivity(i);
     }
 
     private void goProfileActivity(ParseUser owner) {
+        Log.i(TAG,"going to profile activity for: " + owner.getUsername());
         Intent i = new Intent(GroupDetailsActivity.this,ProfileActivity.class);
-        i.putExtra(User.KEY_USER,group.getOwner());
+        i.putExtra(User.KEY_USER,Parcels.wrap(group.getOwner()));
         this.startActivity(i);
     }
 }
