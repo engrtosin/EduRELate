@@ -20,15 +20,14 @@
             app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvActivityTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Activity"
             android:layout_centerHorizontal="true"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/black"
-            android:text="Title"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            xmlns:android="http://schemas.android.com/apk/res/android" />
 
         <ImageView
             android:id="@+id/ivLogoutBtn"

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.codepath.edurelate.activities.LoginActivity;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -23,7 +24,9 @@ public class Group extends ParseObject {
     public static final String KEY_IS_FRIEND_GROUP = "isFriendGroup";
     public static final String KEY_OWNER = "owner";
     public static final String KEY_CHAT = "chat";
+    public static final String KEY_GROUP = "group";
     private static final String KEY_MEMBERS = "members";
+    private static final String KEY_GROUP_PIC = "groupPic";
 
     public Chat chat;
 
@@ -68,6 +71,10 @@ public class Group extends ParseObject {
         return getList(KEY_MEMBERS);
     }
 
+    public ParseFile getGroupPic() throws ParseException {
+        return fetchIfNeeded().getParseFile(KEY_GROUP_PIC);
+    }
+
     public void setGroupName(String groupName) {
         put(KEY_GROUP_NAME,groupName);
     }
@@ -87,6 +94,10 @@ public class Group extends ParseObject {
     public void setNewMembers() {
         List<Member> members = new ArrayList<>();
         put(KEY_MEMBERS,members);
+    }
+
+    public void setGroupPic(ParseFile groupPic) {
+        put(KEY_GROUP_PIC,groupPic);
     }
 
     public void setNewChat() {
