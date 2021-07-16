@@ -14,6 +14,8 @@ import com.codepath.edurelate.adapters.UsersAdapter;
 import com.codepath.edurelate.databinding.ActivityAllUsersBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.models.Chat;
+import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
@@ -38,10 +40,17 @@ public class AllUsersActivity extends AppCompatActivity {
     List<ParseUser> users = new ArrayList<>();
     UsersAdapter usersAdapter;
     GridLayoutManager glManager;
+    Group invitingGroup;
+    boolean inviteType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        inviteType = getIntent().getBooleanExtra(Invite.INVITE_TYPE,true);
+        if (inviteType == Invite.GROUP_INVITE_CODE) {
+            invitingGroup = Parcels.unwrap(getIntent().getParcelableExtra(Group.KEY_GROUP));
+        }
 
         Log.i(TAG,"in on create");
         binding = ActivityAllUsersBinding.inflate(getLayoutInflater());
@@ -129,6 +138,13 @@ public class AllUsersActivity extends AppCompatActivity {
             public void chatClicked(ParseUser user) {
                 Chat chat = findFriendChat(user);
                 goChatActivity(chat);
+            }
+
+            @Override
+            public void inviteUser(ParseUser user) {
+                if (inviteType == Invite.GROUP_INVITE_CODE) {
+                    invitingGroup.sendInvite(user);
+                }
             }
         });
     }

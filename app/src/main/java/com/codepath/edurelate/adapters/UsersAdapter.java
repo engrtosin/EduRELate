@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ItemUserBinding;
+import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -32,6 +33,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public interface UsersAdapterInterface {
         void userClicked(ParseUser user);
         void chatClicked(ParseUser user);
+        void inviteUser(ParseUser user);
     }
 
     public void setAdapterListener(UsersAdapterInterface usersAdapterInterface) {
@@ -102,10 +104,17 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     mListener.chatClicked(user);
                 }
             });
+            itemUserBinding.tvInvite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.inviteUser(user);
+                }
+            });
         }
 
         public void bind(ParseUser user) throws ParseException {
             this.user = user;
+            itemUserBinding.tvInvite.setVisibility(View.VISIBLE);
             ParseFile image = user.getParseFile(User.KEY_USER_PIC);
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(itemUserBinding.ivUserPic);

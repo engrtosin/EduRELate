@@ -118,6 +118,12 @@ public class Group extends ParseObject {
         put(KEY_CHAT,this.chat);
     }
 
+    /* ------------- GROUP HELPER METHODS ------------------- */
+    public void sendInvite(ParseUser user) {
+        Invite.newInvite(user,this);
+        // send messages to the sender and the recipient.
+    }
+
     /* ------------- CHAT METHODS ------------------- */
     public void setChatFields() {
         this.chat.put(Chat.KEY_ISGROUPCHAT,true);

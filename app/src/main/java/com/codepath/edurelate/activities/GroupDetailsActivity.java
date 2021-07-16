@@ -1,5 +1,6 @@
 package com.codepath.edurelate.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -16,6 +17,7 @@ import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.NewPicDialogFragment;
 import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseException;
@@ -27,6 +29,7 @@ import org.parceler.Parcels;
 public class GroupDetailsActivity extends AppCompatActivity implements NewPicDialogFragment.NewPicInterface {
 
     public static final String TAG = "GroupDetailsActivity";
+    private static final int GO_ALL_USERS_CODE = 20;
 
     ActivityGroupDetailsBinding binding;
     ToolbarMainBinding tbMainBinding;
@@ -93,6 +96,12 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
         setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation, GroupDetailsActivity.this);
 
+        binding.tvActInvite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goAllUsersActivityForResult();
+            }
+        });
         binding.ivEditPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,5 +186,29 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
         Intent i = new Intent(GroupDetailsActivity.this,ProfileActivity.class);
         i.putExtra(User.KEY_USER,Parcels.wrap(group.getOwner()));
         this.startActivity(i);
+    }
+
+    private void goAllUsersActivity() {
+        Intent i = new Intent(GroupDetailsActivity.this, AllUsersActivity.class);
+        i.putExtra(Group.KEY_GROUP,Parcels.wrap(group));
+        i.putExtra(Invite.INVITE_TYPE,Invite.GROUP_INVITE_CODE);
+        this.startActivity(i);
+    }
+
+    private void goAllUsersActivityForResult() {
+        Intent i = new Intent(GroupDetailsActivity.this,AllUsersActivity.class);
+        i.putExtra(Group.KEY_GROUP,Parcels.wrap(group));
+        i.putExtra(Invite.INVITE_TYPE,Invite.GROUP_INVITE_CODE);
+        this.startActivityForResult(i,GO_ALL_USERS_CODE);
+    }
+
+    /* ---------------------- onActivityResult ----------------------- */
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GO_ALL_USERS_CODE) {
+
+        }
     }
 }
