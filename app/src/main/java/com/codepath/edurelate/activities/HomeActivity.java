@@ -222,6 +222,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public static void goAllUsersActivity(Activity activity) {
         Intent i = new Intent(activity, AllUsersActivity.class);
+
         activity.startActivity(i);
     }
 }
