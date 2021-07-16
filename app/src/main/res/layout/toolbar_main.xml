@@ -19,6 +19,14 @@
             android:layout_marginStart="10dp"
             app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
 
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/ivBackBtn"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tvActivityTitle"
             android:layout_width="wrap_content"

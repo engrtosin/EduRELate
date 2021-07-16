@@ -3,6 +3,7 @@ package com.codepath.edurelate.models;
 import android.util.Log;
 
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -51,6 +52,18 @@ public class User {
         user.put(KEY_LAST_NAME,lastName);
     }
 
+    public static void setUserPic(ParseUser user, ParseFile parseFile) {
+        user.put(KEY_USER_PIC,parseFile);
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error updating user " + user.getObjectId() + " pic");
+                }
+            }
+        });
+    }
+
     public static void addNewGroup(Group group,ParseUser user) {
         user.add(KEY_GROUPS,group);
         user.saveInBackground(new SaveCallback() {
@@ -81,7 +94,7 @@ public class User {
         // send a message to the sender
     }
 
-    public static boolean compareUsers(ParseUser owner, ParseUser currentUser) {
-        return owner.getObjectId().equals(currentUser.getObjectId());
+    public static boolean compareUsers(ParseUser user, ParseUser otherUser) {
+        return user.getObjectId().equals(otherUser.getObjectId());
     }
 }

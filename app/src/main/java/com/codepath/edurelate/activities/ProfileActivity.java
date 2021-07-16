@@ -3,6 +3,7 @@ package com.codepath.edurelate.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import com.bumptech.glide.Glide;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityProfileBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
+import com.codepath.edurelate.fragments.NewGroupDialogFragment;
+import com.codepath.edurelate.fragments.NewPicDialogFragment;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseException;
@@ -27,7 +30,7 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements NewPicDialogFragment.NewPicInterface {
 
     public static final String TAG = "ProfileActivity";
 
@@ -59,7 +62,19 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void initializeViews() throws ParseException {
         tbMainBinding.tvActivityTitle.setText(User.getFirstName(user) + "'s Profile");
-        if (user.equals(User.currentUser)) {
+        setIconVisibilities();
+
+        // TODO: Use User static method.
+        ParseFile image = user.getParseFile(User.KEY_USER_PIC);
+        Log.i(TAG,"user image: " + image);
+        if (image != null) {
+            Log.i(TAG,"about to glide user pic");
+            Glide.with(this).load(image.getUrl()).into(binding.ivUserPic);
+        }
+    }
+
+    private void setIconVisibilities() {
+        if (User.compareUsers(user,User.currentUser)) {
             binding.ivEditPic.setVisibility(View.VISIBLE);
             binding.tvDescPassword.setVisibility(View.VISIBLE);
             binding.tvPassword.setVisibility(View.VISIBLE);
@@ -68,14 +83,6 @@ public class ProfileActivity extends AppCompatActivity {
             binding.tvActSendMsg.setVisibility(View.GONE);
             // TODO: Use User static method.
             binding.tvPassword.setText(user.getString(User.KEY_PASSWORD));
-        }
-
-        // TODO: Use User static method.
-        ParseFile image = user.getParseFile(User.KEY_USER_PIC);
-        Log.i(TAG,"user image: " + image);
-        if (image != null) {
-            Log.i(TAG,"about to glide user pic");
-            Glide.with(this).load(image.getUrl()).into(binding.ivUserPic);
         }
     }
 
@@ -91,11 +98,12 @@ public class ProfileActivity extends AppCompatActivity {
                 goPeopleActivity();
             }
         });
-    }
-
-    private void goPeopleActivity() {
-        Intent i = new Intent(ProfileActivity.this, PeopleActivity.class);
-        i.putExtra(User.KEY_USER, Parcels.wrap(user));
+        binding.ivEditPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNewPicDialog();
+            }
+        });
     }
 
     private void setToolbarClickListeners() {
@@ -112,5 +120,21 @@ public class ProfileActivity extends AppCompatActivity {
                 LoginActivity.logoutUser(ProfileActivity.this);
             }
         });
+    }
+
+    private void showNewPicDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        NewPicDialogFragment newPicDialogFragment = NewPicDialogFragment.newInstance("New Pic");
+        newPicDialogFragment.show(fm, "fragment_new_pic");
+    }
+
+    private void goPeopleActivity() {
+        Intent i = new Intent(ProfileActivity.this, PeopleActivity.class);
+        i.putExtra(User.KEY_USER, Parcels.wrap(user));
+    }
+
+    @Override
+    public void picSaved(ParseFile parseFile) {
+        User.setUserPic(user,parseFile);
     }
 }
