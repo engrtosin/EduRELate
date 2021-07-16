@@ -25,8 +25,8 @@ public class Group extends ParseObject {
     public static final String KEY_OWNER = "owner";
     public static final String KEY_CHAT = "chat";
     public static final String KEY_GROUP = "group";
-    private static final String KEY_MEMBERS = "members";
-    private static final String KEY_GROUP_PIC = "groupPic";
+    public static final String KEY_MEMBERS = "members";
+    public static final String KEY_GROUP_PIC = "groupPic";
 
     public Chat chat;
 

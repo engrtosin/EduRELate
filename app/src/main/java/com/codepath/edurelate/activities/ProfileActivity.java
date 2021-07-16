@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +15,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityProfileBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
+import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -26,10 +34,13 @@ public class ProfileActivity extends AppCompatActivity {
     ActivityProfileBinding binding;
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
+    ParseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        user = Parcels.unwrap(getIntent().getParcelableExtra(User.KEY_USER));
 
         Log.i(TAG,"in on create");
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
@@ -38,7 +49,34 @@ public class ProfileActivity extends AppCompatActivity {
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
+        try {
+            initializeViews();
+        } catch (ParseException e) {
+            Log.e(TAG,"Error initializing views: " + e.getMessage(),e);
+        }
         setClickListeners();
+    }
+
+    private void initializeViews() throws ParseException {
+        tbMainBinding.tvActivityTitle.setText(User.getFirstName(user) + "'s Profile");
+        if (user.equals(User.currentUser)) {
+            binding.ivEditPic.setVisibility(View.VISIBLE);
+            binding.tvDescPassword.setVisibility(View.VISIBLE);
+            binding.tvPassword.setVisibility(View.VISIBLE);
+            binding.ivChat.setVisibility(View.GONE);
+            binding.tvActInvite.setVisibility(View.GONE);
+            binding.tvActSendMsg.setVisibility(View.GONE);
+            // TODO: Use User static method.
+            binding.tvPassword.setText(user.getString(User.KEY_PASSWORD));
+        }
+
+        // TODO: Use User static method.
+        ParseFile image = user.getParseFile(User.KEY_USER_PIC);
+        Log.i(TAG,"user image: " + image);
+        if (image != null) {
+            Log.i(TAG,"about to glide user pic");
+            Glide.with(this).load(image.getUrl()).into(binding.ivUserPic);
+        }
     }
 
     private void setClickListeners() {
@@ -46,6 +84,18 @@ public class ProfileActivity extends AppCompatActivity {
 
         setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation,ProfileActivity.this);
+
+        binding.btnPeople.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goPeopleActivity();
+            }
+        });
+    }
+
+    private void goPeopleActivity() {
+        Intent i = new Intent(ProfileActivity.this, PeopleActivity.class);
+        i.putExtra(User.KEY_USER, Parcels.wrap(user));
     }
 
     private void setToolbarClickListeners() {

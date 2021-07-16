@@ -32,7 +32,12 @@ public class BaseActivity extends AppCompatActivity {
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
+        initializeViews();
         setClickListeners();
+    }
+
+    private void initializeViews() {
+        Log.i(TAG,"Initializing views in " + TAG);
     }
 
     private void setClickListeners() {

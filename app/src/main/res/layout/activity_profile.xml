@@ -64,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="Send Message"
+            android:visibility="gone"
             android:layout_marginEnd="5dp"/>
 
         <TextView
@@ -72,6 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/cvUserPic"
             android:layout_marginStart="5dp"
+            android:visibility="gone"
             android:layout_marginTop="5dp"
             android:text="Send an invite" />
 
@@ -99,6 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvDescUsername"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:text="Password" />
 
@@ -109,6 +112,7 @@
         android:layout_toEndOf="@id/tvDescPassword"
         android:layout_alignTop="@id/tvDescPassword"
         android:layout_marginStart="10dp"
+        android:visibility="gone"
         android:password="true"
         android:text="oluwatosin" />
 

@@ -80,4 +80,8 @@ public class User {
         // send a message to the recipient
         // send a message to the sender
     }
+
+    public static boolean compareUsers(ParseUser owner, ParseUser currentUser) {
+        return owner.getObjectId().equals(currentUser.getObjectId());
+    }
 }

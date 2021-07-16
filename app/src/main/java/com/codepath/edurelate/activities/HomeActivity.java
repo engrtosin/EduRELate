@@ -211,7 +211,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public static void navProfileActivity(Activity activity) {
         Intent i = new Intent(activity, ProfileActivity.class);
-        i.putExtra(LoginActivity.KEY_CURRENT_USER, Parcels.wrap(User.currentUser));
+        i.putExtra(User.KEY_USER, Parcels.wrap(User.currentUser));
         activity.startActivity(i);
     }
 
@@ -222,7 +222,6 @@ public class HomeActivity extends AppCompatActivity {
 
     public static void goAllUsersActivity(Activity activity) {
         Intent i = new Intent(activity, AllUsersActivity.class);
-
         activity.startActivity(i);
     }
 }

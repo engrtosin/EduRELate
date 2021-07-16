@@ -72,6 +72,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ItemGroupBinding itemGroupBinding;
+        Group group;
 
         public ViewHolder(@NonNull @NotNull ItemGroupBinding itemGroupBinding) {
             super(itemGroupBinding.getRoot());
@@ -83,20 +84,21 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             itemGroupBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    mListener.groupClicked(group);
                 }
             });
             itemGroupBinding.tvGroupOwner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    mListener.ownerClicked(group.getOwner());
                 }
             });
         }
 
         public void bind(Group group) throws ParseException {
+            this.group = group;
             ParseFile image = group.getGroupPic();
-            if (image == null) {
+            if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(itemGroupBinding.ivGroupPic);
             }
             else {
