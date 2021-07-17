@@ -74,10 +74,13 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
     }
 
     private void initializeOwnerSection() throws ParseException {
-        ParseFile image = group.getOwner().getParseFile(User.KEY_USER_PIC);
-        if (image != null) {
-            Log.i(TAG,"about to glide owner pic");
-            Glide.with(this).load(image.getUrl()).into(binding.ivOwnerPic);
+        ParseFile image;
+        if (group.has(Group.KEY_GROUP_PIC)) {
+            image = group.getOwner().getParseFile(User.KEY_USER_PIC);
+            if (image != null) {
+                Log.i(TAG,"about to glide owner pic");
+                Glide.with(this).load(image.getUrl()).into(binding.ivOwnerPic);
+            }
         }
         binding.tvOwnerName.setText(User.getFullName(group.getOwner()));
     }

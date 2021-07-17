@@ -1,6 +1,7 @@
 package com.codepath.edurelate.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.FragmentGroupsBinding;
 import com.codepath.edurelate.databinding.FragmentNewGroupBinding;
 import com.codepath.edurelate.models.Group;
+import com.parse.ParseException;
 
 public class NewGroupDialogFragment extends DialogFragment  implements TextView.OnEditorActionListener {
 
@@ -65,12 +67,16 @@ public class NewGroupDialogFragment extends DialogFragment  implements TextView.
         binding.ivDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createNewGroup();
+                try {
+                    createNewGroup();
+                } catch (ParseException e) {
+                    Log.e(TAG,"Error while creating a new group: " + e.getMessage(),e);
+                }
             }
         });
     }
 
-    protected void createNewGroup() {
+    protected void createNewGroup() throws ParseException {
         String groupName = binding.etGroupName.getText().toString();
         if (groupName == null) {
             Toast.makeText(getContext(),"Group name cannot be empty.",Toast.LENGTH_SHORT).show();

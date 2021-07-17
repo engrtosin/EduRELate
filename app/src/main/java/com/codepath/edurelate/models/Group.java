@@ -32,7 +32,7 @@ public class Group extends ParseObject {
 
     public Chat chat;
 
-    public static Group newGroup(String groupName) {
+    public static Group newGroup(String groupName) throws ParseException {
         Group group = new Group();
         group.setGroupName(groupName);
         group.setIsFriendGroup(false);
@@ -58,8 +58,8 @@ public class Group extends ParseObject {
         return getString(KEY_GROUP_NAME);
     }
 
-    public boolean getIsFriendGroup() {
-        return getBoolean(KEY_IS_FRIEND_GROUP);
+    public boolean getIsFriendGroup() throws ParseException {
+        return fetchIfNeeded().getBoolean(KEY_IS_FRIEND_GROUP);
     }
 
     public ParseUser getOwner() {

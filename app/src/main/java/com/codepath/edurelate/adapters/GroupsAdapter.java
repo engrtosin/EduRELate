@@ -56,7 +56,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    /* --------------------- viewholder methods ----------------------- */
+    /* --------------------- RECYCLERVIEW VIEWHOLDER METHODS ----------------------- */
     @NonNull
     @NotNull
     @Override

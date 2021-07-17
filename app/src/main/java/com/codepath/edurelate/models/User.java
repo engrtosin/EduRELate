@@ -73,7 +73,7 @@ public class User {
         });
     }
 
-    public static void addNewGroup(Group group,ParseUser user) {
+    public static void addNewGroup(Group group,ParseUser user) throws ParseException {
         user.add(KEY_GROUPS,group);
         if (!group.getIsFriendGroup()) {
             user.add(KEY_NON_FRIEND_GROUPS,group);
@@ -108,5 +108,15 @@ public class User {
 
     public static boolean compareUsers(ParseUser user, ParseUser otherUser) {
         return user.getObjectId().equals(otherUser.getObjectId());
+    }
+
+    public static ParseUser findFriend(ParseUser user, Group group) {
+        List<Member> members = group.getMembers();
+        for (Member member : members) {
+            if (!User.compareUsers(user,member.getUser())) {
+                return member.getUser();
+            }
+        }
+        return  null;
     }
 }
