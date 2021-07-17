@@ -55,11 +55,17 @@ public class Group extends ParseObject {
     }
 
     public String getGroupName() {
-        return getString(KEY_GROUP_NAME);
+        if (has(Group.KEY_GROUP_NAME)) {
+            return getString(KEY_GROUP_NAME);
+        }
+        return "no name";
     }
 
-    public boolean getIsFriendGroup() throws ParseException {
-        return fetchIfNeeded().getBoolean(KEY_IS_FRIEND_GROUP);
+    public boolean getIsFriendGroup() {
+        if (has(KEY_IS_FRIEND_GROUP)) {
+            return getBoolean(KEY_IS_FRIEND_GROUP);
+        }
+        return false;
     }
 
     public ParseUser getOwner() {

@@ -28,15 +28,38 @@
             app:srcCompat="@drawable/ic_baseline_arrow_back_24"
             app:tint="@color/black" />
 
-        <TextView
-            android:id="@+id/tvActivityTitle"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Mayowa"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:gravity="center">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvChatPic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                app:cardCornerRadius="15dp" >
+
+                <ImageView
+                    android:id="@+id/ivChatPic"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/default_user_avatar" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvActivityTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="Mayowa"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/pbLoading"
@@ -83,10 +106,10 @@
         android:layout_alignParentBottom="true" >
 
         <EditText
-            android:id="@+id/etNewCommentTxt"
+            android:id="@+id/etNewMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/sendCompose"
+            android:layout_toStartOf="@id/ivSendBtn"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingStart="20dp"
@@ -98,10 +121,11 @@
             android:hint="Send a message" />
 
         <ImageView
-            android:id="@+id/sendCompose"
+            android:id="@+id/ivSendBtn"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@id/etNewMessage"
             android:layout_marginEnd="10dp"
             app:tint="@color/black"
             app:srcCompat="@drawable/ic_baseline_send_24" />

@@ -28,13 +28,13 @@ public class User {
     public static ParseUser currentUser;
     public static ParseUser edurelateBot;
 
-    public static String getFirstName(ParseUser user) throws ParseException {
-        String firstName = user.fetchIfNeeded().getString(KEY_FIRST_NAME);
+    public static String getFirstName(ParseUser user) {
+        String firstName = user.getString(KEY_FIRST_NAME);
         return firstName;
     }
 
-    public static String getLastName(ParseUser user) throws ParseException {
-        String lastName = user.fetchIfNeeded().getString(KEY_LAST_NAME);
+    public static String getLastName(ParseUser user) {
+        String lastName = user.getString(KEY_LAST_NAME);
         return lastName;
     }
 

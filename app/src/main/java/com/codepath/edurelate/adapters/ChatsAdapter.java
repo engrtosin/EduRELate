@@ -117,17 +117,21 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         public void bind(Group group) throws ParseException {
             this.group = group;
             Log.i(TAG,"binding group: " + group.getObjectId());
-            if (group.getIsFriendGroup()) {
-                bindFriendGroup();
-                return;
+            if (group.has(Group.KEY_IS_FRIEND_GROUP)) {
+                if (group.getIsFriendGroup()) {
+                    bindFriendGroup();
+                    return;
+                }
             }
             bindFullGroup();
         }
 
         private void bindFullGroup() {
-            ParseFile image = group.getParseFile(Group.KEY_GROUP_PIC);
-            if (image != null) {
-                Glide.with(context).load(image.getUrl()).into(itemChatBinding.ivChatPic);
+            if (group.has(Group.KEY_GROUP_PIC)) {
+                ParseFile image = group.getParseFile(Group.KEY_GROUP_PIC);
+                if (image != null) {
+                    Glide.with(context).load(image.getUrl()).into(itemChatBinding.ivChatPic);
+                }
             }
             itemChatBinding.tvChatName.setText(group.getGroupName());
         }
