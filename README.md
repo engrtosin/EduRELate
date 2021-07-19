@@ -33,10 +33,10 @@ The aim of this app is to make communication in a school community very easy. It
   * User can specify their role.
 * There should be persistence in logged in user
 * User can logout
+* User can login with Google
 * User can see all friends and groups in people screen.
 * User can send messages to people.
 * User can reply to a message
-  * User can double tap to reply to a message.
 * User can like a message.
 * Users can create new groups.
 * A group owner can invite a user
@@ -53,6 +53,7 @@ The aim of this app is to make communication in a school community very easy. It
   * User can see hidden chats.
   * User can show a chat.
 * Groups in the Home screen are arranged according to the most used
+* User can double tap to reply to a message.
 * Users can create events
 * Events can be synced with Google Calendar
 * Users can send files and photos.
@@ -211,7 +212,7 @@ These are the tabs common to all the screens.
 | isGroupInvite    | boolean      | true if this is an invite to a group      |     yes         |
 | inviteSender    | User      | person sending the invite      |     yes         |
 | inviteRecipient    | User      | person receiving the invite      |     yes         |
-*Optional*
+####Optional####
 #### Major
 | Property    | Type        | Description            | Required   | 
 | ----------- | ----------- | -----------            | ---------- |
