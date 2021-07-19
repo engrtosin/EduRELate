@@ -55,6 +55,15 @@ public class AllGroupsActivity extends AppCompatActivity {
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
+        queryAllGroups();
+        Log.i(TAG,"Number of all users: " + groups.size());
+        groupsAdapter = new GroupsAdapter(AllGroupsActivity.this,groups);
+        setAdapterInterface();
+        glManager = new GridLayoutManager(AllGroupsActivity.this,SPAN_COUNT,
+                GridLayoutManager.VERTICAL,false);
+        binding.rvGroups.setAdapter(groupsAdapter);
+        binding.rvGroups.setLayoutManager(glManager);
+
         setClickListeners();
     }
 
@@ -96,7 +105,7 @@ public class AllGroupsActivity extends AppCompatActivity {
 
     private void queryAllGroups() {
         ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
-        query.whereEqualTo(Group.KEY_IS_FRIEND_GROUP,false);
+        query.whereNotEqualTo(Group.KEY_OWNER,User.edurelateBot);
         query.findInBackground(new FindCallback<Group>() {
             @Override
             public void done(List<Group> objects, ParseException e) {
