@@ -85,7 +85,7 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
         binding.tvOwnerName.setText(User.getFullName(group.getOwner()));
     }
 
-    private void setIconVisibility() {
+    private void setIconVisibility() throws ParseException {
         if (User.compareUsers(group.getOwner(),User.currentUser)) {
             binding.ivOwnerChat.setVisibility(View.INVISIBLE);
             binding.ivEditPic.setVisibility(View.VISIBLE);
@@ -126,19 +126,32 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
         binding.ivOwnerChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goChatActivity(group.getOwner());
+                try {
+                    goChatActivity(group.getOwner());
+                } catch (ParseException e) {
+                    Log.e(TAG,"Error after clicking owner: " + e.getMessage(),e);
+                }
             }
         });
         binding.cvOwnerPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goProfileActivity(group.getOwner());
+                try {
+                    goProfileActivity(group.getOwner());
+                } catch (ParseException e) {
+                    Log.e(TAG,"Error after clicking owner pic: " + e.getMessage(),e);
+                }
             }
         });
         binding.tvOwnerName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goProfileActivity(group.getOwner());
+                try {
+                    goProfileActivity(group.getOwner());
+                } catch (ParseException e) {
+
+                    Log.e(TAG,"Error after clicking owner name: " + e.getMessage(),e);
+                }
             }
         });
     }
@@ -184,7 +197,7 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
         this.startActivity(i);
     }
 
-    private void goProfileActivity(ParseUser owner) {
+    private void goProfileActivity(ParseUser owner) throws ParseException {
         Log.i(TAG,"going to profile activity for: " + owner.getUsername());
         Intent i = new Intent(GroupDetailsActivity.this,ProfileActivity.class);
         i.putExtra(User.KEY_USER,Parcels.wrap(group.getOwner()));

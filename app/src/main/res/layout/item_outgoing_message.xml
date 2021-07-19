@@ -33,23 +33,25 @@
         android:id="@+id/tvReplyMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="200dp"
-        android:paddingVertical="0dp"
-        android:paddingHorizontal="10dp"
-        android:gravity="center"
         android:layout_alignEnd="@id/cvOutTxt"
         android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:maxWidth="200dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="0dp"
         android:text="Reply to me"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/ivArrow"
         android:layout_width="30dp"
         android:layout_height="50dp"
-        android:scaleType="fitXY"
         android:layout_below="@id/tvReplyMsg"
         android:layout_toStartOf="@id/cvOutTxt"
+        android:scaleType="fitXY"
+        android:visibility="gone"
         app:srcCompat="@drawable/outline_subdirectory_arrow_right_24" />
 
     <ImageView

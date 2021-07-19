@@ -52,7 +52,7 @@ public class AllChatsActivity extends AppCompatActivity {
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
         groups = User.getAllGroups(User.currentUser);
-        Log.i(TAG,"Number of all users: " + groups.size());
+        Log.i(TAG,"Number of all groups: " + groups.size());
         chatsAdapter = new ChatsAdapter(AllChatsActivity.this,groups);
         setAdapterInterface();
         glManager = new GridLayoutManager(AllChatsActivity.this,SPAN_COUNT,
@@ -112,6 +112,7 @@ public class AllChatsActivity extends AppCompatActivity {
     }
 
     private void goChatActivity(Group group) {
+        Log.i(TAG,"go group : " + group.getObjectId());
         Intent i = new Intent(AllChatsActivity.this,ChatActivity.class);
         i.putExtra(Group.KEY_GROUP, Parcels.wrap(group));
         this.startActivity(i);

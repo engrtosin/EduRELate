@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 
 import com.codepath.edurelate.BitmapScaler;
@@ -82,6 +83,8 @@ public class NewPicDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        photoFile = getPhotoFileUri(PHOTO_FILE_NAME);
+        fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider.Edurelate", photoFile);
         mListener = (NewPicInterface) getActivity();
         setOnClickListeners();
     }
@@ -113,6 +116,7 @@ public class NewPicDialogFragment extends DialogFragment {
                     return;
                 }
                 parsePhotoFile = saveImageAsParseFile();
+                Log.i(TAG,"pic saved");
                 mListener.picSaved(parsePhotoFile);
                 dismiss();
             }
@@ -187,13 +191,34 @@ public class NewPicDialogFragment extends DialogFragment {
         if ((data != null) && requestCode == PICK_PHOTO_CODE) {
             Uri photoUri = data.getData();
 
+            String realPath = getRealPathFromUri(getContext(),photoUri);
+            File localFile = new File(realPath);
+            boolean canRead = localFile.canRead();
             Bitmap selectedImage = loadFromUri(photoUri);
+            String uriToString = photoUri.toString();
+            File urllocalFile = new File(uriToString);
+            canRead = urllocalFile.canRead();
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byteArray = stream.toByteArray();
 
             binding.ivNewPic.setImageBitmap(selectedImage);
+        }
+    }
+
+    public static String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
@@ -211,10 +236,6 @@ public class NewPicDialogFragment extends DialogFragment {
     }
 
     private ParseFile saveImageAsParseFile() {
-        if (photoFile == null || binding.ivNewPic.getDrawable() == null) {
-            Toast.makeText(getContext(), "Image cannot be empty.", Toast.LENGTH_SHORT).show();
-            return null;
-        }
         return new ParseFile(byteArray);
     }
 }

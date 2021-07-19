@@ -15,6 +15,7 @@ import com.codepath.edurelate.databinding.ItemChatBinding;
 import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Friend;
 import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.Message;
 import com.codepath.edurelate.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -124,6 +125,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
                 }
             }
             bindFullGroup();
+//            Message latestMsg = group.getLatestMsg();
         }
 
         private void bindFullGroup() {

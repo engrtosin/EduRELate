@@ -1,6 +1,7 @@
 package com.codepath.edurelate.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -21,6 +22,23 @@ public class Message extends ParseObject {
     public static final String KEY_REPLY_TO = "replyTo";
     public static final String KEY_USERS_LIKING_THIS = "usersLikingThis";
     public static final int TRUNCATED_BODY_LENGTH = 50;
+    public static final int MESSAGE_OUTGOING = 789;
+    public static final int MESSAGE_INCOMING = 321;
+
+    public ParseUser sender;
+    public String body;
+    public Message replyTo;
+    public Group recipient;
+
+    public Message() {
+    }
+
+    public Message(ParseUser sender, String body, Message replyTo, Group recipient) {
+        this.sender = sender;
+        this.body = body;
+        this.replyTo = replyTo;
+        this.recipient = recipient;
+    }
 
     public String getBody(boolean isFull) {
         String body = getString(KEY_BODY);
@@ -30,8 +48,8 @@ public class Message extends ParseObject {
         return body;
     }
     
-    public ParseUser getSender() {
-        return getParseUser(KEY_SENDER);
+    public ParseUser getSender() throws ParseException {
+        return fetchIfNeeded().getParseUser(KEY_SENDER);
     }
 
     public ParseUser getRecipient() {

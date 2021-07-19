@@ -28,16 +28,15 @@ public class Group extends ParseObject {
     public static final String KEY_GROUP = "group";
     public static final String KEY_MEMBERS = "members";
     public static final String KEY_GROUP_PIC = "groupPic";
+    public static final String KEY_MESSAGES = "messages";
+    public static final String KEY_LATEST_MSG = "latestMsg";
     public static final String KEY_LATEST_MSG_DATE = "latestMsgDate";
 
-    public Chat chat;
-
-    public static Group newGroup(String groupName) throws ParseException {
+    public static Group newNonFriendGroup(String groupName) throws ParseException {
         Group group = new Group();
         group.setGroupName(groupName);
-        group.setIsFriendGroup(false);
         group.setNewMembers();
-        group.setNewChat();
+        group.put(KEY_MESSAGES,new ArrayList<>());
         group.setOwner(User.currentUser);
         group.saveInBackground(new SaveCallback() {
             @Override
@@ -61,19 +60,20 @@ public class Group extends ParseObject {
         return "no name";
     }
 
-    public boolean getIsFriendGroup() {
-        if (has(KEY_IS_FRIEND_GROUP)) {
-            return getBoolean(KEY_IS_FRIEND_GROUP);
-        }
-        return false;
+    public boolean getIsFriendGroup() throws ParseException {
+        return getOwner().getObjectId().equals(User.edurelateBot.getObjectId());
     }
 
-    public ParseUser getOwner() {
-        return getParseUser(KEY_OWNER);
+    public ParseUser getOwner() throws ParseException {
+        return fetchIfNeeded().getParseUser(KEY_OWNER);
+    }
+
+    public List<Message> getMessages() {
+        return getList(KEY_MESSAGES);
     }
 
     public Chat getChat() {
-        return chat;
+        return (Chat) get(KEY_CHAT);
     }
 
     public List<Member> getMembers() {
@@ -82,6 +82,10 @@ public class Group extends ParseObject {
 
     public ParseFile getGroupPic() throws ParseException {
         return fetchIfNeeded().getParseFile(KEY_GROUP_PIC);
+    }
+
+    public Message getLatestMsg() throws ParseException {
+        return (Message) get(KEY_LATEST_MSG);
     }
 
     public Date getLatestMsgDate() throws ParseException {
@@ -108,6 +112,10 @@ public class Group extends ParseObject {
         addUnique(KEY_MEMBERS,member);
     }
 
+    private void addMessage(Message message) {
+        add(KEY_MESSAGES,message);
+    }
+
     public void setNewMembers() {
         List<Member> members = new ArrayList<>();
         put(KEY_MEMBERS,members);
@@ -117,12 +125,12 @@ public class Group extends ParseObject {
         put(KEY_GROUP_PIC,groupPic);
     }
 
-    public void setNewChat() {
-        this.chat = new Chat();
-        setChatFields();
-        chat.saveInBackground();
-        put(KEY_CHAT,this.chat);
-    }
+//    public void setNewChat() {
+//        this.chat = new Chat();
+//        setChatFields();
+//        chat.saveInBackground();
+//        put(KEY_CHAT,this.chat);
+//    }
 
     /* ------------- GROUP HELPER METHODS ------------------- */
     public void sendInvite(ParseUser user) {
@@ -130,10 +138,33 @@ public class Group extends ParseObject {
         // send messages to the sender and the recipient.
     }
 
-    /* ------------- CHAT METHODS ------------------- */
-    public void setChatFields() {
-        this.chat.put(Chat.KEY_ISGROUPCHAT,true);
-        List<Message> messages = new ArrayList<>();
-        this.chat.put(Chat.KEY_MESSAGES,messages);
+    public Message sendNewMessage(String body, Message replyTo) {
+        Message message = new Message();
+        message.put(Message.KEY_BODY,body);
+        message.put(Message.KEY_RECIPIENT,this);
+        message.put(Message.KEY_USERS_LIKING_THIS, new ArrayList<>());
+        message.put(Message.KEY_SENDER,User.currentUser);
+        if (replyTo != null) {
+            message.put(Message.KEY_REPLY_TO,replyTo);
+        }
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error saving new message: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Message successfully saved.");
+            }
+        });
+        addMessage(message);
+        return message;
     }
+
+    /* ------------- CHAT METHODS ------------------- */
+//    public void setChatFields() {
+//        this.chat.put(Chat.KEY_ISGROUPCHAT,true);
+//        List<Message> messages = new ArrayList<>();
+//        this.chat.put(Chat.KEY_MESSAGES,messages);
+//    }
 }

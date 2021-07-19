@@ -135,6 +135,11 @@ public class ProfileActivity extends AppCompatActivity implements NewPicDialogFr
     @Override
     public void picSaved(ParseFile parseFile) {
         User.setUserPic(user,parseFile);
+        try {
+            initializeViews();
+        } catch (ParseException e) {
+            Log.e(TAG,"Error initializing views: " + e.getMessage(),e);
+        }
     }
 
     /* --------------------- intent methods to activities ----------------------- */

@@ -106,7 +106,11 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             itemGroupBinding.tvGroupOwner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.ownerClicked(group.getOwner());
+                    try {
+                        mListener.ownerClicked(group.getOwner());
+                    } catch (ParseException e) {
+                        Log.e(TAG,"Error while getting owner: " + e.getMessage(),e);
+                    }
                 }
             });
         }

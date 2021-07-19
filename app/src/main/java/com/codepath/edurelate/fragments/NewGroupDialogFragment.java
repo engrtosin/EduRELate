@@ -13,8 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.codepath.edurelate.R;
-import com.codepath.edurelate.databinding.FragmentGroupsBinding;
 import com.codepath.edurelate.databinding.FragmentNewGroupBinding;
 import com.codepath.edurelate.models.Group;
 import com.parse.ParseException;
@@ -82,7 +80,7 @@ public class NewGroupDialogFragment extends DialogFragment  implements TextView.
             Toast.makeText(getContext(),"Group name cannot be empty.",Toast.LENGTH_SHORT).show();
             return;
         }
-        Group.newGroup(groupName);
+        Group.newNonFriendGroup(groupName);
         dismiss();
     }
 
