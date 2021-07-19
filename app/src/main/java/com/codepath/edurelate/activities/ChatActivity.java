@@ -53,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
             Log.e(TAG,"getting is friend group failed: " + e.getMessage(),e);
         }
         messages = group.getMessages();
+        Log.i(TAG,"messages size: "+messages.size());
 
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -119,9 +120,19 @@ public class ChatActivity extends AppCompatActivity {
                     return;
                 }
                 Message newMessage = group.sendNewMessage(body,newReplyTo);
+                messages.add(messages.size(),newMessage);
+                Log.i(TAG,"messages size: "+messages.size());
                 adapter.notifyDataSetChanged();
                 binding.etNewMessage.setText("");
             }
         });
+    }
+
+    public void queryMessages() {
+        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        query.whereEqualTo(Message.KEY_RECIPIENT,group);
+        query.include(Message.KEY_SENDER);
+        query.include(Message.KEY_USERS_LIKING_THIS);
+        query.include(Message.KEY_REPLY_TO);
     }
 }

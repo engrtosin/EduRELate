@@ -76,19 +76,23 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
     @Override
     public int getItemViewType(int position) {
-        if (isCurrUser(position)) {
-            return Message.MESSAGE_OUTGOING;
-        } else {
-            return Message.MESSAGE_INCOMING;
+        try {
+            if (isCurrUser(position)) {
+                return Message.MESSAGE_OUTGOING;
+            } else {
+                return Message.MESSAGE_INCOMING;
+            }
+        } catch (ParseException e) {
+            Log.e(TAG,"Failed to get isCurrUser: " + e.getMessage(),e);
         }
+        return -1;
     }
 
     /* ---------------- ADAPTER HELPER METHODS ------------------- */
-    private boolean isCurrUser(int position) {
+    private boolean isCurrUser(int position) throws ParseException {
         Message message = messages.get(position);
-//        return message.getSender() != null &&
-//                message.getSender().getObjectId().equals(User.currentUser.getObjectId());
-        return message.sender != null && message.sender.getObjectId().equals(User.currentUser.getObjectId());
+        return message.getSender() != null &&
+                message.getSender().getObjectId().equals(User.currentUser.getObjectId());
     }
 
     /* ---------------- VIEWHOLDER CLASSES ------------------- */

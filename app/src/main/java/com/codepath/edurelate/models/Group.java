@@ -157,7 +157,17 @@ public class Group extends ParseObject {
                 Log.i(TAG,"Message successfully saved.");
             }
         });
+        put(KEY_LATEST_MSG,message);
         addMessage(message);
+        saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while adding message to group: " + e.getMessage(),e);
+                }
+                Log.i(TAG,"message successfully added to group");
+            }
+        });
         return message;
     }
 
