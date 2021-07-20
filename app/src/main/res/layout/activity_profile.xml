@@ -32,24 +32,28 @@
 
     </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:id="@+id/ivEditPic"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/cvUserPic"
-        android:layout_alignTop="@id/cvUserPic"
-        android:layout_marginStart="10dp"
-        app:srcCompat="@drawable/outline_edit_24" />
+        android:layout_alignTop="@id/cvUserPic" >
 
-    <ImageView
-        android:id="@+id/ivChat"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_toEndOf="@id/cvUserPic"
-        android:layout_below="@id/ivEditPic"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="10dp"
-        app:srcCompat="@drawable/outline_chat_bubble_outline_24" />
+        <ImageView
+            android:id="@+id/ivEditPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="10dp"
+            app:srcCompat="@drawable/outline_edit_24" />
+
+        <ImageView
+            android:id="@+id/ivChat"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            app:srcCompat="@drawable/outline_chat_bubble_outline_24" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llProfileActions"
