@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <queries>
+
         <!-- Camera -->
         <intent>
             <action android:name="android.media.action.IMAGE_CAPTURE" />
@@ -22,7 +23,8 @@
         android:roundIcon="@drawable/edurelate_round_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Edurelate">
-        <activity android:name=".activities.AllGroupsActivity"></activity>
+        <activity android:name=".activities.NotificationsActivity"></activity>
+        <activity android:name=".activities.AllGroupsActivity" />
         <activity android:name=".activities.AllUsersActivity" />
         <activity android:name=".activities.AllChatsActivity" />
         <activity android:name=".activities.AllMembersActivity" />
