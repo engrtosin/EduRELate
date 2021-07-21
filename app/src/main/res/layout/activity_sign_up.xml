@@ -28,13 +28,24 @@
         android:background="#c0c0c0" />
 
     <EditText
-        android:id="@+id/etUsername"
+        android:id="@+id/etEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="63dp"
-        android:layout_marginEnd="65dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="53dp"
+        android:ems="10"
+        android:hint="Your email here" />
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etEmail"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="57dp"
         android:ems="10"
         android:hint="Your username here" />
 
@@ -44,8 +55,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etUsername"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="70dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
         android:ems="10"
         android:hint="Your password here"
         android:inputType="textPassword" />
@@ -57,7 +68,7 @@
         android:layout_below="@+id/etPassword"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="53dp"
+        android:layout_marginEnd="56dp"
         android:ems="10"
         android:hint="Your first name here" />
 
@@ -68,7 +79,7 @@
         android:layout_below="@+id/etFirstName"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="68dp"
+        android:layout_marginEnd="57dp"
         android:ems="10"
         android:hint="Your last name here"
         android:inputType="textPersonName" />
@@ -79,20 +90,29 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/etLastName"
         android:layout_alignParentStart="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="156dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="157dp"
+        android:layout_marginTop="64dp"
         android:text="Sign Up" />
+
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/etEmail"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="58dp"
+        android:text="Email:" />
 
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@id/etUsername"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="67dp"
-        android:layout_marginEnd="58dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="50dp"
         android:layout_toStartOf="@+id/etUsername"
         android:text="Username:" />
 
@@ -100,10 +120,10 @@
         android:id="@+id/tvPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@id/etPassword"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="126dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="34dp"
         android:layout_toStartOf="@+id/etPassword"
         android:text="Password" />
@@ -112,10 +132,9 @@
         android:id="@+id/tvFirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@id/etFirstName"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="21dp"
-        android:layout_marginTop="201dp"
         android:layout_marginEnd="47dp"
         android:layout_toStartOf="@+id/etFirstName"
         android:text="First name:" />
@@ -124,11 +143,10 @@
         android:id="@+id/tvLastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@id/etLastName"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="266dp"
-        android:layout_marginEnd="59dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="30dp"
         android:layout_toStartOf="@+id/etLastName"
         android:text="Last name:" />
 
@@ -138,5 +156,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnSignUp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
         android:text="Do you have an account? Login" />
 </RelativeLayout>

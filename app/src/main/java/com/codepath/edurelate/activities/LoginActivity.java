@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(view);
 
         if (ParseUser.getCurrentUser() != null) {
+            User.currentUser = ParseUser.getCurrentUser();
             goHomeActivity();
         }
 
@@ -77,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e(TAG,"Login error occured",e);
                     return;
                 }
+                User.currentUser = ParseUser.getCurrentUser();
                 goHomeActivity();
                 Toast.makeText(LoginActivity.this,"Successful!",Toast.LENGTH_SHORT).show();
             }
@@ -101,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         activity.startActivity(i);
         activity.finish();
         Log.i(TAG,"in login activity after logout");
+        User.currentUser = ParseUser.getCurrentUser();
     }
 
     protected void goHomeActivity() {

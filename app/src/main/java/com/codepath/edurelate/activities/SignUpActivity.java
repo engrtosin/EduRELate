@@ -49,9 +49,10 @@ public class SignUpActivity extends LoginActivity {
             public void onClick(View v) {
                 String username = binding.etUsername.getText().toString();
                 String password = binding.etPassword.getText().toString();
+                String email = binding.etEmail.getText().toString();
                 String firstName = binding.etFirstName.getText().toString();
                 String lastName = binding.etLastName.getText().toString();
-                signUpUser(username,password,firstName,lastName);
+                signUpUser(username,password,email,firstName,lastName);
             }
         });
 
@@ -69,12 +70,14 @@ public class SignUpActivity extends LoginActivity {
     }
 
 
-    private void signUpUser(String username,String password,String firstName,String lastName) {
+    private void signUpUser(String username,String password,String email,String firstName,String lastName) {
         // Create the ParseUser
         ParseUser user = new ParseUser();
         // Set core properties
+        user.setEmail(email);
         user.setUsername(username);
         user.setPassword(password);
+        user.put(User.KEY_EMAIL,email);
         user.put(User.KEY_FIRST_NAME,firstName);
         user.put(User.KEY_LAST_NAME,lastName);
         user.put(User.KEY_FRIENDS,new ArrayList<>());
@@ -85,7 +88,7 @@ public class SignUpActivity extends LoginActivity {
                 if (e == null) {
                     Log.i(TAG,"Successful sign up");
                     Toast.makeText(SignUpActivity.this, "Successful!", Toast.LENGTH_SHORT).show();
-                    loginUser(username,password);
+                    loginUser(email,password);
                     // Hooray! Let them use the app now.
                 } else {
                     Log.i(TAG,"Failed sign up");

@@ -26,6 +26,7 @@ public class User {
     public static final String KEY_USER = "user";
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String BOT_OBJECT_ID = "kJmCehSRZm";
+    public static final String KEY_EMAIL = "email";
 
     public static ParseUser currentUser;
     public static ParseUser edurelateBot;
