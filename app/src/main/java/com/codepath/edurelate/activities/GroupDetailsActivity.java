@@ -86,7 +86,7 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
     }
 
     private void setIconVisibility() throws ParseException {
-        if (User.compareUsers(group.getOwner(),User.currentUser)) {
+        if (User.compareUsers(group.getOwner(),ParseUser.getCurrentUser())) {
             binding.ivOwnerChat.setVisibility(View.INVISIBLE);
             binding.ivEditPic.setVisibility(View.VISIBLE);
             return;

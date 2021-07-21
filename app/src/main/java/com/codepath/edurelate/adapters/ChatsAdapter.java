@@ -139,7 +139,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         }
 
         private void bindFriendGroup() throws ParseException {
-            ParseUser friend = User.findFriend(User.currentUser,group);
+            ParseUser friend = User.findFriend(ParseUser.getCurrentUser(),group);
             ParseFile image = friend.getParseFile(User.KEY_USER_PIC);
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(itemChatBinding.ivChatPic);

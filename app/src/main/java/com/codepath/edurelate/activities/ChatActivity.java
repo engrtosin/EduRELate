@@ -47,7 +47,7 @@ public class ChatActivity extends AppCompatActivity {
         Log.i(TAG,"group gotten: " + this.group.getObjectId());
         try {
             if (group.getIsFriendGroup()) {
-                friend = User.findFriend(User.currentUser,group);
+                friend = User.findFriend(ParseUser.getCurrentUser(),group);
             }
         } catch (ParseException e) {
             Log.e(TAG,"getting is friend group failed: " + e.getMessage(),e);
@@ -59,9 +59,9 @@ public class ChatActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-//        Message msg1 = new Message(User.currentUser,"Msg 1", null, null);
-//        Message msg2 = new Message(User.currentUser,"Msg 2", null, null);
-//        Message msg3 = new Message(User.currentUser,"Msg 3", null, null);
+//        Message msg1 = new Message(ParseUser.getCurrentUser(),"Msg 1", null, null);
+//        Message msg2 = new Message(ParseUser.getCurrentUser(),"Msg 2", null, null);
+//        Message msg3 = new Message(ParseUser.getCurrentUser(),"Msg 3", null, null);
 //        Message botMsg1 = new Message(User.edurelateBot,"Bot msg", null, null);
 //        messages = Arrays.asList(msg1,msg2,msg3,botMsg1);
         adapter = new MessagesAdapter(this,messages);

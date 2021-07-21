@@ -21,6 +21,8 @@ public class User {
     public static final String KEY_GROUPS = "groups";
     public static final String KEY_NON_FRIEND_GROUPS = "nonFriendGroups";
     public static final String KEY_MAJOR = "major";
+    public static final String KEY_INVITE_SENT = "invitesSent";
+    public static final String KEY_INVITE_RECEIVED = "invitesReceived";
     public static final String KEY_USER = "user";
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String BOT_OBJECT_ID = "kJmCehSRZm";
@@ -100,6 +102,26 @@ public class User {
         return message;
     }
 
+    public static void acceptInvite(Invite invite) {
+        if (invite.getIsGroupInvite()) {
+            invite.setStatus(Invite.INVITE_STATUS_ACCEPTED);
+            // add the person to the group
+            Group group = invite.getToJoinGroup();
+            ParseUser sender = invite.getSender();
+            try {
+                if (User.compareUsers(sender,group.getOwner())) {
+                    ParseUser recipient = invite.getRecipient();
+                    Member member = group.removeInvitee(recipient);
+//                    group.addMember(member);
+                }
+            } catch (ParseException e) {
+                Log.e(TAG,"Error while getting group owner: " + e.getMessage(),e);
+            }
+            Member member = group.removeJoinRequester(sender);
+//            group.addMember(member);
+        }
+    }
+
     public static void updateInviteStatus(Invite invite) {
         // add the recipient to the group or as a friend to sender
         // send a message to the recipient
@@ -111,12 +133,38 @@ public class User {
     }
 
     public static ParseUser findFriend(ParseUser user, Group group) {
-        List<Member> members = group.getMembers();
-        for (Member member : members) {
-            if (!User.compareUsers(user,member.getUser())) {
-                return member.getUser();
+        List<ParseUser> members = group.getMembers();
+        for (ParseUser member : members) {
+            if (!User.compareUsers(user,member)) {
+                return member;
             }
         }
         return  null;
+    }
+
+    public static void addInviteReceived(Invite invite, ParseUser user) {
+        user.add(KEY_INVITE_RECEIVED,invite);
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) {
+                    Log.e(TAG,"Error while adding invite received: " + e.getMessage(),e);
+                }
+                Log.i(TAG,"InviteReceived added successfully.");
+            }
+        });
+    }
+
+    public static void addInviteSent(Invite invite, ParseUser currentUser) {
+        currentUser.add(KEY_INVITE_SENT,invite);
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) {
+                    Log.e(TAG,"Error while adding invite sent: " + e.getMessage(),e);
+                }
+                Log.i(TAG,"InviteSent added successfully.");
+            }
+        });
     }
 }

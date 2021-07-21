@@ -57,7 +57,7 @@ public class AllMembersActivity extends AppCompatActivity {
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
-        members = group.getMembers();
+//        members = group.getMembers();
         Log.i(TAG,"Number of all users: " + members.size());
         membersAdapter = new MembersAdapter(AllMembersActivity.this,members);
         setAdapterInterface();

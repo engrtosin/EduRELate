@@ -17,6 +17,7 @@ import com.codepath.edurelate.databinding.FragmentGroupsBinding;
 import com.codepath.edurelate.interfaces.PeopleFragmentInterface;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.User;
+import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -76,7 +77,7 @@ public class GroupsFragment extends Fragment {
 
     /* ------------- fragment setup methods --------------- */
     private void setupRecyclerView() {
-        groups = User.getNonFriendGroups(User.currentUser);
+        groups = User.getNonFriendGroups(ParseUser.getCurrentUser());
         Log.i(TAG,"Number of all groups: " + groups.size());
         groupsAdapter = new GroupsAdapter(getContext(),groups);
         setAdapterInterface();

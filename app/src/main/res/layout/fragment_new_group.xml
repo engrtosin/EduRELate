@@ -25,11 +25,25 @@
         android:inputType="text"
         android:imeOptions="actionDone" />
 
+    <TextView
+        android:id="@+id/lblGroupAccess"
+        android:text="Is this group open?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etGroupName"/>
+
+    <Switch
+        android:id="@+id/swGroupAccess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblGroupAccess"
+        android:text="Open Group" />
+
     <ImageView
         android:id="@+id/ivDone"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignEnd="@id/etGroupName"
-        android:layout_below="@id/etGroupName"
+        android:layout_below="@id/swGroupAccess"
         app:srcCompat="@drawable/ic_baseline_done_24" />
 </RelativeLayout>

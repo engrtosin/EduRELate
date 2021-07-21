@@ -51,7 +51,7 @@ public class AllChatsActivity extends AppCompatActivity {
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
-        groups = User.getAllGroups(User.currentUser);
+        groups = User.getAllGroups(ParseUser.getCurrentUser());
         Log.i(TAG,"Number of all groups: " + groups.size());
         chatsAdapter = new ChatsAdapter(AllChatsActivity.this,groups);
         setAdapterInterface();

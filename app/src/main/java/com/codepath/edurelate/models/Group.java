@@ -2,17 +2,20 @@ package com.codepath.edurelate.models;
 
 import android.util.Log;
 
-import com.codepath.edurelate.activities.LoginActivity;
+import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -31,13 +34,19 @@ public class Group extends ParseObject {
     public static final String KEY_MESSAGES = "messages";
     public static final String KEY_LATEST_MSG = "latestMsg";
     public static final String KEY_LATEST_MSG_DATE = "latestMsgDate";
+    public static final String KEY_INVITEES = "invitees";
+    public static final String KEY_JOIN_REQUESTERS = "joinRequesters";
+    public static final int OPEN_GROUP_CODE = 0;
+    public static final int CLOSED_GROUP_CODE = 1;
+    public static final String KEY_GROUP_ACCESS = "groupAccess";
 
-    public static Group newNonFriendGroup(String groupName) throws ParseException {
+    public static Group newNonFriendGroup(String groupName,int groupAccess) throws ParseException {
         Group group = new Group();
         group.setGroupName(groupName);
         group.setNewMembers();
         group.put(KEY_MESSAGES,new ArrayList<>());
-        group.setOwner(User.currentUser);
+        group.put(KEY_GROUP_ACCESS,groupAccess);
+        group.setOwner(ParseUser.getCurrentUser());
         group.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -49,7 +58,7 @@ public class Group extends ParseObject {
                 Log.i(TAG,"Group successfully created!");
             }
         });
-        User.addNewGroup(group,User.currentUser);
+        User.addNewGroup(group,ParseUser.getCurrentUser());
         return group;
     }
 
@@ -76,7 +85,7 @@ public class Group extends ParseObject {
         return (Chat) get(KEY_CHAT);
     }
 
-    public List<Member> getMembers() {
+    public List<ParseUser> getMembers() {
         return getList(KEY_MEMBERS);
     }
 
@@ -108,8 +117,14 @@ public class Group extends ParseObject {
         put(KEY_LATEST_MSG_DATE, createdAt);
     }
 
-    public void addMember(Member member) {
+    public int getGroupAccess() {
+        return getInt(KEY_GROUP_ACCESS);
+    }
+
+    public void addMember(ParseUser member) {
         addUnique(KEY_MEMBERS,member);
+        // TODO: relocate this if needed
+        saveInBackground();
     }
 
     private void addMessage(Message message) {
@@ -134,8 +149,36 @@ public class Group extends ParseObject {
 
     /* ------------- GROUP HELPER METHODS ------------------- */
     public void sendInvite(ParseUser user) {
-        Invite.newInvite(user,this);
-        // send messages to the sender and the recipient.
+        Invite invite = Invite.newGroupInvite(user,this);
+        // send messages to the sender and the recipient
+        User.addInviteSent(invite,ParseUser.getCurrentUser());
+        User.addInviteReceived(invite,user);
+        saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.i(TAG,"Error while adding user to invitees: " + e.getMessage(),e);
+                }
+                Log.i(TAG, "user added to invitees.");
+            }
+        });
+    }
+
+    private Member createNewMember(ParseUser user, Invite invite) {
+        Member member = new Member();
+        member.put(Member.KEY_USER,user);
+        member.put(Member.KEY_GROUP,this);
+        member.put(Member.KEY_INVITE,invite);
+        member.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while saving member: " + e.getMessage(),e);
+                }
+                Log.i(TAG,"Member saved successfully to parse.");
+            }
+        });
+        return member;
     }
 
     public Message sendNewMessage(String body, Message replyTo) {
@@ -143,7 +186,7 @@ public class Group extends ParseObject {
         message.put(Message.KEY_BODY,body);
         message.put(Message.KEY_RECIPIENT,this);
         message.put(Message.KEY_USERS_LIKING_THIS, new ArrayList<>());
-        message.put(Message.KEY_SENDER,User.currentUser);
+        message.put(Message.KEY_SENDER,ParseUser.getCurrentUser());
         if (replyTo != null) {
             message.put(Message.KEY_REPLY_TO,replyTo);
         }
@@ -169,6 +212,97 @@ public class Group extends ParseObject {
             }
         });
         return message;
+    }
+
+    public Member getMember(ParseUser user) {
+        final Member[] member = new Member[1];
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.whereEqualTo(Member.KEY_USER,user);
+        query.whereEqualTo(Member.KEY_GROUP,this);
+        query.findInBackground(new FindCallback<Member>() {
+            @Override
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error finding member: " + e.getMessage(),e);
+                }
+                if (objects.size() > 0) {
+                    member[0] = objects.get(0);
+                }
+            }
+        });
+        return member[0];
+    }
+
+    public Member removeInvitee(ParseUser user) {
+        final Member[] member = new Member[1];
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.whereEqualTo(Member.KEY_USER,user);
+        query.whereEqualTo(Member.KEY_GROUP,this);
+        query.findInBackground(new FindCallback<Member>() {
+            @Override
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error finding member: " + e.getMessage(),e);
+                }
+                if (objects.size() > 0) {
+                    member[0] = objects.get(0);
+                }
+            }
+        });
+        removeAll(KEY_INVITEES, Arrays.asList(member[0]));
+        return member[0];
+    }
+
+    public Member removeJoinRequester(ParseUser user) {
+        final Member[] member = new Member[1];
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.whereEqualTo(Member.KEY_USER,user);
+        query.whereEqualTo(Member.KEY_GROUP,this);
+        query.findInBackground(new FindCallback<Member>() {
+            @Override
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error finding member: " + e.getMessage(),e);
+                }
+                if (objects.size() > 0) {
+                    member[0] = objects.get(0);
+                }
+            }
+        });
+        removeAll(KEY_JOIN_REQUESTERS, Arrays.asList(member[0]));
+        return member[0];
+    }
+
+    public Invite getInvite(ParseUser user) {
+        final Invite[] invite = new Invite[1];
+        ParseQuery<Invite> query = ParseQuery.getQuery(Invite.class);
+        Log.i(TAG,"group: " + this.getObjectId());
+        query.whereEqualTo(Invite.KEY_TO_JOIN_GROUP,this);
+        Log.i(TAG,"user: " + user.getObjectId());
+        query.whereEqualTo(Invite.KEY_NEW_MEMBER,user);
+        query.findInBackground(new FindCallback<Invite>() {
+            @Override
+            public void done(List<Invite> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error finding member: " + e.getMessage(),e);
+                }
+                if (objects.size() > 0) {
+                    Log.i(TAG,"results for " + user.getObjectId() + ": " + objects.size());
+                    invite[0] = objects.get(0);
+                }
+            }
+        });
+        return invite[0];
+    }
+
+    public boolean isMember(ParseUser user) {
+        List<ParseUser> members = getMembers();
+        for (int i = 0; i < members.size(); i++) {
+            if (User.compareUsers(members.get(i),user)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /* ------------- CHAT METHODS ------------------- */

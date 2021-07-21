@@ -92,7 +92,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     private boolean isCurrUser(int position) throws ParseException {
         Message message = messages.get(position);
         return message.getSender() != null &&
-                message.getSender().getObjectId().equals(User.currentUser.getObjectId());
+                message.getSender().getObjectId().equals(ParseUser.getCurrentUser().getObjectId());
     }
 
     /* ---------------- VIEWHOLDER CLASSES ------------------- */

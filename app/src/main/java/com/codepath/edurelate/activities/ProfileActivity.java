@@ -79,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity implements NewPicDialogFr
     }
 
     private void setIconVisibilities() {
-        if (User.compareUsers(user,User.currentUser)) {
+        if (User.compareUsers(user,ParseUser.getCurrentUser())) {
             binding.ivEditPic.setVisibility(View.VISIBLE);
             binding.tvDescPassword.setVisibility(View.VISIBLE);
             binding.tvPassword.setVisibility(View.VISIBLE);

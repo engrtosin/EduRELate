@@ -41,13 +41,13 @@ public class AllUsersActivity extends AppCompatActivity {
     UsersAdapter usersAdapter;
     GridLayoutManager glManager;
     Group invitingGroup;
-    boolean inviteType;
+    int inviteType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        inviteType = getIntent().getBooleanExtra(Invite.INVITE_TYPE,true);
+        inviteType = getIntent().getIntExtra(Invite.INVITE_TYPE,200);
         if (inviteType == Invite.GROUP_INVITE_CODE) {
             invitingGroup = Parcels.unwrap(getIntent().getParcelableExtra(Group.KEY_GROUP));
         }
@@ -61,7 +61,7 @@ public class AllUsersActivity extends AppCompatActivity {
 
         queryAllUsers();
         Log.i(TAG,"Number of all users: " + users.size());
-        usersAdapter = new UsersAdapter(AllUsersActivity.this,users);
+        usersAdapter = new UsersAdapter(AllUsersActivity.this,users,inviteType,invitingGroup);
         setAdapterInterface();
         glManager = new GridLayoutManager(AllUsersActivity.this,SPAN_COUNT,
                 GridLayoutManager.VERTICAL,false);
@@ -103,7 +103,7 @@ public class AllUsersActivity extends AppCompatActivity {
     protected void queryAllUsers() {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereNotContainedIn(User.KEY_OBJECT_ID,
-                Arrays.asList(User.BOT_OBJECT_ID,User.currentUser.getObjectId()));
+                Arrays.asList(User.BOT_OBJECT_ID,ParseUser.getCurrentUser().getObjectId()));
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
@@ -112,7 +112,7 @@ public class AllUsersActivity extends AppCompatActivity {
                     return;
                 }
                 Log.i(TAG, "Users successfully queried. Size: " + objects.size());
-                objects.add(0,User.currentUser);
+                objects.add(0,ParseUser.getCurrentUser());
                 usersAdapter.clear();
                 usersAdapter.addAll(objects);
             }
@@ -131,6 +131,7 @@ public class AllUsersActivity extends AppCompatActivity {
         usersAdapter.setAdapterListener(new UsersAdapter.UsersAdapterInterface() {
             @Override
             public void userClicked(ParseUser user) {
+
                 goProfileActivity(user);
             }
 
@@ -145,6 +146,26 @@ public class AllUsersActivity extends AppCompatActivity {
                 if (inviteType == Invite.GROUP_INVITE_CODE) {
                     invitingGroup.sendInvite(user);
                 }
+            }
+
+            @Override
+            public void acceptInvite(Invite invite) {
+
+            }
+
+            @Override
+            public void rejectInvite(Invite invite) {
+
+            }
+
+            @Override
+            public void sendGroupInvite(ParseUser user, Group group) {
+                group.sendInvite(user);
+            }
+
+            @Override
+            public void joinGroup(ParseUser user, Group group) {
+                group.addMember(user);
             }
         });
     }

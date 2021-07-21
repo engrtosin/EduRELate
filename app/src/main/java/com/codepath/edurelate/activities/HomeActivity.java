@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigation.setSelectedItemId(R.id.action_home);
         tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
 
-        groups = User.getNonFriendGroups(User.currentUser);
+        groups = User.getNonFriendGroups(ParseUser.getCurrentUser());
         Log.i(TAG,"Number of current user's groups: " + groups.size());
         groupsAdapter = new GroupsAdapter(HomeActivity.this,groups);
         setAdapterInterface();
@@ -75,15 +75,15 @@ public class HomeActivity extends AppCompatActivity {
     private void initializeViews() throws ParseException {
         setToolbarTitle(binding.getRoot(),getString(R.string.home_title));
         tbMainBinding.tvActivityTitle.setText(getString(R.string.home_title));
-        ParseFile image = User.currentUser.getParseFile(User.KEY_USER_PIC);
-        Log.i(TAG, User.currentUser.getUsername());
+        ParseFile image = ParseUser.getCurrentUser().getParseFile(User.KEY_USER_PIC);
+        Log.i(TAG, ParseUser.getCurrentUser().getUsername());
         Log.i(TAG,"curr user image: " + image);
         if (image != null) {
             Log.i(TAG,"about to glide curr user pic");
             Glide.with(this).load(image.getUrl()).into(binding.ivUserPic);
         }
-        binding.tvName.setText(User.getFullName(User.currentUser));
-        binding.tvUsername.setText("@" + User.currentUser.getUsername());
+        binding.tvName.setText(User.getFullName(ParseUser.getCurrentUser()));
+        binding.tvUsername.setText("@" + ParseUser.getCurrentUser().getUsername());
     }
 
     public static void setToolbarTitle(View rootView, String title) {
@@ -213,7 +213,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public static void navProfileActivity(Activity activity) {
         Intent i = new Intent(activity, ProfileActivity.class);
-        i.putExtra(User.KEY_USER, Parcels.wrap(User.currentUser));
+        i.putExtra(User.KEY_USER, Parcels.wrap(ParseUser.getCurrentUser()));
         activity.startActivity(i);
     }
 

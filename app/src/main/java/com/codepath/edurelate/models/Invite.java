@@ -19,20 +19,21 @@ public class Invite extends ParseObject {
     public static final String KEY_RECIPIENT = "inviteRecipient";
     public static final String KEY_STATUS = "status";
     public static final String KEY_IS_GROUP_INVITE = "isGroupInvite";
+    public static final String KEY_TO_JOIN_GROUP = "toJoinGroup";
+    public static final String KEY_TO_FRIEND_USER = "toFriendUser";
+    public static final String KEY_NEW_MEMBER = "newMember";
     public static final String INVITE_TYPE = "inviteType";
     public static final int INVITE_STATUS_ACCEPTED = 1;
     public static final int INVITE_STATUS_REJECTED = 0;
     public static final int INVITE_STATUS_NONE = -1;
-    public static final boolean GROUP_INVITE_CODE = true;
-    public static final boolean FRIEND_INVITE_CODE = false;
-    public static final String KEY_TO_JOIN_GROUP = "toJoinGroup";
-    public static final String KEY_TO_FRIEND_USER = "toFriendUser";
+    public static final int GROUP_INVITE_CODE = 300;
+    public static final int FRIEND_INVITE_CODE = 200;
 
-    public static void newInvite(ParseUser user, Group group) {
+    public static Invite newGroupInvite(ParseUser user, Group group) {
         Invite invite = new Invite();
         invite.put(KEY_IS_GROUP_INVITE,true);
-        invite.put(KEY_SENDER,User.currentUser);
-        invite.put(KEY_RECIPIENT,user);
+        invite.put(KEY_SENDER,ParseUser.getCurrentUser());
+        invite.put(KEY_NEW_MEMBER,user);
         invite.put(KEY_STATUS,Invite.INVITE_STATUS_NONE);
         invite.put(KEY_TO_JOIN_GROUP,group);
         invite.saveInBackground(new SaveCallback() {
@@ -44,6 +45,7 @@ public class Invite extends ParseObject {
                 Log.i(TAG,"Invite sent successfully.");
             }
         });
+        return invite;
     }
 
     public ParseUser getSender() {
@@ -54,8 +56,12 @@ public class Invite extends ParseObject {
         return getParseUser(KEY_RECIPIENT);
     }
     
-    public boolean getStatus() {
-        return getBoolean(KEY_STATUS);
+    public int getStatus() {
+        return getInt(KEY_STATUS);
+    }
+
+    public boolean getIsGroupInvite() {
+        return getBoolean(KEY_IS_GROUP_INVITE);
     }
 
     public void setSender(ParseUser sender) {
@@ -66,8 +72,11 @@ public class Invite extends ParseObject {
         put(KEY_RECIPIENT, recipient);
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         put(KEY_STATUS, status);
-        User.updateInviteStatus(this);
+    }
+
+    public Group getToJoinGroup() {
+        return (Group) getParseObject(KEY_TO_JOIN_GROUP);
     }
 }

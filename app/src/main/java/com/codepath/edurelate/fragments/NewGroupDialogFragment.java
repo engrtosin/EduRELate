@@ -62,6 +62,7 @@ public class NewGroupDialogFragment extends DialogFragment  implements TextView.
     }
 
     protected void setOnClickListeners() {
+        binding.swGroupAccess.setChecked(false);
         binding.ivDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +81,11 @@ public class NewGroupDialogFragment extends DialogFragment  implements TextView.
             Toast.makeText(getContext(),"Group name cannot be empty.",Toast.LENGTH_SHORT).show();
             return;
         }
-        Group.newNonFriendGroup(groupName);
+        int groupAccess = Group.OPEN_GROUP_CODE;
+        if (binding.swGroupAccess.isChecked()) {
+            groupAccess = Group.CLOSED_GROUP_CODE;
+        }
+        Group.newNonFriendGroup(groupName,groupAccess);
         dismiss();
     }
 
