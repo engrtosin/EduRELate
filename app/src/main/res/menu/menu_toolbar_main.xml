@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_logout"
-        android:icon="@drawable/outline_logout_black_24dp"
-        android:iconTint="@color/black"
-        android:title="Logout"
+        android:id="@+id/action_notifications"
+        android:icon="@drawable/outline_notifications_24"
+        android:iconTint="@color/white"
+        android:title="Notifications"
         app:showAsAction="always" />
 </menu>

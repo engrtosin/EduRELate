@@ -1,12 +1,15 @@
 package com.codepath.edurelate.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.PeopleFragmentPagerAdapter;
 import com.codepath.edurelate.databinding.ActivityPeopleBinding;
@@ -16,7 +19,7 @@ import com.codepath.edurelate.fragments.GroupsFragment;
 import com.codepath.edurelate.interfaces.PeopleFragmentInterface;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class PeopleActivity extends AppCompatActivity implements PeopleFragmentInterface {
+public class PeopleActivity extends BaseActivity implements PeopleFragmentInterface {
 
     public static final String TAG = "PeopleActivity";
 
@@ -24,6 +27,7 @@ public class PeopleActivity extends AppCompatActivity implements PeopleFragmentI
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
     PeopleFragmentPagerAdapter adapter;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +35,11 @@ public class PeopleActivity extends AppCompatActivity implements PeopleFragmentI
         binding = ActivityPeopleBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        setupToolbar("People");
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
         bottomNavigation.setSelectedItemId(R.id.action_home);
-        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         adapter = new PeopleFragmentPagerAdapter(getSupportFragmentManager(),
                 PeopleActivity.this);
         binding.vpPager.setAdapter(adapter);
@@ -43,7 +48,7 @@ public class PeopleActivity extends AppCompatActivity implements PeopleFragmentI
     }
 
     private void setListeners() {
-        setToolbarClickListeners();
+//        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation,PeopleActivity.this);
     }
 

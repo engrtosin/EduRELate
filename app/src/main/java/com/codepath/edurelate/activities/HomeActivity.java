@@ -2,6 +2,7 @@ package com.codepath.edurelate.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.app.Activity;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.GroupsAdapter;
 import com.codepath.edurelate.databinding.ActivityHomeBinding;
@@ -31,7 +33,7 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
     public static final String TAG = "HomeActivity";
     public static final int SPAN_COUNT = 2;
@@ -42,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     List<Group> groups;
     GroupsAdapter groupsAdapter;
     GridLayoutManager glManager;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +53,11 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        setupToolbar(getString(R.string.home_title));
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
         bottomNavigation.setSelectedItemId(R.id.action_home);
-        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
 
         groups = User.getNonFriendGroups(ParseUser.getCurrentUser());
         Log.i(TAG,"Number of current user's groups: " + groups.size());
@@ -73,8 +77,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initializeViews() throws ParseException {
-        setToolbarTitle(binding.getRoot(),getString(R.string.home_title));
-        tbMainBinding.tvActivityTitle.setText(getString(R.string.home_title));
+//        setToolbarTitle(binding.getRoot(),getString(R.string.home_title));
+//        tbMainBinding.tvActivityTitle.setText(getString(R.string.home_title));
         ParseFile image = ParseUser.getCurrentUser().getParseFile(User.KEY_USER_PIC);
         Log.i(TAG, ParseUser.getCurrentUser().getUsername());
         Log.i(TAG,"curr user image: " + image);
@@ -93,7 +97,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
-        setToolbarClickListeners();
+//        setToolbarClickListeners();
         setBottomNavigationListener(bottomNavigation, HomeActivity.this);
         setUserClickListeners();
         binding.tvActPeople.setOnClickListener(new View.OnClickListener() {

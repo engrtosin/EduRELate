@@ -54,7 +54,7 @@ public class AllMembersActivity extends AppCompatActivity {
         binding = ActivityAllMembersBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
 //        members = group.getMembers();
@@ -77,7 +77,7 @@ public class AllMembersActivity extends AppCompatActivity {
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
 
-        setToolbarClickListeners();
+//        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation, AllMembersActivity.this);
     }
 

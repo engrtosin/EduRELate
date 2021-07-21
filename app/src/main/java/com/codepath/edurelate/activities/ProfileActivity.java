@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityProfileBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
@@ -30,13 +31,14 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
-public class ProfileActivity extends AppCompatActivity implements NewPicDialogFragment.NewPicInterface {
+public class ProfileActivity extends BaseActivity implements NewPicDialogFragment.NewPicInterface {
 
     public static final String TAG = "ProfileActivity";
 
     ActivityProfileBinding binding;
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
+    Toolbar toolbar;
     ParseUser user;
 
     @Override
@@ -49,7 +51,12 @@ public class ProfileActivity extends AppCompatActivity implements NewPicDialogFr
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+        try {
+            setupToolbar(User.getFullName(user));
+        } catch (ParseException e) {
+            Log.e(TAG,"Error while getting full name: " + e.getMessage(),e);
+        }
+//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
         try {
@@ -61,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity implements NewPicDialogFr
     }
 
     private void initializeViews() throws ParseException {
-        tbMainBinding.tvActivityTitle.setText(User.getFirstName(user) + "'s Profile");
+//        tbMainBinding.tvActivityTitle.setText(User.getFirstName(user) + "'s Profile");
         setIconVisibilities();
 
         // TODO: Use User static method.
@@ -92,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity implements NewPicDialogFr
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
 
-        setToolbarClickListeners();
+//        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation,ProfileActivity.this);
 
         binding.btnPeople.setOnClickListener(new View.OnClickListener() {

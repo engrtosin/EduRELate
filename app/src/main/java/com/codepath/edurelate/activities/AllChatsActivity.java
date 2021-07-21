@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.ChatsAdapter;
 import com.codepath.edurelate.adapters.UsersAdapter;
@@ -29,7 +32,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllChatsActivity extends AppCompatActivity {
+public class AllChatsActivity extends BaseActivity {
 
     public static final String TAG = "AllChatsActivity";
     public static final int SPAN_COUNT = 1;
@@ -48,7 +51,8 @@ public class AllChatsActivity extends AppCompatActivity {
         binding = ActivityAllChatsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+        // TODO: Use string.xml value
+        setupToolbar("Chats");
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
         groups = User.getAllGroups(ParseUser.getCurrentUser());
@@ -69,7 +73,7 @@ public class AllChatsActivity extends AppCompatActivity {
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
 
-        setToolbarClickListeners();
+//        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation,AllChatsActivity.this);
     }
 

@@ -1,6 +1,7 @@
 package com.codepath.edurelate.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Intent;
@@ -8,7 +9,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.UsersAdapter;
 import com.codepath.edurelate.databinding.ActivityAllUsersBinding;
@@ -29,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AllUsersActivity extends AppCompatActivity {
+public class AllUsersActivity extends BaseActivity {
 
     public static final String TAG = "AllUsersActivity";
     public static final int SPAN_COUNT = 2;
@@ -42,6 +45,7 @@ public class AllUsersActivity extends AppCompatActivity {
     GridLayoutManager glManager;
     Group invitingGroup;
     int inviteType;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,8 @@ public class AllUsersActivity extends AppCompatActivity {
         binding = ActivityAllUsersBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+        setupToolbar("All Users");
+//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
         queryAllUsers();
@@ -79,7 +84,7 @@ public class AllUsersActivity extends AppCompatActivity {
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
 
-        setToolbarClickListeners();
+//        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation, AllUsersActivity.this);
     }
 

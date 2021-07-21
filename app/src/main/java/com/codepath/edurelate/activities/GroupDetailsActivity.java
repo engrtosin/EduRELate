@@ -2,6 +2,7 @@ package com.codepath.edurelate.activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
@@ -9,8 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityGroupDetailsBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
@@ -26,7 +29,7 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
-public class GroupDetailsActivity extends AppCompatActivity implements NewPicDialogFragment.NewPicInterface {
+public class GroupDetailsActivity extends BaseActivity implements NewPicDialogFragment.NewPicInterface {
 
     public static final String TAG = "GroupDetailsActivity";
     private static final int GO_ALL_USERS_CODE = 20;
@@ -35,6 +38,7 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
     Group group;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +49,8 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
         binding = ActivityGroupDetailsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+        setupToolbar(group.getGroupName());
+//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
         try {
@@ -58,7 +63,7 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
 
     private void initializeViews() throws ParseException {
         Log.i(TAG,"Initializing views in " + TAG);
-        tbMainBinding.tvActivityTitle.setText(group.getGroupName());
+//        tbMainBinding.tvActivityTitle.setText(group.getGroupName());
         setIconVisibility();
         initializeGroupSection();
         initializeOwnerSection();
@@ -96,7 +101,7 @@ public class GroupDetailsActivity extends AppCompatActivity implements NewPicDia
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
 
-        setToolbarClickListeners();
+//        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation, GroupDetailsActivity.this);
 
         binding.tvActInvite.setOnClickListener(new View.OnClickListener() {

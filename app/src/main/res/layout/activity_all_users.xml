@@ -7,7 +7,7 @@
     tools:context=".activities.AllUsersActivity">
 
     <include
-        layout="@layout/toolbar_main"
+        layout="@layout/toolbar_orig_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
@@ -16,7 +16,7 @@
         android:id="@+id/rvUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tbMain"
+        android:layout_below="@id/tbOrigMain"
         android:layout_above="@id/bottomNavigation"
         android:padding="10dp" />
 

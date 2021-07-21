@@ -9,7 +9,7 @@
     tools:context=".activities.AllChatsActivity">
 
     <include
-        layout="@layout/toolbar_main"
+        layout="@layout/toolbar_orig_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
@@ -18,7 +18,7 @@
         android:id="@+id/rvChats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tbMain" >
+        android:layout_below="@id/tbOrigMain" >
     </androidx.recyclerview.widget.RecyclerView>
 
     <include

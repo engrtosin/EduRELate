@@ -1,6 +1,7 @@
 package com.codepath.edurelate.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -9,7 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.GroupsAdapter;
 import com.codepath.edurelate.adapters.UsersAdapter;
@@ -32,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AllGroupsActivity extends AppCompatActivity {
+public class AllGroupsActivity extends BaseActivity {
 
     public static final String TAG = "AllGroupsActivity";
     public static final int SPAN_COUNT = 2;
@@ -43,6 +46,7 @@ public class AllGroupsActivity extends AppCompatActivity {
     List<Group > groups = new ArrayList<>();
     GroupsAdapter groupsAdapter;
     GridLayoutManager glManager;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,8 @@ public class AllGroupsActivity extends AppCompatActivity {
         binding = ActivityAllGroupsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+        setupToolbar("All Groups");
+//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
         queryAllGroups();
@@ -70,7 +75,7 @@ public class AllGroupsActivity extends AppCompatActivity {
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
 
-        setToolbarClickListeners();
+//        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation,AllGroupsActivity.this);
 
         binding.tvActNewGroup.setOnClickListener(new View.OnClickListener() {
