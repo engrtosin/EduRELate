@@ -2,15 +2,12 @@ package com.codepath.edurelate.models;
 
 import android.util.Log;
 
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.List;
-import java.util.Queue;
 
 public class User {
 
@@ -118,7 +115,7 @@ public class User {
 
     public static void acceptInvite(Invite invite) {
         if (invite.getIsGroupInvite()) {
-            invite.setStatus(Invite.INVITE_STATUS_ACCEPTED);
+            invite.setStatus(Invite.STATUS_ACCEPTED);
             // add the person to the group
             Group group = invite.getToJoinGroup();
             ParseUser sender = invite.getSender();

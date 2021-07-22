@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingVertical="10dp"
     android:paddingHorizontal="10dp">
 
@@ -26,6 +26,7 @@
             android:id="@+id/ivAccept"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:visibility="gone"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             app:tint="@color/edurelate_green"
@@ -35,6 +36,7 @@
             android:id="@+id/ivReject"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:visibility="gone"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             app:tint="@color/medium_red"
@@ -43,11 +45,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:text="Go to post"
             android:textStyle="bold"
             android:textSize="18sp" />
     </LinearLayout>
+
 
 </RelativeLayout>

@@ -40,4 +40,16 @@ public class Notification extends ParseObject {
         });
         return notification;
     }
+
+    public int getNotifType() {
+        return getInt(KEY_NOTIF_TYPE);
+    }
+
+    public Invite getInvite() {
+        return (Invite) getParseObject(KEY_INVITE);
+    }
+
+    public String getNotifText() {
+        return getString(KEY_NOTIF_TEXT);
+    }
 }

@@ -23,9 +23,9 @@ public class Invite extends ParseObject {
     public static final String KEY_TO_FRIEND_USER = "toFriendUser";
     public static final String KEY_NEW_MEMBER = "newMember";
     public static final String INVITE_TYPE = "inviteType";
-    public static final int INVITE_STATUS_ACCEPTED = 1;
-    public static final int INVITE_STATUS_REJECTED = 0;
-    public static final int INVITE_STATUS_NONE = -1;
+    public static final int STATUS_ACCEPTED = 1;
+    public static final int STATUS_REJECTED = 0;
+    public static final int STATUS_NONE = -1;
     public static final int GROUP_INVITE_CODE = 300;
     public static final int FRIEND_INVITE_CODE = 200;
 
@@ -34,7 +34,7 @@ public class Invite extends ParseObject {
         invite.put(KEY_IS_GROUP_INVITE,true);
         invite.put(KEY_SENDER,ParseUser.getCurrentUser());
         invite.put(KEY_NEW_MEMBER,user);
-        invite.put(KEY_STATUS,Invite.INVITE_STATUS_NONE);
+        invite.put(KEY_STATUS,Invite.STATUS_NONE);
         invite.put(KEY_TO_JOIN_GROUP,group);
         invite.saveInBackground(new SaveCallback() {
             @Override
