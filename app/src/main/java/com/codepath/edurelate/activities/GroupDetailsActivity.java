@@ -131,32 +131,19 @@ public class GroupDetailsActivity extends BaseActivity implements NewPicDialogFr
         binding.ivOwnerChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    goChatActivity(group.getOwner());
-                } catch (ParseException e) {
-                    Log.e(TAG,"Error after clicking owner: " + e.getMessage(),e);
-                }
+                goChatActivity(group.getOwner());
             }
         });
         binding.cvOwnerPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    goProfileActivity(group.getOwner());
-                } catch (ParseException e) {
-                    Log.e(TAG,"Error after clicking owner pic: " + e.getMessage(),e);
-                }
+                goProfileActivity(group.getOwner());
             }
         });
         binding.tvOwnerName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    goProfileActivity(group.getOwner());
-                } catch (ParseException e) {
-
-                    Log.e(TAG,"Error after clicking owner name: " + e.getMessage(),e);
-                }
+                goProfileActivity(group.getOwner());
             }
         });
     }
@@ -202,7 +189,7 @@ public class GroupDetailsActivity extends BaseActivity implements NewPicDialogFr
         this.startActivity(i);
     }
 
-    private void goProfileActivity(ParseUser owner) throws ParseException {
+    private void goProfileActivity(ParseUser owner) {
         Log.i(TAG,"going to profile activity for: " + owner.getUsername());
         Intent i = new Intent(GroupDetailsActivity.this,ProfileActivity.class);
         i.putExtra(User.KEY_USER,Parcels.wrap(group.getOwner()));

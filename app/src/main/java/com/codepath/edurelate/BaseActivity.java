@@ -74,6 +74,9 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_notifications) {
+            HomeActivity.goNotificationsActivity(this);
+        }
         return super.onOptionsItemSelected(item);
     }
 

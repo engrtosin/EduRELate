@@ -231,4 +231,9 @@ public class HomeActivity extends BaseActivity {
         Intent i = new Intent(activity, AllUsersActivity.class);
         activity.startActivity(i);
     }
+
+    public static void goNotificationsActivity(Activity activity) {
+        Intent i = new Intent(activity, NotificationsActivity.class);
+        activity.startActivity(i);
+    }
 }

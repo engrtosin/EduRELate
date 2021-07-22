@@ -45,12 +45,8 @@ public class ChatActivity extends AppCompatActivity {
 
         this.group = Parcels.unwrap(getIntent().getParcelableExtra(Group.KEY_GROUP));
         Log.i(TAG,"group gotten: " + this.group.getObjectId());
-        try {
-            if (group.getIsFriendGroup()) {
-                friend = User.findFriend(ParseUser.getCurrentUser(),group);
-            }
-        } catch (ParseException e) {
-            Log.e(TAG,"getting is friend group failed: " + e.getMessage(),e);
+        if (group.getIsFriendGroup()) {
+            friend = User.findFriend(ParseUser.getCurrentUser(),group);
         }
         messages = group.getMessages();
         Log.i(TAG,"messages size: "+messages.size());

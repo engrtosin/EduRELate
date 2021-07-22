@@ -110,6 +110,7 @@ public class AllGroupsActivity extends BaseActivity {
 
     private void queryAllGroups() {
         ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+        query.include(Group.KEY_OWNER);
         query.whereNotEqualTo(Group.KEY_OWNER,User.edurelateBot);
         query.findInBackground(new FindCallback<Group>() {
             @Override

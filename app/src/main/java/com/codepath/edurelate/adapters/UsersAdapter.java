@@ -123,109 +123,31 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         }
 
         public void bind(ParseUser user) throws ParseException {
-            this.user = user;
-            if (inviteType == Invite.GROUP_INVITE_CODE) {
-                if (group.getGroupAccess() == Group.OPEN_GROUP_CODE) {
-                    bindForOpenGroup();
+            if (User.compareUsers(group.getOwner(),ParseUser.getCurrentUser())) {
+                if (!User.compareUsers(user,group.getOwner())) {
+                    if (!group.isMember(user)) {
+                        itemUserBinding.tvInvite.setVisibility(View.VISIBLE);
+                        if (group.isInvited(user)) {
+                            itemUserBinding.tvInvite.setText("Invite sent");
+                            return;
+                        }
+                        itemUserBinding.tvInvite.setText("Invite to group");
+                        itemUserBinding.tvInvite.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                group.sendInvite(user);
+                                itemUserBinding.tvInvite.setText("Invite sent");
+                            }
+                        });
+                    }
                 }
-                bindForGroupInvite();
             }
-            else {
-                bindForFriendInvite();
-            }
+            itemUserBinding.tvFullName.setText(User.getFullName(user));
             ParseFile image = user.getParseFile(User.KEY_USER_PIC);
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(itemUserBinding.ivUserPic);
             }
-            else {
-                itemUserBinding.ivUserPic.setImageResource(R.drawable.outline_groups_24);
-            }
-            itemUserBinding.tvFullName.setText(User.getFullName(user));
         }
 
-        private void bindForOpenGroup() {
-            if (!group.isMember(user)) {
-                itemUserBinding.tvInvite.setText("Join group");
-                itemUserBinding.tvInvite.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mListener.joinGroup(user,group);
-                    }
-                });
-            }
-        }
-
-        private void bindForClosedGroup() {
-
-        }
-
-        private void bindForGroupInvite() throws ParseException {
-            Log.i(TAG,"bindForGroupInvite");
-            if (User.compareUsers(ParseUser.getCurrentUser(),group.getOwner())) {
-                Invite invite = group.getInvite(user);
-                Log.i(TAG,"invite from request: " + invite);
-                if (invite == null) {
-                    if (!group.isMember(user)) {
-                        bindForNoGroupInvite();
-                    }
-                    return;
-                }
-                if (invite.getStatus() == Invite.INVITE_STATUS_NONE) {
-                    if (User.compareUsers(invite.getSender(),ParseUser.getCurrentUser())) {
-                        // show user
-                        bindForNoneGroupInvite();
-                    }
-                    //
-                    bindForOwnerInvited(invite);
-                }
-            }
-        }
-
-        private void bindForNoGroupInvite() {
-            Log.i(TAG,"bindForNoGroupInvite");
-            itemUserBinding.tvInvite.setVisibility(View.VISIBLE);
-            itemUserBinding.tvInvite.setText("Invite to group");
-            itemUserBinding.tvInvite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.sendGroupInvite(user,group);
-                    itemUserBinding.tvInvite.setText("Invite sent");
-                    itemUserBinding.tvInvite.setClickable(false);
-                }
-            });
-        }
-
-        private void bindForNoneGroupInvite() {
-            Log.i(TAG,"bindForNoneGroupInvite");
-            itemUserBinding.tvInvite.setVisibility(View.VISIBLE);
-            itemUserBinding.tvInvite.setText("Invite sent");
-        }
-
-        private void bindForOwnerInvited(Invite invite) {
-            Log.i(TAG,"bindForOwnerInvited");
-            itemUserBinding.tvInvite.setVisibility(View.GONE);
-            itemUserBinding.tvAccept.setVisibility(View.VISIBLE);
-            itemUserBinding.tvReject.setVisibility(View.VISIBLE);
-            itemUserBinding.tvAccept.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.acceptInvite(invite);
-                    itemUserBinding.tvAccept.setVisibility(View.GONE);
-                    itemUserBinding.tvReject.setVisibility(View.GONE);
-                }
-            });
-            itemUserBinding.tvReject.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.rejectInvite(invite);
-                    itemUserBinding.tvAccept.setVisibility(View.GONE);
-                    itemUserBinding.tvReject.setVisibility(View.GONE);
-                }
-            });
-        }
-
-        private void bindForFriendInvite() {
-            Log.i(TAG,"bindForDeleteInvite");
-        }
     }
 }

@@ -69,12 +69,12 @@ public class Group extends ParseObject {
         return "no name";
     }
 
-    public boolean getIsFriendGroup() throws ParseException {
+    public boolean getIsFriendGroup() {
         return getOwner().getObjectId().equals(User.edurelateBot.getObjectId());
     }
 
-    public ParseUser getOwner() throws ParseException {
-        return fetchIfNeeded().getParseUser(KEY_OWNER);
+    public ParseUser getOwner() {
+        return getParseUser(KEY_OWNER);
     }
 
     public List<Message> getMessages() {
@@ -99,6 +99,10 @@ public class Group extends ParseObject {
 
     public Date getLatestMsgDate() throws ParseException {
         return getDate(KEY_LATEST_MSG_DATE);
+    }
+
+    public List<ParseUser> getInvitees() {
+        return getList(KEY_INVITEES);
     }
 
     public void setGroupName(String groupName) {
@@ -150,9 +154,11 @@ public class Group extends ParseObject {
     /* ------------- GROUP HELPER METHODS ------------------- */
     public void sendInvite(ParseUser user) {
         Invite invite = Invite.newGroupInvite(user,this);
-        // send messages to the sender and the recipient
-        User.addInviteSent(invite,ParseUser.getCurrentUser());
-        User.addInviteReceived(invite,user);
+        add(KEY_INVITEES,user);
+        String txtToOwner = "You invited " + User.getFullName(user) + " to " + getGroupName();
+        Notification toOwner = Notification.newInstance(Notification.INVITER_CODE,txtToOwner,invite);
+        String txtToUser = User.getFullName(getOwner()) + " invited you to " + getGroupName();
+        Notification toUser = Notification.newInstance(Notification.INVITEE_CODE,txtToUser,invite);
         saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -162,23 +168,6 @@ public class Group extends ParseObject {
                 Log.i(TAG, "user added to invitees.");
             }
         });
-    }
-
-    private Member createNewMember(ParseUser user, Invite invite) {
-        Member member = new Member();
-        member.put(Member.KEY_USER,user);
-        member.put(Member.KEY_GROUP,this);
-        member.put(Member.KEY_INVITE,invite);
-        member.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG,"Error while saving member: " + e.getMessage(),e);
-                }
-                Log.i(TAG,"Member saved successfully to parse.");
-            }
-        });
-        return member;
     }
 
     public Message sendNewMessage(String body, Message replyTo) {
@@ -299,6 +288,16 @@ public class Group extends ParseObject {
         List<ParseUser> members = getMembers();
         for (int i = 0; i < members.size(); i++) {
             if (User.compareUsers(members.get(i),user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isInvited(ParseUser user) {
+        List<ParseUser> invitees = getInvitees();
+        for (int i = 0; i < invitees.size(); i++) {
+            if (User.compareUsers(invitees.get(i),user)) {
                 return true;
             }
         }

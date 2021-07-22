@@ -2,12 +2,15 @@ package com.codepath.edurelate.models;
 
 import android.util.Log;
 
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.List;
+import java.util.Queue;
 
 public class User {
 
@@ -30,6 +33,7 @@ public class User {
 
     public static ParseUser currentUser;
     public static ParseUser edurelateBot;
+    public static Group parseGroup;
 
     public static String getFirstName(ParseUser user) {
         String firstName = user.getString(KEY_FIRST_NAME);
@@ -41,9 +45,15 @@ public class User {
         return lastName;
     }
 
-    public static String getFullName(ParseUser user) throws ParseException {
-        String firstName = user.fetchIfNeeded().getString(KEY_FIRST_NAME);
-        String lastName = user.fetchIfNeeded().getString(KEY_LAST_NAME);
+    public static String getFullName(ParseUser user) {
+        String firstName = null;
+        String lastName = null;
+        try {
+            firstName = user.fetchIfNeeded().getString(KEY_FIRST_NAME);
+            lastName = user.fetchIfNeeded().getString(KEY_LAST_NAME);
+        } catch (ParseException e) {
+            Log.e(TAG,"Error while getting first and last names: " + e.getMessage(),e);
+        }
         return firstName + " " + lastName;
     }
 
@@ -53,7 +63,8 @@ public class User {
 
     public static List<Group> getNonFriendGroups(ParseUser user) {
         Log.i(TAG,"User " + user.getUsername() + " has: " + user.has(KEY_NON_FRIEND_GROUPS));
-        return user.getList(KEY_NON_FRIEND_GROUPS);
+        List<Group> groups = user.getList(KEY_NON_FRIEND_GROUPS);
+        return groups;
     }
 
     public static void setFirstName(ParseUser user, String firstName) {
@@ -109,14 +120,10 @@ public class User {
             // add the person to the group
             Group group = invite.getToJoinGroup();
             ParseUser sender = invite.getSender();
-            try {
-                if (User.compareUsers(sender,group.getOwner())) {
-                    ParseUser recipient = invite.getRecipient();
-                    Member member = group.removeInvitee(recipient);
+            if (User.compareUsers(sender,group.getOwner())) {
+                ParseUser recipient = invite.getRecipient();
+                Member member = group.removeInvitee(recipient);
 //                    group.addMember(member);
-                }
-            } catch (ParseException e) {
-                Log.e(TAG,"Error while getting group owner: " + e.getMessage(),e);
             }
             Member member = group.removeJoinRequester(sender);
 //            group.addMember(member);

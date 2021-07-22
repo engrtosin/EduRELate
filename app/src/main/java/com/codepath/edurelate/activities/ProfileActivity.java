@@ -51,23 +51,15 @@ public class ProfileActivity extends BaseActivity implements NewPicDialogFragmen
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        try {
-            setupToolbar(User.getFullName(user));
-        } catch (ParseException e) {
-            Log.e(TAG,"Error while getting full name: " + e.getMessage(),e);
-        }
+        setupToolbar(User.getFullName(user));
 //        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
-        try {
-            initializeViews();
-        } catch (ParseException e) {
-            Log.e(TAG,"Error initializing views: " + e.getMessage(),e);
-        }
+        initializeViews();
         setClickListeners();
     }
 
-    private void initializeViews() throws ParseException {
+    private void initializeViews() {
 //        tbMainBinding.tvActivityTitle.setText(User.getFirstName(user) + "'s Profile");
         setIconVisibilities();
 
@@ -114,6 +106,13 @@ public class ProfileActivity extends BaseActivity implements NewPicDialogFragmen
                 showNewPicDialog();
             }
         });
+        binding.ivLogoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                goLoginActivity();
+            }
+        });
     }
 
     private void setToolbarClickListeners() {
@@ -142,11 +141,7 @@ public class ProfileActivity extends BaseActivity implements NewPicDialogFragmen
     @Override
     public void picSaved(ParseFile parseFile) {
         User.setUserPic(user,parseFile);
-        try {
-            initializeViews();
-        } catch (ParseException e) {
-            Log.e(TAG,"Error initializing views: " + e.getMessage(),e);
-        }
+        initializeViews();
     }
 
     /* --------------------- intent methods to activities ----------------------- */
@@ -154,5 +149,10 @@ public class ProfileActivity extends BaseActivity implements NewPicDialogFragmen
         Intent i = new Intent(ProfileActivity.this, PeopleActivity.class);
         i.putExtra(User.KEY_USER, Parcels.wrap(user));
         this.startActivity(i);
+    }
+
+    private void goLoginActivity() {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
     }
 }
