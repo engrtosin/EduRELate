@@ -16,6 +16,7 @@ import com.codepath.edurelate.databinding.ActivityChatBinding;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Message;
 import com.codepath.edurelate.models.User;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -25,6 +26,7 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,8 +50,6 @@ public class ChatActivity extends AppCompatActivity {
         if (group.getIsFriendGroup()) {
             friend = User.findFriend(ParseUser.getCurrentUser(),group);
         }
-        messages = group.getMessages();
-        Log.i(TAG,"messages size: "+messages.size());
 
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -60,9 +60,12 @@ public class ChatActivity extends AppCompatActivity {
 //        Message msg3 = new Message(ParseUser.getCurrentUser(),"Msg 3", null, null);
 //        Message botMsg1 = new Message(User.edurelateBot,"Bot msg", null, null);
 //        messages = Arrays.asList(msg1,msg2,msg3,botMsg1);
+        messages = new ArrayList<>();
         adapter = new MessagesAdapter(this,messages);
         binding.rvMessages.setAdapter(adapter);
         binding.rvMessages.setLayoutManager(new LinearLayoutManager(this));
+        queryMessages();
+        Log.i(TAG,"messages size: "+messages.size());
 
         try {
             initializeViews();
@@ -130,5 +133,14 @@ public class ChatActivity extends AppCompatActivity {
         query.include(Message.KEY_SENDER);
         query.include(Message.KEY_USERS_LIKING_THIS);
         query.include(Message.KEY_REPLY_TO);
+        query.findInBackground(new FindCallback<Message>() {
+            @Override
+            public void done(List<Message> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while quering messages for group (" + group.getObjectId() + "): " + e.getMessage(),e);
+                }
+                adapter.addAll(objects);
+            }
+        });
     }
 }

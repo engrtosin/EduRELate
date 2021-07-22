@@ -44,6 +44,17 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         this.messages = messages;
     }
 
+    /* ------------------- ADAPTER METHODS ------------------- */
+    public void addAll(List<Message> messages) {
+        this.messages.addAll(messages);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        messages.clear();
+        notifyDataSetChanged();
+    }
+
     /* ---------------- VIEWHOLDER METHODS ------------------- */
     @NonNull
     @NotNull

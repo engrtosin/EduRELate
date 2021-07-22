@@ -43,8 +43,6 @@ public class Group extends ParseObject {
     public static Group newNonFriendGroup(String groupName,int groupAccess) throws ParseException {
         Group group = new Group();
         group.setGroupName(groupName);
-        group.setNewMembers();
-        group.put(KEY_MESSAGES,new ArrayList<>());
         group.put(KEY_GROUP_ACCESS,groupAccess);
         group.setOwner(ParseUser.getCurrentUser());
         group.saveInBackground(new SaveCallback() {
@@ -58,7 +56,7 @@ public class Group extends ParseObject {
                 Log.i(TAG,"Group successfully created!");
             }
         });
-        User.addNewGroup(group,ParseUser.getCurrentUser());
+        Member member = Member.newMember(ParseUser.getCurrentUser(),group,false,Member.OWNER_CODE);
         return group;
     }
 
@@ -70,7 +68,7 @@ public class Group extends ParseObject {
     }
 
     public boolean getIsFriendGroup() {
-        return getOwner().getObjectId().equals(User.edurelateBot.getObjectId());
+        return getBoolean(KEY_IS_FRIEND_GROUP);
     }
 
     public ParseUser getOwner() {
@@ -174,7 +172,7 @@ public class Group extends ParseObject {
     public Message sendNewMessage(String body, Message replyTo) {
         Message message = new Message();
         message.put(Message.KEY_BODY,body);
-        message.put(Message.KEY_RECIPIENT,this);
+        message.put(Message.KEY_GROUP,this);
         message.put(Message.KEY_USERS_LIKING_THIS, new ArrayList<>());
         message.put(Message.KEY_SENDER,ParseUser.getCurrentUser());
         if (replyTo != null) {
@@ -191,17 +189,6 @@ public class Group extends ParseObject {
             }
         });
         put(KEY_LATEST_MSG,message);
-        addMessage(message);
-        saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.e(TAG,"Error while adding message to group: " + e.getMessage(),e);
-                    return;
-                }
-                Log.i(TAG,"message successfully added to group");
-            }
-        });
         return message;
     }
 

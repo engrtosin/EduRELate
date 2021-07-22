@@ -16,11 +16,16 @@ import com.codepath.edurelate.adapters.GroupsAdapter;
 import com.codepath.edurelate.databinding.FragmentGroupsBinding;
 import com.codepath.edurelate.interfaces.PeopleFragmentInterface;
 import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupsFragment extends Fragment {
@@ -77,7 +82,8 @@ public class GroupsFragment extends Fragment {
 
     /* ------------- fragment setup methods --------------- */
     private void setupRecyclerView() {
-        groups = User.getNonFriendGroups(ParseUser.getCurrentUser());
+        groups = new ArrayList<>();
+        queryExtraGroups();
         Log.i(TAG,"Number of all groups: " + groups.size());
         groupsAdapter = new GroupsAdapter(getContext(),groups);
         setAdapterInterface();
@@ -95,6 +101,26 @@ public class GroupsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 peopleListener.joinNewGroup();
+            }
+        });
+    }
+
+    private void queryExtraGroups() {
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.include(Member.KEY_GROUP);
+        query.whereEqualTo(Member.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Member.KEY_IS_FRIEND_GROUP,false);
+        query.whereNotContainedIn(Member.KEY_GROUP,User.currUserGroups);
+        query.findInBackground(new FindCallback<Member>() {
+            @Override
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while querying for members: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Members queried successfully. Size: " + objects.size());
+                User.currUserGroups.addAll(Member.getGroups(objects));
+                groupsAdapter.addAll(User.currUserGroups);
             }
         });
     }

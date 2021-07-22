@@ -7,6 +7,7 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -31,6 +32,7 @@ public class User {
     public static ParseUser currentUser;
     public static ParseUser edurelateBot;
     public static Group parseGroup;
+    public static List<Group> currUserGroups = new ArrayList<>();
 
     public static String getFirstName(ParseUser user) {
         String firstName = user.getString(KEY_FIRST_NAME);

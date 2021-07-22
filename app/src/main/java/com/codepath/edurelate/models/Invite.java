@@ -80,4 +80,18 @@ public class Invite extends ParseObject {
     public Group getToJoinGroup() {
         return (Group) getParseObject(KEY_TO_JOIN_GROUP);
     }
+
+    public void acceptInvite() {
+        put(KEY_STATUS, Invite.STATUS_ACCEPTED);
+        // add new member to group
+        // send notification to sender
+        // send notification to recipient
+    }
+
+    public void rejectInvite() {
+        put(KEY_STATUS, Invite.STATUS_ACCEPTED);
+        // add new member to group
+        // send notification to sender
+        // send notification to recipient
+    }
 }

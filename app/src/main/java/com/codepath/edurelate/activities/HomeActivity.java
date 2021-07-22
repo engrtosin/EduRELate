@@ -22,15 +22,20 @@ import com.codepath.edurelate.databinding.ActivityHomeBinding;
 import com.codepath.edurelate.databinding.TitleActivityBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HomeActivity extends BaseActivity {
@@ -59,14 +64,14 @@ public class HomeActivity extends BaseActivity {
         bottomNavigation.setSelectedItemId(R.id.action_home);
 //        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
 
-        groups = User.getNonFriendGroups(ParseUser.getCurrentUser());
-        Log.i(TAG,"Number of current user's groups: " + groups.size());
+        groups = new ArrayList<>();
         groupsAdapter = new GroupsAdapter(HomeActivity.this,groups);
         setAdapterInterface();
         glManager = new GridLayoutManager(HomeActivity.this,SPAN_COUNT,
                 GridLayoutManager.VERTICAL,false);
         binding.rvGroups.setAdapter(groupsAdapter);
         binding.rvGroups.setLayoutManager(glManager);
+        queryExtraGroups();
 
         try {
             initializeViews();
@@ -167,6 +172,27 @@ public class HomeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 navProfileActivity(HomeActivity.this);
+            }
+        });
+    }
+
+    /* ------------------------- interface methods --------------------------- */
+    private void queryExtraGroups() {
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.include(Member.KEY_GROUP);
+        query.whereEqualTo(Member.KEY_IS_FRIEND_GROUP,false);
+        query.whereContainedIn(Member.KEY_USER, Arrays.asList(ParseUser.getCurrentUser()));
+        query.whereNotContainedIn(Member.KEY_GROUP,User.currUserGroups);
+        query.findInBackground(new FindCallback<Member>() {
+            @Override
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while querying for members: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Members queried successfully. Size: " + objects.size());
+                User.currUserGroups.addAll(Member.getGroups(objects));
+                groupsAdapter.addAll(User.currUserGroups);
             }
         });
     }

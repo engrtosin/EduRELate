@@ -61,11 +61,13 @@ public class NotificationsActivity extends BaseActivity {
             @Override
             public void inviteAccepted(Invite invite) {
                 Log.i(TAG,"Invite accepted: " + invite.getObjectId());
+                invite.acceptInvite();
             }
 
             @Override
             public void inviteRejected(Invite invite) {
                 Log.i(TAG,"Invite rejected: " + invite.getObjectId());
+                invite.rejectInvite();
             }
         });
     }

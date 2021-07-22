@@ -21,6 +21,7 @@ public class Message extends ParseObject {
     public static final String KEY_RECIPIENT = "recipient";
     public static final String KEY_REPLY_TO = "replyTo";
     public static final String KEY_USERS_LIKING_THIS = "usersLikingThis";
+    public static final String KEY_GROUP = "group";
     public static final int TRUNCATED_BODY_LENGTH = 50;
     public static final int MESSAGE_OUTGOING = 789;
     public static final int MESSAGE_INCOMING = 321;

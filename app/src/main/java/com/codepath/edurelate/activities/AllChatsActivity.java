@@ -23,8 +23,12 @@ import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
+import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -55,7 +59,7 @@ public class AllChatsActivity extends BaseActivity {
         setupToolbar("Chats");
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
-        groups = User.getAllGroups(ParseUser.getCurrentUser());
+        groups = new ArrayList<>();
         Log.i(TAG,"Number of all groups: " + groups.size());
         chatsAdapter = new ChatsAdapter(AllChatsActivity.this,groups);
         setAdapterInterface();
@@ -66,8 +70,26 @@ public class AllChatsActivity extends BaseActivity {
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         binding.rvChats.addItemDecoration(itemDecoration);
+        queryAllGroups();
 
         setClickListeners();
+    }
+
+    private void queryAllGroups() {
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.include(Member.KEY_GROUP);
+        query.whereEqualTo(Member.KEY_USER, ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Member>() {
+            @Override
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while querying for members: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Members queried successfully. Size: " + objects.size());
+                chatsAdapter.addAll(Member.getGroups(objects));
+            }
+        });
     }
 
     private void setClickListeners() {
