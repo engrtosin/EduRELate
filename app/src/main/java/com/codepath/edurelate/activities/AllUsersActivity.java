@@ -19,6 +19,7 @@ import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
+import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
@@ -44,6 +45,7 @@ public class AllUsersActivity extends BaseActivity {
     UsersAdapter usersAdapter;
     GridLayoutManager glManager;
     Group invitingGroup;
+    List<String> membersId;
     int inviteType;
     Toolbar toolbar;
 
@@ -54,6 +56,8 @@ public class AllUsersActivity extends BaseActivity {
         inviteType = getIntent().getIntExtra(Invite.INVITE_TYPE,200);
         if (inviteType == Invite.GROUP_INVITE_CODE) {
             invitingGroup = Parcels.unwrap(getIntent().getParcelableExtra(Group.KEY_GROUP));
+            membersId = new ArrayList<>();
+            queryAllMembers();
         }
 
         Log.i(TAG,"in on create");
@@ -66,7 +70,7 @@ public class AllUsersActivity extends BaseActivity {
 
         queryAllUsers();
         Log.i(TAG,"Number of all users: " + users.size());
-        usersAdapter = new UsersAdapter(AllUsersActivity.this,users,inviteType,invitingGroup);
+        usersAdapter = new UsersAdapter(AllUsersActivity.this,users,inviteType,invitingGroup,membersId);
         setAdapterInterface();
         glManager = new GridLayoutManager(AllUsersActivity.this,SPAN_COUNT,
                 GridLayoutManager.VERTICAL,false);
@@ -120,6 +124,26 @@ public class AllUsersActivity extends BaseActivity {
                 objects.add(0,ParseUser.getCurrentUser());
                 usersAdapter.clear();
                 usersAdapter.addAll(objects);
+            }
+        });
+    }
+
+    private void queryAllMembers() {
+        membersId = new ArrayList<>();
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.include(Member.KEY_USER);
+        query.whereEqualTo(Member.KEY_GROUP,invitingGroup);
+        query.findInBackground(new FindCallback<Member>() {
+            @Override
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error while getting members: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Members size: " + objects.size());
+                for (int i = 0; i < objects.size(); i++) {
+                    membersId.add(objects.get(i).getUser().getObjectId());
+                }
             }
         });
     }

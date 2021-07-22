@@ -30,6 +30,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     public final int inviteType;
     private final Group group;
+    private final List<String> membersId;
     Context context;
     List<ParseUser> users;
     UsersAdapterInterface mListener;
@@ -48,15 +49,16 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         this.mListener = usersAdapterInterface;
     }
 
-    public UsersAdapter(Context context, List<ParseUser> users, int inviteType, Group group) {
+    public UsersAdapter(Context context, List<ParseUser> users, int inviteType, Group group, List<String> membersId) {
         this.context = context;
         this.users = users;
         this.inviteType = inviteType;
         this.group = group;
+        this.membersId = membersId;
     }
 
-    public void addAll(List<ParseUser> objects) {
-        users.addAll(objects);
+    public void addAll(List<ParseUser> users) {
+        this.users.addAll(users);
         notifyDataSetChanged();
     }
 
@@ -125,18 +127,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         public void bind(ParseUser user) throws ParseException {
             if (User.compareUsers(group.getOwner(),ParseUser.getCurrentUser())) {
                 if (!User.compareUsers(user,group.getOwner())) {
-                    if (!group.isMember(user)) {
+                    if (!membersId.contains(user.getObjectId())) {
                         itemUserBinding.tvInvite.setVisibility(View.VISIBLE);
-                        if (group.isInvited(user)) {
-                            itemUserBinding.tvInvite.setText("Invite sent");
-                            return;
-                        }
-                        itemUserBinding.tvInvite.setText("Invite to group");
+                        itemUserBinding.tvInvite.setText("Add to group");
                         itemUserBinding.tvInvite.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                group.sendInvite(user);
-                                itemUserBinding.tvInvite.setText("Invite sent");
+                                group.addMember(user);
+                                itemUserBinding.tvInvite.setText("User added");
                             }
                         });
                     }

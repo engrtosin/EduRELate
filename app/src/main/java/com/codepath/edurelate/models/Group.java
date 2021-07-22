@@ -123,10 +123,8 @@ public class Group extends ParseObject {
         return getInt(KEY_GROUP_ACCESS);
     }
 
-    public void addMember(ParseUser member) {
-        addUnique(KEY_MEMBERS,member);
-        // TODO: relocate this if needed
-        saveInBackground();
+    public void addMember(ParseUser user) {
+        Member member = Member.newMember(user,this,getIsFriendGroup(),Member.MEMBER_CODE);
     }
 
     private void addMessage(Message message) {
@@ -278,9 +276,11 @@ public class Group extends ParseObject {
     }
 
     public boolean isMember(ParseUser user) {
-        List<ParseUser> members = getMembers();
-        for (int i = 0; i < members.size(); i++) {
-            if (User.compareUsers(members.get(i),user)) {
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.whereEqualTo(Member.KEY_GROUP,this);
+        List<Member> allMembers = query.findInBackground().getResult();
+        for (int i = 0; i < allMembers.size(); i++) {
+            if (User.compareUsers(allMembers.get(i).getUser(),ParseUser.getCurrentUser())) {
                 return true;
             }
         }
