@@ -82,6 +82,7 @@ public class User {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG,"Error updating user " + user.getObjectId() + " pic");
+                    return;
                 }
             }
         });
@@ -97,6 +98,7 @@ public class User {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG,"Error adding group to current user: " + e.getMessage(),e);
+                    return;
                 }
                 Log.i(TAG,"group added to current user.");
             }
@@ -157,6 +159,7 @@ public class User {
             public void done(ParseException e) {
                 if(e != null) {
                     Log.e(TAG,"Error while adding invite received: " + e.getMessage(),e);
+                    return;
                 }
                 Log.i(TAG,"InviteReceived added successfully.");
             }
@@ -170,6 +173,7 @@ public class User {
             public void done(ParseException e) {
                 if(e != null) {
                     Log.e(TAG,"Error while adding invite sent: " + e.getMessage(),e);
+                    return;
                 }
                 Log.i(TAG,"InviteSent added successfully.");
             }

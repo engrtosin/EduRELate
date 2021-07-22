@@ -41,6 +41,7 @@ public class Invite extends ParseObject {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG,"Error saving invite: " + e.getMessage(),e);
+                    return;
                 }
                 Log.i(TAG,"Invite sent successfully.");
             }

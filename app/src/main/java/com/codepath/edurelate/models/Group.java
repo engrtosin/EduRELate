@@ -156,14 +156,15 @@ public class Group extends ParseObject {
         Invite invite = Invite.newGroupInvite(user,this);
         add(KEY_INVITEES,user);
         String txtToOwner = "You invited " + User.getFullName(user) + " to " + getGroupName();
-        Notification toOwner = Notification.newInstance(Notification.INVITER_CODE,txtToOwner,invite);
+        Notification toOwner = Notification.newInstance(getOwner(),Notification.INVITER_CODE,txtToOwner,invite);
         String txtToUser = User.getFullName(getOwner()) + " invited you to " + getGroupName();
-        Notification toUser = Notification.newInstance(Notification.INVITEE_CODE,txtToUser,invite);
+        Notification toUser = Notification.newInstance(user,Notification.INVITEE_CODE,txtToUser,invite);
         saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
                     Log.i(TAG,"Error while adding user to invitees: " + e.getMessage(),e);
+                    return;
                 }
                 Log.i(TAG, "user added to invitees.");
             }
@@ -196,6 +197,7 @@ public class Group extends ParseObject {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG,"Error while adding message to group: " + e.getMessage(),e);
+                    return;
                 }
                 Log.i(TAG,"message successfully added to group");
             }
@@ -213,6 +215,7 @@ public class Group extends ParseObject {
             public void done(List<Member> objects, ParseException e) {
                 if (e != null) {
                     Log.e(TAG,"Error finding member: " + e.getMessage(),e);
+                    return;
                 }
                 if (objects.size() > 0) {
                     member[0] = objects.get(0);
@@ -232,6 +235,7 @@ public class Group extends ParseObject {
             public void done(List<Member> objects, ParseException e) {
                 if (e != null) {
                     Log.e(TAG,"Error finding member: " + e.getMessage(),e);
+                    return;
                 }
                 if (objects.size() > 0) {
                     member[0] = objects.get(0);
@@ -252,6 +256,7 @@ public class Group extends ParseObject {
             public void done(List<Member> objects, ParseException e) {
                 if (e != null) {
                     Log.e(TAG,"Error finding member: " + e.getMessage(),e);
+                    return;
                 }
                 if (objects.size() > 0) {
                     member[0] = objects.get(0);
@@ -274,6 +279,7 @@ public class Group extends ParseObject {
             public void done(List<Invite> objects, ParseException e) {
                 if (e != null) {
                     Log.e(TAG,"Error finding member: " + e.getMessage(),e);
+                    return;
                 }
                 if (objects.size() > 0) {
                     Log.i(TAG,"results for " + user.getObjectId() + ": " + objects.size());
