@@ -125,6 +125,10 @@ public class Group extends ParseObject {
 
     public void addMember(ParseUser user) {
         Member member = Member.newMember(user,this,getIsFriendGroup(),Member.MEMBER_CODE);
+        String txtToOwner = "You added " + User.getFullName(user) + " to " + getGroupName();
+        Notification toOwner = Notification.newInstance(getOwner(),Notification.NEW_MEMBER_CODE,txtToOwner);
+        String txtToUser = User.getFullName(getOwner()) + " added you to " + getGroupName();
+        Notification toUser = Notification.newInstance(user,Notification.NEW_GROUP_CODE,txtToUser);
     }
 
     private void addMessage(Message message) {

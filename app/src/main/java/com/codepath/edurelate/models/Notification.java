@@ -20,7 +20,9 @@ public class Notification extends ParseObject {
     public static final String KEY_NOTIF_TEXT = "notifText";
     public static final String KEY_INVITE = "invite";
     public static final int INVITER_CODE = 10;
-    public static final int INVITEE_CODE = 20;
+    public static final int INVITEE_CODE = 15;
+    public static final int NEW_GROUP_CODE = 20;
+    public static final int NEW_MEMBER_CODE = 25;
 
     public static Notification newInstance(ParseUser user, int notifType, String notifText, Invite invite) {
         Notification notification = new Notification();
@@ -28,6 +30,24 @@ public class Notification extends ParseObject {
         notification.put(KEY_NOTIF_TYPE,notifType);
         notification.put(KEY_NOTIF_TEXT,notifText);
         notification.put(KEY_INVITE,invite);
+        notification.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while saving notification: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Notification successfully saved.");
+            }
+        });
+        return notification;
+    }
+
+    public static Notification newInstance(ParseUser user, int notifType, String notifText) {
+        Notification notification = new Notification();
+        notification.put(KEY_USER,user);
+        notification.put(KEY_NOTIF_TYPE,notifType);
+        notification.put(KEY_NOTIF_TEXT,notifText);
         notification.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
