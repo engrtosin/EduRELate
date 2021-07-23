@@ -177,8 +177,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         }
 
         private void bindReply() {
-            if (message.replyTo != null) {
-
+            Message replyTo = message.getReplyTo();
+            if (replyTo != null) {
+                binding.tvReplyMsg.setVisibility(View.VISIBLE);
+                binding.ivArrow.setVisibility(View.VISIBLE);
+                binding.tvReplyMsg.setText(replyTo.getBody(false));
             }
         }
     }
@@ -201,6 +204,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                     mListener.onDoubleTap(message);
                 }
             });
+            binding.tvReplyMsg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.replyClicked(message.getReplyTo());
+                }
+            });
             binding.ivLikeOutMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -212,9 +221,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         public void bind(Message message) {
             this.message = message;
             binding.tvOutTxt.setText(message.getBody(true));
-//            binding.tvOutTxt.setText(message.body);
+            bindReply();
+        }
+
+        private void bindReply() {
+            Message replyTo = message.getReplyTo();
+            if (replyTo != null) {
+                binding.tvReplyMsg.setVisibility(View.VISIBLE);
+                binding.ivArrow.setVisibility(View.VISIBLE);
+                binding.tvReplyMsg.setText(replyTo.getBody(false));
+            }
         }
     }
-
-
 }

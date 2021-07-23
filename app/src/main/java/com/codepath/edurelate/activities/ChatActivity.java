@@ -40,6 +40,7 @@ public class ChatActivity extends AppCompatActivity {
     ActivityChatBinding binding;
     Group group;
     List<Message> messages;
+    List<String> messageIds;
     ParseUser friend;
     MessagesAdapter adapter;
     MessagesAdapter.MessagesAdapterInterface adapterListener;
@@ -65,6 +66,7 @@ public class ChatActivity extends AppCompatActivity {
 //        Message botMsg1 = new Message(User.edurelateBot,"Bot msg", null, null);
 //        messages = Arrays.asList(msg1,msg2,msg3,botMsg1);
         messages = new ArrayList<>();
+        messageIds = new ArrayList<>();
         adapter = new MessagesAdapter(this,messages);
         binding.rvMessages.setAdapter(adapter);
         binding.rvMessages.setLayoutManager(new LinearLayoutManager(this));
@@ -129,6 +131,23 @@ public class ChatActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 binding.rvMessages.smoothScrollToPosition(messages.size()-1);
                 binding.etNewMessage.setText("");
+                newReplyTo = null;
+                binding.vDemarcate1.setVisibility(View.GONE);
+                binding.rlReply.setVisibility(View.GONE);
+            }
+        });
+        binding.rlReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.rvMessages.smoothScrollToPosition(messages.indexOf(newReplyTo));
+            }
+        });
+        binding.ivCancelReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newReplyTo = null;
+                binding.vDemarcate1.setVisibility(View.GONE);
+                binding.rlReply.setVisibility(View.GONE);
             }
         });
     }
@@ -148,8 +167,15 @@ public class ChatActivity extends AppCompatActivity {
                 }
                 adapter.addAll(objects);
                 binding.rvMessages.smoothScrollToPosition(messages.size()-1);
+                updateMessageIds(objects);
             }
         });
+    }
+
+    private void updateMessageIds(List<Message> messages) {
+        for (int i = 0; i < messages.size(); i++) {
+            messageIds.add(messages.get(i).getObjectId());
+        }
     }
 
     /* ------------------------- ADAPTER LISTENER METHOD -------------------------------- */
@@ -162,37 +188,24 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void replyClicked(Message replyTo) {
-                binding.rvMessages.smoothScrollToPosition(messages.indexOf(replyTo));
+                Log.i(TAG,"Reply position: " + messageIds.indexOf(replyTo.getObjectId()));
+                binding.rvMessages.smoothScrollToPosition(messageIds.indexOf(replyTo.getObjectId()));
             }
 
             @Override
             public void onDoubleTap(Message message) {
                 binding.rvMessages.smoothScrollToPosition(messages.size());
                 newReplyTo = message;
-                bindNewReply(message);
+                bindNewReply();
             }
         });
     }
 
-    private void bindNewReply(Message message) {
+    private void bindNewReply() {
         binding.vDemarcate1.setVisibility(View.VISIBLE);
         binding.rlReply.setVisibility(View.VISIBLE);
-        binding.tvReplySender.setText(User.getFullName(message.getSender()));
-        binding.tvReplyMsg.setText(message.getBody(false));
-        binding.rlReply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.rvMessages.smoothScrollToPosition(messages.indexOf(message));
-            }
-        });
-        binding.ivCancelReply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newReplyTo = null;
-                binding.vDemarcate1.setVisibility(View.GONE);
-                binding.rlReply.setVisibility(View.GONE);
-            }
-        });
+        binding.tvReplySender.setText(User.getFullName(newReplyTo.getSender()));
+        binding.tvReplyMsg.setText(newReplyTo.getBody(false));
     }
 
     /* ------------------------- ADAPTER LISTENER METHOD -------------------------------- */

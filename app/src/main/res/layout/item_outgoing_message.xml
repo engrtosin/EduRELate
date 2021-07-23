@@ -34,15 +34,16 @@
         android:id="@+id/tvReplyMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/cvOutTxt"
+        android:layout_alignStart="@id/ivArrow"
         android:layout_marginBottom="5dp"
-        android:gravity="center"
+        android:gravity="left"
         android:maxWidth="200dp"
         android:paddingHorizontal="10dp"
         android:paddingVertical="0dp"
+        android:background="@drawable/text_msg_background"
         android:text="Reply to me"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="13sp"
         android:visibility="gone" />
 
     <ImageView
