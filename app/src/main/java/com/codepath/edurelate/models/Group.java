@@ -191,6 +191,17 @@ public class Group extends ParseObject {
             }
         });
         put(KEY_LATEST_MSG,message);
+        saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+
+                if (e != null) {
+                    Log.e(TAG,"Error updating latest ssage: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Latest message successfully updated.");
+            }
+        });
         return message;
     }
 

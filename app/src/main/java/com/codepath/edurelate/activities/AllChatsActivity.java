@@ -77,7 +77,7 @@ public class AllChatsActivity extends BaseActivity {
 
     private void queryAllGroups() {
         ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
-        query.include(Member.KEY_GROUP);
+        query.include(Member.KEY_GROUP+"."+Group.KEY_LATEST_MSG);
         query.whereEqualTo(Member.KEY_USER, ParseUser.getCurrentUser());
         query.findInBackground(new FindCallback<Member>() {
             @Override

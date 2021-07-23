@@ -22,7 +22,7 @@ public class Message extends ParseObject {
     public static final String KEY_REPLY_TO = "replyTo";
     public static final String KEY_USERS_LIKING_THIS = "usersLikingThis";
     public static final String KEY_GROUP = "group";
-    public static final int TRUNCATED_BODY_LENGTH = 50;
+    public static final int TRUNCATED_BODY_LENGTH = 40;
     public static final int MESSAGE_OUTGOING = 789;
     public static final int MESSAGE_INCOMING = 321;
 
@@ -43,14 +43,17 @@ public class Message extends ParseObject {
 
     public String getBody(boolean isFull) {
         String body = getString(KEY_BODY);
+        if (body.length() < TRUNCATED_BODY_LENGTH) {
+            return body;
+        }
         if (!isFull) {
             return body.substring(0,TRUNCATED_BODY_LENGTH) + "...";
         }
         return body;
     }
     
-    public ParseUser getSender() throws ParseException {
-        return fetchIfNeeded().getParseUser(KEY_SENDER);
+    public ParseUser getSender() {
+        return getParseUser(KEY_SENDER);
     }
 
     public ParseUser getRecipient() {

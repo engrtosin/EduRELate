@@ -125,7 +125,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
                 }
             }
             bindFullGroup();
-//            Message latestMsg = group.getLatestMsg();
+            Message latestMsg = group.getLatestMsg();
+            String latestMsgTxt = latestMsg.getBody(false);
+            itemChatBinding.tvLatestMsg.setText(latestMsgTxt);
         }
 
         private void bindFullGroup() {

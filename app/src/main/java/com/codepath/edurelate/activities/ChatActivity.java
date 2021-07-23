@@ -122,6 +122,7 @@ public class ChatActivity extends AppCompatActivity {
                 messages.add(messages.size(),newMessage);
                 Log.i(TAG,"messages size: "+messages.size());
                 adapter.notifyDataSetChanged();
+                binding.rvMessages.smoothScrollToPosition(messages.size()-1);
                 binding.etNewMessage.setText("");
             }
         });

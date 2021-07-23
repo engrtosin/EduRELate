@@ -87,20 +87,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
     @Override
     public int getItemViewType(int position) {
-        try {
-            if (isCurrUser(position)) {
-                return Message.MESSAGE_OUTGOING;
-            } else {
-                return Message.MESSAGE_INCOMING;
-            }
-        } catch (ParseException e) {
-            Log.e(TAG,"Failed to get isCurrUser: " + e.getMessage(),e);
+        if (isCurrUser(position)) {
+            return Message.MESSAGE_OUTGOING;
         }
-        return -1;
+        return Message.MESSAGE_INCOMING;
     }
 
     /* ---------------- ADAPTER HELPER METHODS ------------------- */
-    private boolean isCurrUser(int position) throws ParseException {
+    private boolean isCurrUser(int position) {
         Message message = messages.get(position);
         return message.getSender() != null &&
                 message.getSender().getObjectId().equals(ParseUser.getCurrentUser().getObjectId());
@@ -131,11 +125,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             binding.cvSenderPic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        mListener.senderClicked(message.getSender());
-                    } catch (ParseException e) {
-                        Log.e(TAG,"Error upon clicking sender pic: " + e.getMessage(),e);
-                    }
+                    mListener.senderClicked(message.getSender());
                 }
             });
             binding.tvReplyMsg.setOnClickListener(new View.OnClickListener() {
@@ -153,17 +143,15 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         }
 
         public void bind(Message message) {
+            ParseUser sender = message.getSender();
             this.message = message;
             ParseFile image = null;
-            try {
-                Log.i(TAG,message.getSender().getObjectId());
-                image = message.getSender().getParseFile(User.KEY_USER_PIC);
-            } catch (ParseException e) {
-                Log.e(TAG,"Error while getting parseimage: " + e.getMessage(),e);
-            }
+            Log.i(TAG,sender.getObjectId());
+            image = sender.getParseFile(User.KEY_USER_PIC);
             if (message != null) {
                 Glide.with(context).load(image.getUrl()).into(binding.ivSenderPic);
             }
+            binding.tvSenderName.setText(User.getFullName(sender));
             binding.tvInTxt.setText(message.getBody(true));
             bindReply();
         }

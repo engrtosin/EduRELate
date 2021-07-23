@@ -20,13 +20,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="200dp"
-            android:minHeight="40dp"
+            android:minHeight="20dp"
             android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="15dp"
-            android:gravity="center"
+            android:gravity="left"
             android:text="Hey there!"
+            android:layout_gravity="left"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </androidx.cardview.widget.CardView>
 
     <TextView
