@@ -301,6 +301,25 @@ public class Group extends ParseObject {
         return false;
     }
 
+    public void acceptRequest(Request request) {
+        ParseUser user = request.getCreator();
+        Member member = Member.newMember(user,this,getIsFriendGroup(),Member.MEMBER_CODE);
+        String txtToOwner = "You accepted " + User.getFullName(user) + "'s request to join " + getGroupName();
+        Notification toOwner = Notification.newInstance(getOwner(),Notification.NEW_MEMBER_CODE,txtToOwner);
+        String txtToUser = User.getFullName(getOwner()) + " accepted your request to join " + getGroupName();
+        Notification toUser = Notification.newInstance(user,Notification.NEW_GROUP_CODE,txtToUser);
+        request.deleteInBackground();
+    }
+
+    public void rejectRequest(Request request) {
+        ParseUser user = request.getCreator();
+        String txtToOwner = "You rejected " + User.getFullName(user) + "'s request to join " + getGroupName();
+        Notification toOwner = Notification.newInstance(getOwner(),Notification.NEW_MEMBER_CODE,txtToOwner);
+        String txtToUser = User.getFullName(getOwner()) + " rejected your request to join " + getGroupName();
+        Notification toUser = Notification.newInstance(user,Notification.NEW_GROUP_CODE,txtToUser);
+        request.deleteInBackground();
+    }
+
     /* ------------- CHAT METHODS ------------------- */
 //    public void setChatFields() {
 //        this.chat.put(Chat.KEY_ISGROUPCHAT,true);

@@ -154,7 +154,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
         public void bind(Message message) {
             this.message = message;
-//            ParseFile image = message.sender.getParseFile(User.KEY_USER_PIC);
             ParseFile image = null;
             try {
                 Log.i(TAG,message.getSender().getObjectId());
@@ -166,7 +165,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                 Glide.with(context).load(image.getUrl()).into(binding.ivSenderPic);
             }
             binding.tvInTxt.setText(message.getBody(true));
-//            binding.tvInTxt.setText(message.body);
             bindReply();
         }
 
