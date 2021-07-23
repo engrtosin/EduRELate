@@ -3,8 +3,11 @@ package com.codepath.edurelate.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -39,6 +42,7 @@ public class ChatActivity extends AppCompatActivity {
     List<Message> messages;
     ParseUser friend;
     MessagesAdapter adapter;
+    MessagesAdapter.MessagesAdapterInterface adapterListener;
     Message newReplyTo;
 
     @Override
@@ -64,6 +68,7 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new MessagesAdapter(this,messages);
         binding.rvMessages.setAdapter(adapter);
         binding.rvMessages.setLayoutManager(new LinearLayoutManager(this));
+        setAdapterListener();
         queryMessages();
         Log.i(TAG,"messages size: "+messages.size());
 
@@ -128,6 +133,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    /* ------------------------- PARSE METHODS -------------------------------- */
     public void queryMessages() {
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.whereEqualTo(Message.KEY_GROUP,group);
@@ -141,7 +147,58 @@ public class ChatActivity extends AppCompatActivity {
                     Log.e(TAG,"Error while quering messages for group (" + group.getObjectId() + "): " + e.getMessage(),e);
                 }
                 adapter.addAll(objects);
+                binding.rvMessages.smoothScrollToPosition(messages.size()-1);
             }
         });
+    }
+
+    /* ------------------------- ADAPTER LISTENER METHOD -------------------------------- */
+    private void setAdapterListener() {
+        adapter.setAdapterListener(new MessagesAdapter.MessagesAdapterInterface() {
+            @Override
+            public void senderClicked(ParseUser sender) {
+                goProfileActivity(sender);
+            }
+
+            @Override
+            public void replyClicked(Message replyTo) {
+                binding.rvMessages.smoothScrollToPosition(messages.indexOf(replyTo));
+            }
+
+            @Override
+            public void onDoubleTap(Message message) {
+                binding.rvMessages.smoothScrollToPosition(messages.size());
+                newReplyTo = message;
+                bindNewReply(message);
+            }
+        });
+    }
+
+    private void bindNewReply(Message message) {
+        binding.vDemarcate1.setVisibility(View.VISIBLE);
+        binding.rlReply.setVisibility(View.VISIBLE);
+        binding.tvReplySender.setText(User.getFullName(message.getSender()));
+        binding.tvReplyMsg.setText(message.getBody(false));
+        binding.rlReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.rvMessages.smoothScrollToPosition(messages.indexOf(message));
+            }
+        });
+        binding.ivCancelReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newReplyTo = null;
+                binding.vDemarcate1.setVisibility(View.INVISIBLE);
+                binding.rlReply.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+    /* ------------------------- ADAPTER LISTENER METHOD -------------------------------- */
+    private void goProfileActivity(ParseUser user) {
+        Intent i = new Intent(ChatActivity.this, ProfileActivity.class);
+        i.putExtra(User.KEY_USER,Parcels.wrap(user));
+        this.startActivity(i);
     }
 }

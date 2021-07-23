@@ -16,4 +16,5 @@
     <color name="outgoing_blue">#1896FA</color>
     <color name="announcement_background">#CFCECE</color>
     <color name="announcement_text_gray">#2E2C2C</color>
+    <color name="dark_gray">#383737</color>
 </resources>

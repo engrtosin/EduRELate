@@ -2,14 +2,19 @@ package com.codepath.edurelate.adapters;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.edurelate.MainActivity;
+import com.codepath.edurelate.OnDoubleTapListener;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ItemIncomingMessageBinding;
 import com.codepath.edurelate.databinding.ItemOutgoingMessageBinding;
@@ -36,6 +41,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     public interface MessagesAdapterInterface {
         void senderClicked(ParseUser sender);
         void replyClicked(Message replyTo);
+        void onDoubleTap(Message message);
+    }
+
+    public void setAdapterListener(MessagesAdapterInterface mListener) {
+        this.mListener = mListener;
     }
 
     /* ---------------- CONSTRUCTOR ------------------- */
@@ -103,7 +113,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     /* ---------------- VIEWHOLDER CLASSES ------------------- */
     public abstract class MessageViewHolder extends RecyclerView.ViewHolder {
 
+        protected Message message;
+
         public MessageViewHolder(@NonNull @NotNull View itemView) {
+
             super(itemView);
         }
 
@@ -113,7 +126,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     public class IncomingViewHolder extends MessageViewHolder {
 
         ItemIncomingMessageBinding binding;
-        Message message;
 
         public IncomingViewHolder(@NonNull @NotNull ItemIncomingMessageBinding binding) {
             super(binding.getRoot());
@@ -122,9 +134,17 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         }
 
         private void setOnClickListeners() {
+            binding.getRoot().setOnTouchListener(new OnDoubleTapListener(context) {
+                @Override
+                public void onDoubleTap(MotionEvent e) {
+                    Log.i(TAG,"Incoming Message is double tapped");
+                    mListener.onDoubleTap(message);
+                }
+            });
             binding.cvSenderPic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.i(TAG,"Sender: " + message.getSender());
                     mListener.senderClicked(message.getSender());
                 }
             });
@@ -166,7 +186,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
     public class OutgoingViewHolder extends MessageViewHolder {
 
         ItemOutgoingMessageBinding binding;
-        Message message;
 
         public OutgoingViewHolder(@NonNull @NotNull ItemOutgoingMessageBinding binding) {
             super(binding.getRoot());
@@ -175,6 +194,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         }
 
         private void setOnClickListeners() {
+            binding.getRoot().setOnTouchListener(new OnDoubleTapListener(context) {
+                @Override
+                public void onDoubleTap(MotionEvent e) {
+                    Log.i(TAG,"Outgoing Message is double tapped");
+                    mListener.onDoubleTap(message);
+                }
+            });
             binding.ivLikeOutMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -189,4 +215,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 //            binding.tvOutTxt.setText(message.body);
         }
     }
+
+
 }
