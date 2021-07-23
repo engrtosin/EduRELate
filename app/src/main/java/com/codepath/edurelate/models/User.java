@@ -3,12 +3,17 @@ package com.codepath.edurelate.models;
 import android.util.Log;
 
 import com.codepath.edurelate.R;
+import com.codepath.edurelate.adapters.MessagesAdapter;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -200,5 +205,44 @@ public class User {
         Notification toOwner = Notification.newInstance(group.getOwner(),Notification.REQUEST_RECEIVED_CODE,txtToOwner,request);
         String txtToUser = "You sent a request to join " + group.getGroupName();
         Notification toUser = Notification.newInstance(currUser,Notification.REQUEST_SENT_CODE,txtToUser,request);
+    }
+
+    public static void leaveGroup(Group group) {
+        ParseUser currUser = ParseUser.getCurrentUser();
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.whereEqualTo(Member.KEY_USER,currUser);
+        query.whereContainedIn(Member.KEY_GROUP, Arrays.asList(group));
+        query.findInBackground(new FindCallback<Member>() {
+            @Override
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while getting corresponding member object: " + e.getMessage(),e);
+                    return;
+                }
+                if (objects.size() > 0) {
+                    Log.i(TAG,"Corresponding member for curr user and group (" + group.getObjectId() + ") found.");
+                    objects.get(0).deleteInBackground();
+                    deleteGroupForCurrUser(group);
+                }
+            }
+        });
+        String txtToOwner = User.getFullName(currUser) + " left your group: " + group.getGroupName();
+        Notification toOwner = Notification.newInstance(group.getOwner(),Notification.MEMBER_LEFT_CODE,txtToOwner);
+        String txtToUser = "You left " + group.getGroupName();
+        Notification toUser = Notification.newInstance(currUser,Notification.YOU_LEFT_GROUP_CODE,txtToUser);
+    }
+
+    private static void deleteGroupForCurrUser(Group group) {
+        if (currUserGroups.contains(group)) {
+            currUserGroups.remove(group);
+            return;
+        }
+        for (int i = 0; i < currUserGroups.size(); i++) {
+            Log.i(TAG,"is group same as this in currUserGroups: " + i + ", " + currUserGroups.get(i).getObjectId().equals(group.getObjectId()));
+            if (currUserGroups.get(i).getObjectId().equals(group.getObjectId())) {
+                currUserGroups.remove(currUserGroups.get(i));
+                return;
+            }
+        }
     }
 }

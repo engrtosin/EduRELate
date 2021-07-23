@@ -26,6 +26,8 @@ public class Notification extends ParseObject {
     public static final int NEW_MEMBER_CODE = 25;
     public static final int REQUEST_RECEIVED_CODE = 30;
     public static final int REQUEST_SENT_CODE = 35;
+    public static final int MEMBER_LEFT_CODE = 40;
+    public static final int YOU_LEFT_GROUP_CODE = 45;
 
     public static Notification newInstance(ParseUser user, int notifType, String notifText, Invite invite) {
         Notification notification = new Notification();

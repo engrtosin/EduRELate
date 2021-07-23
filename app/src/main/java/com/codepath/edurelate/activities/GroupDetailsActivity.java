@@ -104,6 +104,12 @@ public class GroupDetailsActivity extends BaseActivity implements NewPicDialogFr
 //        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation, GroupDetailsActivity.this);
 
+        binding.tvLeave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leaveGroup();
+            }
+        });
         binding.tvActInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,6 +168,11 @@ public class GroupDetailsActivity extends BaseActivity implements NewPicDialogFr
                 LoginActivity.logoutUser(GroupDetailsActivity.this);
             }
         });
+    }
+
+    private void leaveGroup() {
+        User.leaveGroup(group);
+        HomeActivity.navHomeActivity(this);
     }
 
     /* -------------------- new pic methods ---------------------- */
