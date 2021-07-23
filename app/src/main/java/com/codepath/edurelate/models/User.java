@@ -2,12 +2,14 @@ package com.codepath.edurelate.models;
 
 import android.util.Log;
 
+import com.codepath.edurelate.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class User {
@@ -177,5 +179,26 @@ public class User {
                 Log.i(TAG,"InviteSent added successfully.");
             }
         });
+    }
+
+    public static void clearCurrUserData() {
+        currUserGroups = null;
+    }
+
+    public static List<String> getCurrGroupIds() {
+        List<String> groupIds = new ArrayList<>();
+        for (int i = 0; i < currUserGroups.size(); i++) {
+            groupIds.add(currUserGroups.get(i).getObjectId());
+        }
+        return groupIds;
+    }
+
+    public static void sendGroupRequest(Group group) {
+        ParseUser currUser = ParseUser.getCurrentUser();
+        Request request = Request.newInstance(currUser,group);
+        String txtToOwner = User.getFullName(currUser) + " wants to join your group: " + group.getGroupName();
+        Notification toOwner = Notification.newInstance(group.getOwner(),Notification.REQUEST_RECEIVED_CODE,txtToOwner,request);
+        String txtToUser = "You sent a request to join " + group.getGroupName();
+        Notification toUser = Notification.newInstance(currUser,Notification.REQUEST_SENT_CODE,txtToUser,request);
     }
 }

@@ -129,7 +129,7 @@ public class ChatActivity extends AppCompatActivity {
 
     public void queryMessages() {
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        query.whereEqualTo(Message.KEY_RECIPIENT,group);
+        query.whereEqualTo(Message.KEY_GROUP,group);
         query.include(Message.KEY_SENDER);
         query.include(Message.KEY_USERS_LIKING_THIS);
         query.include(Message.KEY_REPLY_TO);

@@ -85,7 +85,7 @@ public class GroupsFragment extends Fragment {
         groups = new ArrayList<>();
         queryExtraGroups();
         Log.i(TAG,"Number of all groups: " + groups.size());
-        groupsAdapter = new GroupsAdapter(getContext(),groups);
+        groupsAdapter = new GroupsAdapter(getContext(),groups,null);
         setAdapterInterface();
         glManager = new GridLayoutManager(getContext(),SPAN_COUNT,
                 GridLayoutManager.VERTICAL,false);

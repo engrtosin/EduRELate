@@ -22,6 +22,8 @@ import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.NewGroupDialogFragment;
 import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.Member;
+import com.codepath.edurelate.models.Request;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
@@ -43,7 +45,8 @@ public class AllGroupsActivity extends BaseActivity {
     ActivityAllGroupsBinding binding;
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
-    List<Group > groups = new ArrayList<>();
+    List<Group> groups = new ArrayList<>();
+    List<String> requestIds;
     GroupsAdapter groupsAdapter;
     GridLayoutManager glManager;
     Toolbar toolbar;
@@ -60,14 +63,17 @@ public class AllGroupsActivity extends BaseActivity {
 //        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
-        queryAllGroups();
+        groups = new ArrayList<>();
+        requestIds = new ArrayList<>();
+        queryCurrUserRequests();
         Log.i(TAG,"Number of all users: " + groups.size());
-        groupsAdapter = new GroupsAdapter(AllGroupsActivity.this,groups);
+        groupsAdapter = new GroupsAdapter(AllGroupsActivity.this,groups,requestIds);
         setAdapterInterface();
         glManager = new GridLayoutManager(AllGroupsActivity.this,SPAN_COUNT,
                 GridLayoutManager.VERTICAL,false);
         binding.rvGroups.setAdapter(groupsAdapter);
         binding.rvGroups.setLayoutManager(glManager);
+        queryAllGroups();
 
         setClickListeners();
     }
@@ -112,6 +118,7 @@ public class AllGroupsActivity extends BaseActivity {
         ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
         query.include(Group.KEY_OWNER);
         query.whereNotEqualTo(Group.KEY_OWNER,User.edurelateBot);
+        query.whereNotContainedIn(Group.KEY_OBJECT_ID,User.getCurrGroupIds());
         query.findInBackground(new FindCallback<Group>() {
             @Override
             public void done(List<Group> objects, ParseException e) {
@@ -122,6 +129,23 @@ public class AllGroupsActivity extends BaseActivity {
                 Log.i(TAG, "Groups successfully queried. Size: " + objects.size());
                 groupsAdapter.clear();
                 groupsAdapter.addAll(objects);
+            }
+        });
+    }
+
+    private void queryCurrUserRequests() {
+        ParseQuery<Request> query = ParseQuery.getQuery(Request.class);
+        query.include(Request.KEY_TO_GROUP);
+        query.whereEqualTo(Request.KEY_CREATOR,ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Request>() {
+            @Override
+            public void done(List<Request> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while querying request: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Request successfully queried");
+                requestIds.addAll(Request.getGroupIds(objects));
             }
         });
     }
@@ -137,6 +161,11 @@ public class AllGroupsActivity extends BaseActivity {
             @Override
             public void ownerClicked(ParseUser owner) {
                 goProfileActivity(owner);
+            }
+
+            @Override
+            public void joinGroup(Group group) {
+                User.sendGroupRequest(group);
             }
         });
     }

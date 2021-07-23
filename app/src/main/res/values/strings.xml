@@ -5,4 +5,5 @@
     <string name="home_title">Home</string>
     <string name="ask_to_join_invite">Ask to join</string>
     <string name="invite_a_user">Invite a user</string>
+    <string name="find_group">find group</string>
 </resources>

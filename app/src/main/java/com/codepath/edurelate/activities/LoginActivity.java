@@ -99,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public static void logoutUser(Activity activity) {
         ParseUser.logOut();
+        Log.i(TAG,"clear current user data after logout");
+        User.clearCurrUserData();
         Intent i = new Intent(activity, LoginActivity.class);
         activity.startActivity(i);
         activity.finish();

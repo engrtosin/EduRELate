@@ -13,6 +13,7 @@ import com.codepath.edurelate.databinding.ItemNotificationBinding;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Notification;
+import com.codepath.edurelate.models.Request;
 import com.parse.ParseException;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +30,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     /* -------------------- INTERFACE --------------------- */
     public interface NotificationsAdapterInterface {
-        void inviteAccepted(Invite invite);
-        void inviteRejected(Invite invite);
+        void requestAccepted(Request request);
+        void requestRejected(Request request);
     }
 
     public void setAdapterListener(NotificationsAdapterInterface notificationsAdapterInterface) {
@@ -93,7 +94,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             binding.ivAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.inviteAccepted(notification.getInvite());
+                    mListener.requestAccepted(notification.getRequest());
                     binding.ivAccept.setVisibility(View.GONE);
                     binding.ivReject.setVisibility(View.GONE);
                 }
@@ -101,7 +102,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             binding.ivReject.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.inviteRejected(notification.getInvite());
+                    mListener.requestRejected(notification.getRequest());
                     binding.ivAccept.setVisibility(View.GONE);
                     binding.ivReject.setVisibility(View.GONE);
                 }
@@ -111,6 +112,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         public void bind(Notification notification) {
             this.notification = notification;
             Log.i(TAG,"binding notification: " + notification.getObjectId());
+            binding.tvNotifText.setText(notification.getNotifText());
             if (notification.getNotifType() == Notification.INVITEE_CODE) {
                 Invite invite = notification.getInvite();
                 if (invite.getStatus() == Invite.STATUS_NONE) {
@@ -120,8 +122,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 }
                 return;
             }
-            if (notification.getNotifType() == Notification.INVITER_CODE) {
-                binding.tvNotifText.setText(notification.getNotifText());
+            if (notification.getNotifType() == Notification.REQUEST_RECEIVED_CODE) {
+                Request request = notification.getRequest();
+                if (request != null) {
+                    binding.ivAccept.setVisibility(View.VISIBLE);
+                    binding.ivReject.setVisibility(View.VISIBLE);
+                    return;
+                }
                 return;
             }
         }

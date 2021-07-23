@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 
 import com.codepath.edurelate.BaseActivity;
@@ -17,6 +18,7 @@ import com.codepath.edurelate.adapters.NotificationsAdapter;
 import com.codepath.edurelate.databinding.ActivityNotificationsBinding;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Notification;
+import com.codepath.edurelate.models.Request;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -56,18 +58,23 @@ public class NotificationsActivity extends BaseActivity {
         queryNotifications();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
+
     private void setupAdapterInterface() {
         adapter.setAdapterListener(new NotificationsAdapter.NotificationsAdapterInterface() {
             @Override
-            public void inviteAccepted(Invite invite) {
-                Log.i(TAG,"Invite accepted: " + invite.getObjectId());
-                invite.acceptInvite();
+            public void requestAccepted(Request request) {
+                Log.i(TAG,"Invite accepted: " + request.getObjectId());
+                request.getToGroup().acceptRequest(request);
             }
 
             @Override
-            public void inviteRejected(Invite invite) {
-                Log.i(TAG,"Invite rejected: " + invite.getObjectId());
-                invite.rejectInvite();
+            public void requestRejected(Request request) {
+                Log.i(TAG,"Invite rejected: " + request.getObjectId());
+                request.getToGroup().rejectRequest(request);
             }
         });
     }
@@ -75,8 +82,10 @@ public class NotificationsActivity extends BaseActivity {
     private void queryNotifications() {
         ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
         query.include(Notification.KEY_INVITE);
+        query.include(Notification.KEY_REQUEST+"."+Request.KEY_TO_GROUP);
         query.include(Notification.KEY_USER);
         query.whereEqualTo(Notification.KEY_USER,ParseUser.getCurrentUser());
+        query.orderByDescending(Notification.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Notification>() {
             @Override
             public void done(List<Notification> objects, ParseException e) {

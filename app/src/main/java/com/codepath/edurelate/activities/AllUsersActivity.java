@@ -1,6 +1,5 @@
 package com.codepath.edurelate.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -8,8 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
@@ -57,7 +54,7 @@ public class AllUsersActivity extends BaseActivity {
         if (inviteType == Invite.GROUP_INVITE_CODE) {
             invitingGroup = Parcels.unwrap(getIntent().getParcelableExtra(Group.KEY_GROUP));
             membersId = new ArrayList<>();
-            queryAllMembers();
+            queryAllMemberIds();
         }
 
         Log.i(TAG,"in on create");
@@ -128,7 +125,7 @@ public class AllUsersActivity extends BaseActivity {
         });
     }
 
-    private void queryAllMembers() {
+    private void queryAllMemberIds() {
         membersId = new ArrayList<>();
         ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
         query.include(Member.KEY_USER);

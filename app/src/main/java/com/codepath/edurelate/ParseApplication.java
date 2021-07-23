@@ -10,6 +10,7 @@ import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.Message;
 import com.codepath.edurelate.models.Notification;
+import com.codepath.edurelate.models.Request;
 import com.codepath.edurelate.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -31,6 +32,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Invite.class);
         ParseObject.registerSubclass(Member.class);
         ParseObject.registerSubclass(Notification.class);
+        ParseObject.registerSubclass(Request.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.applicationId))

@@ -44,6 +44,14 @@
             android:layout_below="@id/tvGroupName"
             android:text="Owner: Oluwatosin Ajibola" />
 
+        <TextView
+            android:id="@+id/tvActRequestJoin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@id/tvGroupName"
+            android:text="Request to join" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
 

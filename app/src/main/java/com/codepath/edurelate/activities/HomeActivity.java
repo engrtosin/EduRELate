@@ -65,7 +65,7 @@ public class HomeActivity extends BaseActivity {
 //        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
 
         groups = new ArrayList<>();
-        groupsAdapter = new GroupsAdapter(HomeActivity.this,groups);
+        groupsAdapter = new GroupsAdapter(HomeActivity.this,groups,null);
         setAdapterInterface();
         glManager = new GridLayoutManager(HomeActivity.this,SPAN_COUNT,
                 GridLayoutManager.VERTICAL,false);
@@ -208,6 +208,10 @@ public class HomeActivity extends BaseActivity {
             @Override
             public void ownerClicked(ParseUser owner) {
                 goProfileActivity(owner);
+            }
+
+            @Override
+            public void joinGroup(Group group) {
             }
         });
     }
