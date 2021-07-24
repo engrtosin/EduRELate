@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        getEdurelateBot();
         if (ParseUser.getCurrentUser() != null) {
             User.currentUser = ParseUser.getCurrentUser();
             goHomeActivity();
@@ -83,6 +84,9 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this,"Successful!",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public static void getEdurelateBot() {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.getInBackground(User.BOT_OBJECT_ID, new GetCallback<ParseUser>() {
             @Override

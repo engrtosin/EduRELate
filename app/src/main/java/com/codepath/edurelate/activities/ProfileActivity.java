@@ -23,13 +23,21 @@ import com.codepath.edurelate.databinding.ActivityProfileBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.NewGroupDialogFragment;
 import com.codepath.edurelate.fragments.NewPicDialogFragment;
+import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ProfileActivity extends BaseActivity implements NewPicDialogFragment.NewPicInterface {
 
@@ -113,6 +121,36 @@ public class ProfileActivity extends BaseActivity implements NewPicDialogFragmen
                 goLoginActivity();
             }
         });
+        binding.ivChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG,"On click chat");
+                // TODO: Create a helper method
+                // I can also query once the user gets into this room.
+                ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+                query.include(Member.KEY_USER);
+                query.include(Member.KEY_GROUP);
+                query.whereEqualTo(Member.KEY_FRIEND,user);
+                query.whereContainedIn(Member.KEY_USER, Arrays.asList(ParseUser.getCurrentUser()));
+                query.findInBackground(new FindCallback<Member>() {
+                    @Override
+                    public void done(List<Member> objects, ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG,"Error while trying to get member object: " + e.getMessage(),e);
+                            return;
+                        }
+                        if (objects.size() != 0) {
+                            Log.i(TAG,"Member object found for a chat: ");
+                            goChatActivity(objects.get(0).getGroup());
+                            return;
+                        }
+                        Log.i(TAG,"Member object not found for a chat: ");
+                        Group group = Group.newFriendGroup(ParseUser.getCurrentUser(),user);
+                        goChatActivity(group);
+                    }
+                });
+            }
+        });
     }
 
     private void setToolbarClickListeners() {
@@ -153,6 +191,13 @@ public class ProfileActivity extends BaseActivity implements NewPicDialogFragmen
 
     private void goLoginActivity() {
         Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+    }
+
+    private void goChatActivity(Group group) {
+        Intent i = new Intent(this, LoginActivity.class);
+        i.putExtra(Group.KEY_GROUP,Parcels.wrap(group));
+        i.putExtra(Member.KEY_FRIEND,user);
         startActivity(i);
     }
 }

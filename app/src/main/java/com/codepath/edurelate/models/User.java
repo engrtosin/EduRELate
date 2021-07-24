@@ -148,16 +148,6 @@ public class User {
         return user.getObjectId().equals(otherUser.getObjectId());
     }
 
-    public static ParseUser findFriend(ParseUser user, Group group) {
-        List<ParseUser> members = group.getMembers();
-        for (ParseUser member : members) {
-            if (!User.compareUsers(user,member)) {
-                return member;
-            }
-        }
-        return  null;
-    }
-
     public static void addInviteReceived(Invite invite, ParseUser user) {
         user.add(KEY_INVITE_RECEIVED,invite);
         user.saveInBackground(new SaveCallback() {

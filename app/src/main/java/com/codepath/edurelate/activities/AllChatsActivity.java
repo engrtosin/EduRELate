@@ -21,6 +21,7 @@ import com.codepath.edurelate.databinding.ActivityAllChatsBinding;
 import com.codepath.edurelate.databinding.ActivityAllMembersBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.models.Chat;
+import com.codepath.edurelate.models.Friend;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Member;
@@ -44,6 +45,7 @@ public class AllChatsActivity extends BaseActivity {
     ActivityAllChatsBinding binding;
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
+    List<Member> members = new ArrayList<>();
     List<Group> groups = new ArrayList<>();
     ChatsAdapter chatsAdapter;
     GridLayoutManager glManager;
@@ -59,9 +61,9 @@ public class AllChatsActivity extends BaseActivity {
         setupToolbar("Chats");
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
-        groups = new ArrayList<>();
-        Log.i(TAG,"Number of all groups: " + groups.size());
-        chatsAdapter = new ChatsAdapter(AllChatsActivity.this,groups);
+        members = new ArrayList<>();
+        Log.i(TAG,"Number of all groups: " + members.size());
+        chatsAdapter = new ChatsAdapter(AllChatsActivity.this,members);
         setAdapterInterface();
         glManager = new GridLayoutManager(AllChatsActivity.this,SPAN_COUNT,
                 GridLayoutManager.VERTICAL,false);
@@ -70,26 +72,9 @@ public class AllChatsActivity extends BaseActivity {
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         binding.rvChats.addItemDecoration(itemDecoration);
-        queryAllGroups();
+        queryAllMembers();
 
         setClickListeners();
-    }
-
-    private void queryAllGroups() {
-        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
-        query.include(Member.KEY_GROUP+"."+Group.KEY_LATEST_MSG);
-        query.whereEqualTo(Member.KEY_USER, ParseUser.getCurrentUser());
-        query.findInBackground(new FindCallback<Member>() {
-            @Override
-            public void done(List<Member> objects, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG,"Error while querying for members: " + e.getMessage(),e);
-                    return;
-                }
-                Log.i(TAG,"Members queried successfully. Size: " + objects.size());
-                chatsAdapter.addAll(Member.getGroups(objects));
-            }
-        });
     }
 
     private void setClickListeners() {
@@ -115,6 +100,24 @@ public class AllChatsActivity extends BaseActivity {
         });
     }
 
+    private void queryAllMembers() {
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.include(Member.KEY_GROUP+"."+Group.KEY_LATEST_MSG);
+        query.include(Member.KEY_FRIEND);
+        query.whereEqualTo(Member.KEY_USER, ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Member>() {
+            @Override
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while querying for members: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Members queried successfully. Size: " + objects.size());
+                chatsAdapter.addAll(objects);
+            }
+        });
+    }
+
     /* --------------------- ADAPTER INTERFACE METHODS --------------------- */
     private void setAdapterInterface() {
         chatsAdapter.setAdapterListener(new ChatsAdapter.ChatsAdapterInterface() {
@@ -124,8 +127,13 @@ public class AllChatsActivity extends BaseActivity {
             }
 
             @Override
-            public void chatClicked(Group group) {
-                goChatActivity(group);
+            public void chatClicked(Member member) {
+                goChatActivity(member);
+            }
+
+            @Override
+            public void friendClicked(ParseUser friend) {
+
             }
         });
     }
@@ -137,10 +145,10 @@ public class AllChatsActivity extends BaseActivity {
         this.startActivity(i);
     }
 
-    private void goChatActivity(Group group) {
-        Log.i(TAG,"go group : " + group.getObjectId());
+    private void goChatActivity(Member member) {
+        Log.i(TAG,"go group : " + member.getGroup().getObjectId());
         Intent i = new Intent(AllChatsActivity.this,ChatActivity.class);
-        i.putExtra(Group.KEY_GROUP, Parcels.wrap(group));
+        i.putExtra(Member.KEY_MEMBER,Parcels.wrap(member));
         this.startActivity(i);
     }
 

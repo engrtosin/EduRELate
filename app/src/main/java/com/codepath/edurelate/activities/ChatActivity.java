@@ -17,6 +17,7 @@ import com.codepath.edurelate.adapters.MessagesAdapter;
 import com.codepath.edurelate.databinding.ActivityAllChatsBinding;
 import com.codepath.edurelate.databinding.ActivityChatBinding;
 import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.Message;
 import com.codepath.edurelate.models.User;
 import com.parse.FindCallback;
@@ -39,6 +40,7 @@ public class ChatActivity extends AppCompatActivity {
 
     ActivityChatBinding binding;
     Group group;
+    Member member;
     List<Message> messages;
     List<String> messageIds;
     ParseUser friend;
@@ -50,21 +52,12 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.group = Parcels.unwrap(getIntent().getParcelableExtra(Group.KEY_GROUP));
-        Log.i(TAG,"group gotten: " + this.group.getObjectId());
-        if (group.getIsFriendGroup()) {
-            friend = User.findFriend(ParseUser.getCurrentUser(),group);
-        }
+        this.member = Parcels.unwrap(getIntent().getParcelableExtra(Member.KEY_MEMBER));
 
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-//        Message msg1 = new Message(ParseUser.getCurrentUser(),"Msg 1", null, null);
-//        Message msg2 = new Message(ParseUser.getCurrentUser(),"Msg 2", null, null);
-//        Message msg3 = new Message(ParseUser.getCurrentUser(),"Msg 3", null, null);
-//        Message botMsg1 = new Message(User.edurelateBot,"Bot msg", null, null);
-//        messages = Arrays.asList(msg1,msg2,msg3,botMsg1);
         messages = new ArrayList<>();
         messageIds = new ArrayList<>();
         adapter = new MessagesAdapter(this,messages);
@@ -74,17 +67,13 @@ public class ChatActivity extends AppCompatActivity {
         queryMessages();
         Log.i(TAG,"messages size: "+messages.size());
 
-        try {
-            initializeViews();
-        } catch (ParseException e) {
-            Log.e(TAG,"Error while initializing views: " + e.getMessage(),e);
-        }
+        initializeViews();
         setClickListeners();
     }
 
-    private void initializeViews() throws ParseException {
-        Log.i(TAG,"initializing for group: " + group.getObjectId());
-        if (this.group.getIsFriendGroup()) {
+    private void initializeViews() {
+        Log.i(TAG,"initializing for group: " + member.getGroup().getObjectId());
+        if (this.member.getIsFriendGroup()) {
             glideFriendPic();
         }
         else {
@@ -93,7 +82,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void glideFriendPic() {
-        binding.tvActivityTitle.setText(User.getFirstName(friend));
+        ParseUser friend = member.getFriend();
+        binding.tvActivityTitle.setText(User.getFullName(friend));
         ParseFile image = friend.getParseFile(User.KEY_USER_PIC);
         if (image != null) {
             Glide.with(this).load(image.getUrl()).into(binding.ivChatPic);
@@ -101,6 +91,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void glideGroupPic() {
+        Group group = member.getGroup();
         binding.tvActivityTitle.setText(group.getGroupName());
         if (group.has(Group.KEY_GROUP_PIC)) {
             ParseFile image = group.getParseFile(Group.KEY_GROUP_PIC);
@@ -155,7 +146,7 @@ public class ChatActivity extends AppCompatActivity {
     /* ------------------------- PARSE METHODS -------------------------------- */
     public void queryMessages() {
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        query.whereEqualTo(Message.KEY_GROUP,group);
+        query.whereEqualTo(Message.KEY_GROUP,member.getGroup());
         query.include(Message.KEY_SENDER);
         query.include(Message.KEY_USERS_LIKING_THIS);
         query.include(Message.KEY_REPLY_TO);
@@ -163,10 +154,10 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void done(List<Message> objects, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG,"Error while quering messages for group (" + group.getObjectId() + "): " + e.getMessage(),e);
+                    Log.e(TAG,"Error while quering messages for group (" + member.getGroup().getObjectId() + "): " + e.getMessage(),e);
                 }
                 adapter.addAll(objects);
-                binding.rvMessages.smoothScrollToPosition(messages.size()-1);
+                binding.rvMessages.smoothScrollToPosition(messages.size());
                 updateMessageIds(objects);
             }
         });
@@ -208,7 +199,7 @@ public class ChatActivity extends AppCompatActivity {
         binding.tvReplyMsg.setText(newReplyTo.getBody(false));
     }
 
-    /* ------------------------- ADAPTER LISTENER METHOD -------------------------------- */
+    /* ------------------------- INTENT METHODS TO ACTIVITIES -------------------------------- */
     private void goProfileActivity(ParseUser user) {
         Intent i = new Intent(ChatActivity.this, ProfileActivity.class);
         i.putExtra(User.KEY_USER,Parcels.wrap(user));

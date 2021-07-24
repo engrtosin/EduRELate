@@ -1,6 +1,7 @@
 package com.codepath.edurelate.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.codepath.edurelate.databinding.ItemChatBinding;
 import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Friend;
 import com.codepath.edurelate.models.Group;
+import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.Message;
 import com.codepath.edurelate.models.User;
 import com.parse.ParseException;
@@ -30,13 +32,14 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     public static final String TAG = "ChatsAdapter";
     
     Context context;
-    List<Group> groups;
+    List<Member> members;
     ChatsAdapterInterface mListener;
 
     /* -------------------- INTERFACE --------------------- */
     public interface ChatsAdapterInterface {
         void groupClicked(Group group);
-        void chatClicked(Group group);
+        void chatClicked(Member member);
+        void friendClicked(ParseUser friend);
     }
 
     public void setAdapterListener(ChatsAdapterInterface chatsAdapterInterface) {
@@ -44,19 +47,20 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     }
     
     /* -------------------- CONSTRUCTOR ------------------------- */
-    public ChatsAdapter(Context context, List<Group> groups) {
+    public ChatsAdapter(Context context, List<Member> members) {
         this.context = context;
-        this.groups = groups;
+        this.members = members;
     }
 
     /* ------------------- ADAPTER METHODS ------------------- */
-    public void addAll(List<Group> objects) {
-        groups.addAll(objects);
+
+    public void addAll(List<Member> objects) {
+        members.addAll(objects);
         notifyDataSetChanged();
     }
 
     public void clear() {
-        groups.clear();
+        members.clear();
         notifyDataSetChanged();
     }
 
@@ -72,9 +76,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ChatsAdapter.ViewHolder holder, int position) {
-        Group group = groups.get(position);
+        Member member = members.get(position);
         try {
-            holder.bind(group);
+            holder.bind(member);
         } catch (ParseException e) {
             Log.e(TAG,"Error binding view holder: " + e.getMessage(),e);
         }
@@ -82,14 +86,14 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return groups.size();
+        return members.size();
     }
 
     /* -------------------- VIEW HOLDER CLASS ------------------------- */
     public class ViewHolder extends RecyclerView.ViewHolder {
         
         ItemChatBinding itemChatBinding;
-        Group group;
+        Member member;
         
         /* ----------------- CONSTRUCTOR ------------------- */
         public ViewHolder(@NonNull @NotNull ItemChatBinding itemChatBinding) {
@@ -104,33 +108,32 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             itemChatBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.chatClicked(group);
-                }
-            });
-            itemChatBinding.cvChatPic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.groupClicked(group);
+                    mListener.chatClicked(member);
                 }
             });
         }
 
-        public void bind(Group group) throws ParseException {
-            this.group = group;
+        public void bind(Member member) throws ParseException {
+            this.member = member;
+            Group group = member.getGroup();
             Log.i(TAG,"binding group: " + group.getObjectId());
-            if (group.has(Group.KEY_IS_FRIEND_GROUP)) {
-                if (group.getIsFriendGroup()) {
-                    bindFriendGroup();
-                    return;
-                }
+            if (group.getIsFriendGroup()) {
+                bindFriendGroup();
+                return;
             }
             bindFullGroup();
             Message latestMsg = group.getLatestMsg();
-            String latestMsgTxt = latestMsg.getBody(false);
-            itemChatBinding.tvLatestMsg.setText(latestMsgTxt);
+            if (latestMsg != null) {
+                String latestMsgTxt = latestMsg.getBody(false);
+                itemChatBinding.tvLatestMsg.setText(latestMsgTxt);
+                return;
+            }
+            itemChatBinding.tvLatestMsg.setText("No message yet");
+            itemChatBinding.tvLatestMsg.setTypeface(null, Typeface.ITALIC);
         }
 
         private void bindFullGroup() {
+            Group group = member.getGroup();
             if (group.has(Group.KEY_GROUP_PIC)) {
                 ParseFile image = group.getParseFile(Group.KEY_GROUP_PIC);
                 if (image != null) {
@@ -138,15 +141,35 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
                 }
             }
             itemChatBinding.tvChatName.setText(group.getGroupName());
+            itemChatBinding.cvChatPic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.groupClicked(member.getGroup());
+                }
+            });
         }
 
         private void bindFriendGroup() throws ParseException {
-            ParseUser friend = User.findFriend(ParseUser.getCurrentUser(),group);
+            ParseUser friend = member.getFriend();
             ParseFile image = friend.getParseFile(User.KEY_USER_PIC);
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(itemChatBinding.ivChatPic);
             }
             itemChatBinding.tvChatName.setText(User.getFullName(friend));
+            Message latestMsg = member.getGroup().getLatestMsg();
+            if (latestMsg != null) {
+                String latestMsgTxt = latestMsg.getBody(false);
+                itemChatBinding.tvLatestMsg.setText(latestMsgTxt);
+                return;
+            }
+            itemChatBinding.tvLatestMsg.setText("No message yet");
+            itemChatBinding.tvLatestMsg.setTypeface(null, Typeface.ITALIC);
+            itemChatBinding.cvChatPic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.friendClicked(member.getFriend());
+                }
+            });
         }
     }
 }

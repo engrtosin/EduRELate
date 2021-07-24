@@ -44,6 +44,7 @@ public class Group extends ParseObject {
         Group group = new Group();
         group.setGroupName(groupName);
         group.put(KEY_GROUP_ACCESS,groupAccess);
+        group.put(KEY_IS_FRIEND_GROUP,false);
         group.setOwner(ParseUser.getCurrentUser());
         group.saveInBackground(new SaveCallback() {
             @Override
@@ -57,6 +58,30 @@ public class Group extends ParseObject {
             }
         });
         Member member = Member.newMember(ParseUser.getCurrentUser(),group,false,Member.OWNER_CODE);
+        return group;
+    }
+
+    public static Group newFriendGroup(ParseUser user1, ParseUser user2) {
+        Group group = new Group();
+        group.setGroupName(user1.getObjectId() + " and " + user2.getObjectId());
+        group.put(KEY_GROUP_ACCESS,CLOSED_GROUP_CODE);
+        group.put(KEY_IS_FRIEND_GROUP,true);
+        group.setOwner(User.edurelateBot);
+        group.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error saving friend group: " + e.getMessage(), e);
+                    return;
+                }
+                group.setLatestMsgDate(group.getCreatedAt());
+                Log.i(TAG,"Friend Group successfully created!");
+            }
+        });
+        // TODO: Remove bot membership if not needed
+        Member bot = Member.newMember(User.edurelateBot,group,true,Member.OWNER_CODE);
+        Member member1 = Member.newMember(user1,group,true,user2,Member.MEMBER_CODE);
+        Member member2 = Member.newMember(user2,group,true,user1,Member.MEMBER_CODE);
         return group;
     }
 
@@ -191,6 +216,7 @@ public class Group extends ParseObject {
             }
         });
         put(KEY_LATEST_MSG,message);
+        put(KEY_LATEST_MSG_DATE,message.getCreatedAt());
         saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
