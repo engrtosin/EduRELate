@@ -67,6 +67,7 @@ public class ProfileActivity extends BaseActivity implements ProfileFragmentInte
         adapter = new ProfileFragmentPagerAdapter(getSupportFragmentManager(),this,user);
         binding.vpPager.setAdapter(adapter);
         binding.slidingTabs.setupWithViewPager(binding.vpPager);
+        HomeActivity.setBottomNavigationListener(bottomNavigation,this);
     }
 
     @Override

@@ -43,7 +43,6 @@ public class ChatActivity extends AppCompatActivity {
     Member member;
     List<Message> messages;
     List<String> messageIds;
-    ParseUser friend;
     MessagesAdapter adapter;
     MessagesAdapter.MessagesAdapterInterface adapterListener;
     Message newReplyTo;

@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityGroupDetailsBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.AboutGroupFragment;
+import com.codepath.edurelate.fragments.ChatFragment;
 import com.codepath.edurelate.fragments.MembersFragment;
 import com.codepath.edurelate.fragments.NewPicDialogFragment;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
@@ -70,11 +72,13 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
         View view = binding.getRoot();
         setContentView(view);
         setupToolbar(group.getGroupName());
-        setListeners();
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
+        bottomNavigation.setSelectedItemId(R.id.action_home);
+        setListeners();
     }
 
     private void setListeners() {
+        HomeActivity.setBottomNavigationListener(bottomNavigation,this);
         binding.drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull @NotNull View drawerView, float slideOffset) {
@@ -125,7 +129,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                     }
                     if (item.getItemId() == R.id.action_chat) {
                         binding.tvFragTitle.setText(getString(R.string.group_chat));
-                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.replace(R.id.flContainer, ChatFragment.newInstance(group));
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;
