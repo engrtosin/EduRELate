@@ -112,15 +112,15 @@ public class Group extends ParseObject {
         return getList(KEY_MEMBERS);
     }
 
-    public ParseFile getGroupPic() throws ParseException {
-        return fetchIfNeeded().getParseFile(KEY_GROUP_PIC);
+    public ParseFile getGroupPic() {
+        return getParseFile(KEY_GROUP_PIC);
     }
 
-    public Message getLatestMsg() throws ParseException {
+    public Message getLatestMsg() {
         return (Message) get(KEY_LATEST_MSG);
     }
 
-    public Date getLatestMsgDate() throws ParseException {
+    public Date getLatestMsgDate() {
         return getDate(KEY_LATEST_MSG_DATE);
     }
 

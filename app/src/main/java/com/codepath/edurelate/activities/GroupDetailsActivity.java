@@ -1,13 +1,20 @@
 package com.codepath.edurelate.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,174 +24,190 @@ import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityGroupDetailsBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
+import com.codepath.edurelate.fragments.AboutGroupFragment;
 import com.codepath.edurelate.fragments.NewPicDialogFragment;
+import com.codepath.edurelate.interfaces.GroupDetailsInterface;
 import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
+import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
-public class GroupDetailsActivity extends BaseActivity implements NewPicDialogFragment.NewPicInterface {
+import java.util.Arrays;
+import java.util.List;
+
+public class GroupDetailsActivity extends BaseActivity implements GroupDetailsInterface {
 
     public static final String TAG = "GroupDetailsActivity";
     private static final int GO_ALL_USERS_CODE = 20;
 
     ActivityGroupDetailsBinding binding;
-    ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
+    Member member;
     Group group;
-    Toolbar toolbar;
+    MenuItem currItem;
+    boolean drawerState = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         group = Parcels.unwrap(getIntent().getParcelableExtra(Group.KEY_GROUP));
+        queryMember();
 
         binding = ActivityGroupDetailsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
         setupToolbar(group.getGroupName());
-//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
+        setListeners();
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
-
-        try {
-            initializeViews();
-        } catch (ParseException e) {
-            Log.e(TAG,"Error initializing views: " + e.getMessage(),e);
-        }
-        setClickListeners();
     }
 
-    private void initializeViews() throws ParseException {
-        Log.i(TAG,"Initializing views in " + TAG);
-//        tbMainBinding.tvActivityTitle.setText(group.getGroupName());
-        setIconVisibility();
-        initializeGroupSection();
-        initializeOwnerSection();
-    }
+    private void setListeners() {
+        binding.drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull @NotNull View drawerView, float slideOffset) {
 
-    private void initializeGroupSection() throws ParseException {
-        ParseFile image = group.getGroupPic();
-        if (image != null) {
-            Log.i(TAG,"about to glide curr user pic");
-            Glide.with(this).load(image.getUrl()).into(binding.ivGroupPic);
-        }
-        Log.i(TAG,"Created on: " + group.getCreatedAt());
-    }
-
-    private void initializeOwnerSection() throws ParseException {
-        ParseFile image;
-        if (group.has(Group.KEY_GROUP_PIC)) {
-            image = group.getOwner().getParseFile(User.KEY_USER_PIC);
-            if (image != null) {
-                Log.i(TAG,"about to glide owner pic");
-                Glide.with(this).load(image.getUrl()).into(binding.ivOwnerPic);
             }
-        }
-        binding.tvOwnerName.setText(User.getFullName(group.getOwner()));
+
+            @Override
+            public void onDrawerOpened(@NonNull @NotNull View drawerView) {
+                drawerState = true;
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull @NotNull View drawerView) {
+                drawerState = false;
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+        binding.cvFragTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleDrawerState();
+            }
+        });
+        currItem = binding.navView.getCheckedItem();
+        binding.navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+                if (!item.equals(currItem)) {
+                    currItem = item;
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    if (item.getItemId() == R.id.action_about) {
+                        binding.tvFragTitle.setText(getString(R.string.about));
+                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.commit();
+                        binding.drawerLayout.close();
+                        return true;
+                    }
+                    if (item.getItemId() == R.id.action_members) {
+                        binding.tvFragTitle.setText(getString(R.string.members));
+                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.commit();
+                        binding.drawerLayout.close();
+                        return true;
+                    }
+                    if (item.getItemId() == R.id.action_chat) {
+                        binding.tvFragTitle.setText(getString(R.string.group_chat));
+                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.commit();
+                        binding.drawerLayout.close();
+                        return true;
+                    }
+                    if (item.getItemId() == R.id.action_forum) {
+                        binding.tvFragTitle.setText(getString(R.string.group_forum));
+                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.commit();
+                        binding.drawerLayout.close();
+                        return true;
+                    }
+                    if (item.getItemId() == R.id.action_files) {
+                        binding.tvFragTitle.setText(getString(R.string.group_files));
+                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.commit();
+                        binding.drawerLayout.close();
+                        return true;
+                    }
+                }
+                return true;
+            }
+        });
+        binding.navView.setCheckedItem(R.id.action_about);
     }
 
-    private void setIconVisibility() throws ParseException {
-        if (User.compareUsers(group.getOwner(),ParseUser.getCurrentUser())) {
-            binding.ivOwnerChat.setVisibility(View.INVISIBLE);
-            binding.ivEditPic.setVisibility(View.VISIBLE);
+    private void toggleDrawerState() {
+        if (drawerState) {
+            binding.drawerLayout.close();
             return;
         }
+        binding.drawerLayout.open();
     }
 
-    private void setClickListeners() {
-        Log.i(TAG,"click listeners to be set");
-
-//        setToolbarClickListeners();
-        HomeActivity.setBottomNavigationListener(bottomNavigation, GroupDetailsActivity.this);
-
-        binding.tvLeave.setOnClickListener(new View.OnClickListener() {
+    private void queryMember() {
+        ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.include(Member.KEY_GROUP);
+        query.include(Member.KEY_USER);
+        query.whereEqualTo(Member.KEY_USER,ParseUser.getCurrentUser());
+        query.whereContainedIn(Member.KEY_GROUP, Arrays.asList(group));
+        query.findInBackground(new FindCallback<Member>() {
             @Override
-            public void onClick(View v) {
-                leaveGroup();
-            }
-        });
-        binding.tvActInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goAllUsersActivityForResult();
-            }
-        });
-        binding.ivEditPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showNewPicDialog();
-            }
-        });
-        binding.ivGroupChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        binding.tvActShowMembers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goAllMembersActivity();
-            }
-        });
-        binding.ivOwnerChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goChatActivity(group.getOwner());
-            }
-        });
-        binding.cvOwnerPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goProfileActivity(group.getOwner());
-            }
-        });
-        binding.tvOwnerName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goProfileActivity(group.getOwner());
+            public void done(List<Member> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error occurred while querying member: " + e.getMessage(),e);
+                    return;
+                }
+                if (objects.size() > 0) {
+                    Log.i(TAG,"Member queried successfully");
+                    member = objects.get(0);
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    binding.tvFragTitle.setText(getString(R.string.about));
+                    ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                    ft.commit();
+                }
             }
         });
     }
 
-    private void setToolbarClickListeners() {
-        tbMainBinding.ivBackBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        tbMainBinding.ivLogoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG,"logout clicked");
-                LoginActivity.logoutUser(GroupDetailsActivity.this);
-            }
-        });
-    }
-
+    /* ------------------------ HELPER METHODS ------------------------ */
     private void leaveGroup() {
         User.leaveGroup(group);
         HomeActivity.navHomeActivity(this);
     }
 
-    /* -------------------- new pic methods ---------------------- */
-    private void showNewPicDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        NewPicDialogFragment newPicDialogFragment = NewPicDialogFragment.newInstance("New Pic");
-        newPicDialogFragment.show(fm, "fragment_new_pic");
+    /* ------------------ INTERFACE METHODS ---------------- */
+    @Override
+    public void leave() {
+        leaveGroup();
     }
 
     @Override
-    public void picSaved(ParseFile parseFile) {
-        group.setGroupPic(parseFile);
+    public void inviteUser() {
+
+    }
+
+    @Override
+    public void chatWithUser(ParseUser user) {
+
+    }
+
+    @Override
+    public void goProfile(ParseUser user) {
+
     }
 
     /* ------------------ intent methods to activities ---------------- */

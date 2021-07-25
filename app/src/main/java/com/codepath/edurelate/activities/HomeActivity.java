@@ -49,7 +49,6 @@ public class HomeActivity extends BaseActivity {
     List<Group> groups;
     GroupsAdapter groupsAdapter;
     GridLayoutManager glManager;
-    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +72,11 @@ public class HomeActivity extends BaseActivity {
         binding.rvGroups.setLayoutManager(glManager);
         queryExtraGroups();
 
-        try {
-            initializeViews();
-        } catch (ParseException e) {
-            Log.e(TAG,"Error while initializing views: " + e.getMessage(), e);
-        }
+        initializeViews();
         setClickListeners();
     }
 
-    private void initializeViews() throws ParseException {
-//        setToolbarTitle(binding.getRoot(),getString(R.string.home_title));
-//        tbMainBinding.tvActivityTitle.setText(getString(R.string.home_title));
+    private void initializeViews() {
         ParseFile image = ParseUser.getCurrentUser().getParseFile(User.KEY_USER_PIC);
         Log.i(TAG, ParseUser.getCurrentUser().getUsername());
         Log.i(TAG,"curr user image: " + image);
@@ -95,32 +88,10 @@ public class HomeActivity extends BaseActivity {
         binding.tvUsername.setText("@" + ParseUser.getCurrentUser().getUsername());
     }
 
-    public static void setToolbarTitle(View rootView, String title) {
-        TextView tvActivityTitle = rootView.findViewById(R.id.tvActivityTitle);
-        tvActivityTitle.setText(title);
-    }
-
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
-//        setToolbarClickListeners();
         setBottomNavigationListener(bottomNavigation, HomeActivity.this);
         setUserClickListeners();
-    }
-
-    private void setToolbarClickListeners() {
-        tbMainBinding.ivBackBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        tbMainBinding.ivLogoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG,"logout clicked");
-                LoginActivity.logoutUser(HomeActivity.this);
-            }
-        });
     }
 
     public static void setBottomNavigationListener(BottomNavigationView bottomNavigation, Activity activity) {
@@ -185,6 +156,7 @@ public class HomeActivity extends BaseActivity {
                     return;
                 }
                 Log.i(TAG,"Members queried successfully. Size: " + objects.size());
+                User.currUserMemberships.addAll(objects);
                 User.currUserGroups.addAll(Member.getGroups(objects));
                 groupsAdapter.addAll(User.currUserGroups);
             }

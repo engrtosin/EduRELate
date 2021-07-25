@@ -8,4 +8,10 @@
     <string name="find_group">find group</string>
     <string name="leave_group">Leave this group</string>
     <string name="logout">Logout</string>
+    <string name="about">About</string>
+    <string name="members">Members</string>
+    <string name="group_chat">Chat</string>
+    <string name="group_members">Members</string>
+    <string name="group_forum">Forum</string>
+    <string name="group_files">Files</string>
 </resources>

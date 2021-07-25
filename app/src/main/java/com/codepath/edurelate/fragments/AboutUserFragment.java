@@ -61,14 +61,15 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = getArguments().getParcelable(User.KEY_USER);
+        if (getArguments() != null) {
+            user = getArguments().getParcelable(User.KEY_USER);
+        }
         Log.i(TAG,"in on create");
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = FragmentAboutUserBinding.inflate(inflater,container,false);
         rootView = binding.getRoot();
         return rootView;

@@ -40,6 +40,7 @@ public class User {
     public static ParseUser edurelateBot;
     public static Group parseGroup;
     public static List<Group> currUserGroups = new ArrayList<>();
+    public static List<Member> currUserMemberships = new ArrayList<>();
 
     public static String getFirstName(ParseUser user) {
         String firstName = user.getString(KEY_FIRST_NAME);
@@ -178,6 +179,7 @@ public class User {
 
     public static void clearCurrUserData() {
         currUserGroups = null;
+        currUserMemberships = null;
     }
 
     public static List<String> getCurrGroupIds() {
@@ -231,6 +233,20 @@ public class User {
             Log.i(TAG,"is group same as this in currUserGroups: " + i + ", " + currUserGroups.get(i).getObjectId().equals(group.getObjectId()));
             if (currUserGroups.get(i).getObjectId().equals(group.getObjectId())) {
                 currUserGroups.remove(currUserGroups.get(i));
+                return;
+            }
+        }
+    }
+
+    private static void deleteMembershipForCurrUser(Member member) {
+        if (currUserMemberships.contains(member)) {
+            currUserMemberships.remove(member);
+            return;
+        }
+        for (int i = 0; i < currUserMemberships.size(); i++) {
+            Log.i(TAG,"is group same as this in currUserMemberships: " + i + ", " + currUserMemberships.get(i).getObjectId().equals(member.getObjectId()));
+            if (currUserMemberships.get(i).getObjectId().equals(member.getObjectId())) {
+                currUserMemberships.remove(currUserMemberships.get(i));
                 return;
             }
         }
