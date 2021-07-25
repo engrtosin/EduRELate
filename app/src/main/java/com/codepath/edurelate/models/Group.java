@@ -40,7 +40,7 @@ public class Group extends ParseObject {
     public static final int CLOSED_GROUP_CODE = 1;
     public static final String KEY_GROUP_ACCESS = "groupAccess";
 
-    public static Group newNonFriendGroup(String groupName,int groupAccess) throws ParseException {
+    public static Member newNonFriendGroup(String groupName,int groupAccess) throws ParseException {
         Group group = new Group();
         group.setGroupName(groupName);
         group.put(KEY_GROUP_ACCESS,groupAccess);
@@ -58,10 +58,10 @@ public class Group extends ParseObject {
             }
         });
         Member member = Member.newMember(ParseUser.getCurrentUser(),group,false,Member.OWNER_CODE);
-        return group;
+        return member;
     }
 
-    public static Group newFriendGroup(ParseUser user1, ParseUser user2) {
+    public static Member newFriendGroup(ParseUser user1, ParseUser user2) {
         Group group = new Group();
         group.setGroupName(user1.getObjectId() + " and " + user2.getObjectId());
         group.put(KEY_GROUP_ACCESS,CLOSED_GROUP_CODE);
@@ -82,7 +82,7 @@ public class Group extends ParseObject {
         Member bot = Member.newMember(User.edurelateBot,group,true,Member.OWNER_CODE);
         Member member1 = Member.newMember(user1,group,true,user2,Member.MEMBER_CODE);
         Member member2 = Member.newMember(user2,group,true,user1,Member.MEMBER_CODE);
-        return group;
+        return member1;
     }
 
     public String getGroupName() {

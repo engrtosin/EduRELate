@@ -7,4 +7,5 @@
     <string name="invite_a_user">Invite a user</string>
     <string name="find_group">find group</string>
     <string name="leave_group">Leave this group</string>
+    <string name="logout">Logout</string>
 </resources>

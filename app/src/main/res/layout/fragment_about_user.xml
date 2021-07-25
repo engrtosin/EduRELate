@@ -1,14 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.AboutUserFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tvLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="13dp"
+        android:text="@string/logout"
+        android:textStyle="bold" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/ivLogoutBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/tvLogout"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/outline_logout_black_24dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvUserPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="30dp"
+        app:cardCornerRadius="50dp" >
+
+        <ImageView
+            android:id="@+id/ivUserPic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/default_user_avatar" />
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/cvUserPic"
+        android:layout_alignTop="@id/cvUserPic" >
+
+        <ImageView
+            android:id="@+id/ivEditPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="10dp"
+            app:srcCompat="@drawable/outline_edit_24" />
+
+        <ImageView
+            android:id="@+id/ivChat"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            app:srcCompat="@drawable/outline_chat_bubble_outline_24" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llProfileActions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cvUserPic"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/tvActSendMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Send Message"
+            android:visibility="gone"
+            android:layout_marginEnd="5dp"/>
+
+        <TextView
+            android:id="@+id/tvActInvite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cvUserPic"
+            android:layout_marginStart="5dp"
+            android:visibility="gone"
+            android:layout_marginTop="5dp"
+            android:text="Send an invite" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvDescUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llProfileActions"
+        android:layout_marginTop="10dp"
+        android:text="Username" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tvDescUsername"
+        android:layout_alignTop="@id/tvDescUsername"
+        android:layout_marginStart="10dp"
+        android:text="oluwatosin" />
+
+    <TextView
+        android:id="@+id/tvDescPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDescUsername"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:text="Password" />
+
+    <TextView
+        android:id="@+id/tvPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tvDescPassword"
+        android:layout_alignTop="@id/tvDescPassword"
+        android:layout_marginStart="10dp"
+        android:visibility="gone"
+        android:password="true"
+        android:text="oluwatosin" />
+
+    <TextView
+        android:id="@+id/tvDescFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDescPassword"
+        android:layout_marginTop="10dp"
+        android:text="First Name:" />
+
+    <TextView
+        android:id="@+id/tvFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tvDescFirstName"
+        android:layout_alignTop="@id/tvDescFirstName"
+        android:layout_marginStart="10dp"
+        android:text="Oluwatosin" />
+
+    <TextView
+        android:id="@+id/tvDescLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDescFirstName"
+        android:layout_marginTop="10dp"
+        android:text="Last Name" />
+
+    <TextView
+        android:id="@+id/tvLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tvDescLastName"
+        android:layout_alignTop="@id/tvDescLastName"
+        android:layout_marginStart="10dp"
+        android:text="Ajibola" />
+
+    <View
+        android:id="@+id/vDemarcate"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tvLastName"
+        android:layout_marginTop="5dp"
+        android:background="#c0c0c0" />
+
+</RelativeLayout>
