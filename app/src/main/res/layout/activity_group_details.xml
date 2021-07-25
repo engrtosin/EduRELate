@@ -21,13 +21,13 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvFragTitle"
-            android:layout_width="80dp"
-            android:layout_height="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:layout_below="@id/tbOrigMain"
             android:padding="15dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="1dp"
-            android:backgroundTint="@color/edurelate_green"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="@color/login_blue"
             app:cardCornerRadius="5dp">
             <TextView
                 android:id="@+id/tvFragTitle"

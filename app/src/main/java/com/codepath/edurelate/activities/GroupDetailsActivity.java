@@ -25,6 +25,7 @@ import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityGroupDetailsBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.AboutGroupFragment;
+import com.codepath.edurelate.fragments.MembersFragment;
 import com.codepath.edurelate.fragments.NewPicDialogFragment;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
 import com.codepath.edurelate.models.Chat;
@@ -117,7 +118,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                     }
                     if (item.getItemId() == R.id.action_members) {
                         binding.tvFragTitle.setText(getString(R.string.members));
-                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.replace(R.id.flContainer, MembersFragment.newInstance(group));
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;

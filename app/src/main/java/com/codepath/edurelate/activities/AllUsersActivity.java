@@ -44,7 +44,6 @@ public class AllUsersActivity extends BaseActivity {
     Group invitingGroup;
     List<String> membersId;
     int inviteType;
-    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

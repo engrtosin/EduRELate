@@ -73,18 +73,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         ItemUserBinding itemUserBinding = ItemUserBinding.inflate(LayoutInflater.from(context),
                 parent, false);
-//        View view = itemGroupBinding.getRoot();
         return new ViewHolder(itemUserBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull UsersAdapter.ViewHolder holder, int position) {
         ParseUser user = users.get(position);
-        try {
-            holder.bind(user);
-        } catch (ParseException e) {
-            Log.e(TAG,"Error while binding: " + e.getMessage(),e);
-        }
+        holder.bind(user);
     }
 
     @Override
@@ -124,7 +119,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             });
         }
 
-        public void bind(ParseUser user) throws ParseException {
+        public void bind(ParseUser user) {
             if (User.compareUsers(group.getOwner(),ParseUser.getCurrentUser())) {
                 if (!User.compareUsers(user,group.getOwner())) {
                     if (!membersId.contains(user.getObjectId())) {
