@@ -105,12 +105,6 @@ public class HomeActivity extends BaseActivity {
 //        setToolbarClickListeners();
         setBottomNavigationListener(bottomNavigation, HomeActivity.this);
         setUserClickListeners();
-        binding.tvActPeople.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goPeopleActivity();
-            }
-        });
     }
 
     private void setToolbarClickListeners() {

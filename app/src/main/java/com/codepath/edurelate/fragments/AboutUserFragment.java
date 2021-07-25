@@ -18,6 +18,7 @@ import com.codepath.edurelate.activities.HomeActivity;
 import com.codepath.edurelate.activities.ProfileActivity;
 import com.codepath.edurelate.databinding.ActivityProfileBinding;
 import com.codepath.edurelate.databinding.FragmentAboutUserBinding;
+import com.codepath.edurelate.interfaces.ProfileFragmentInterface;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
@@ -41,17 +42,7 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
     FragmentAboutUserBinding binding;
     View rootView;
     ParseUser user;
-    AboutUserInterface mListener;
-
-    /* ----------------- INTERFACE ----------------------- */
-    public interface AboutUserInterface {
-        void goLoginActivity();
-        void goChatActivity(Member member);
-    }
-
-    public void setInterfaceListener(AboutUserInterface mListener)  {
-        this.mListener = mListener;
-    }
+    ProfileFragmentInterface mListener;
 
     /* ---------------- CONSTRUCTOR ---------------------- */
 
@@ -70,12 +61,12 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = savedInstanceState.getParcelable(User.KEY_USER);
+        user = getArguments().getParcelable(User.KEY_USER);
         Log.i(TAG,"in on create");
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentAboutUserBinding.inflate(inflater,container,false);
@@ -86,6 +77,7 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mListener = (ProfileFragmentInterface) getActivity();
         initializeViews();
         setClickListeners();
     }
@@ -130,7 +122,7 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
             @Override
             public void onClick(View v) {
                 ParseUser.logOut();
-                mListener.goLoginActivity();
+                mListener.logout();
             }
         });
         binding.ivChat.setOnClickListener(new View.OnClickListener() {

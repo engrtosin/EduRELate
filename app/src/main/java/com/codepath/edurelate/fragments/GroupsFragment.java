@@ -11,10 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.codepath.edurelate.activities.AllGroupsActivity;
 import com.codepath.edurelate.adapters.GroupsAdapter;
 import com.codepath.edurelate.databinding.FragmentGroupsBinding;
 import com.codepath.edurelate.interfaces.PeopleFragmentInterface;
+import com.codepath.edurelate.interfaces.ProfileFragmentInterface;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
@@ -34,7 +34,7 @@ public class GroupsFragment extends Fragment {
     public static final int SPAN_COUNT = 2;
 
     FragmentGroupsBinding binding;
-    PeopleFragmentInterface peopleListener;
+    ProfileFragmentInterface mListener;
     List<Group> groups;
     GroupsAdapter groupsAdapter;
     GridLayoutManager glManager;
@@ -70,7 +70,7 @@ public class GroupsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        peopleListener = (PeopleFragmentInterface) getActivity();
+        mListener = (ProfileFragmentInterface) getActivity();
         setupRecyclerView();
         setClickListeners();
     }
@@ -100,7 +100,7 @@ public class GroupsFragment extends Fragment {
         binding.tvNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                peopleListener.joinNewGroup();
+                mListener.joinNewGroup();
             }
         });
     }

@@ -39,7 +39,6 @@ public class PeopleActivity extends BaseActivity implements PeopleFragmentInterf
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
         bottomNavigation.setSelectedItemId(R.id.action_home);
-//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         adapter = new PeopleFragmentPagerAdapter(getSupportFragmentManager(),
                 PeopleActivity.this);
         binding.vpPager.setAdapter(adapter);
