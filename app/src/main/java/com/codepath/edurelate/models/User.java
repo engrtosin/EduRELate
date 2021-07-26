@@ -112,17 +112,6 @@ public class User {
         });
     }
 
-    public static Message sendMessage(String body, ParseUser sender, Group recipient, Message replyTo) throws ParseException {
-        Message message = new Message();
-        message.put(Message.KEY_BODY, body);
-        message.put(Message.KEY_SENDER, sender);
-        message.put(Message.KEY_REPLY_TO, replyTo);
-        message.put(Message.KEY_RECIPIENT, recipient);
-        message.save();
-        recipient.getChat().addMessage(message);
-        return message;
-    }
-
     public static void acceptInvite(Invite invite) {
         if (invite.getIsGroupInvite()) {
             invite.setStatus(Invite.STATUS_ACCEPTED);

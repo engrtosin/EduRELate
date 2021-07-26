@@ -23,15 +23,13 @@
         android:roundIcon="@drawable/edurelate_round_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Edurelate">
-        <activity android:name=".activities.NotificationsActivity"></activity>
+        <activity android:name=".activities.NotificationsActivity" />
         <activity android:name=".activities.AllGroupsActivity" />
         <activity android:name=".activities.AllUsersActivity" />
         <activity android:name=".activities.AllChatsActivity" />
-        <activity android:name=".activities.AllMembersActivity" />
         <activity android:name=".activities.ChatActivity" />
         <activity android:name=".activities.GroupDetailsActivity" />
         <activity android:name=".activities.HomeActivity" />
-        <activity android:name=".activities.PeopleActivity" />
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.LoginActivity">

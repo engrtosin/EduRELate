@@ -12,12 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codepath.edurelate.R;
-import com.codepath.edurelate.activities.AllUsersActivity;
 import com.codepath.edurelate.adapters.UsersAdapter;
 import com.codepath.edurelate.databinding.FragmentMembersBinding;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
-import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Member;

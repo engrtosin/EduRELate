@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.edurelate.models.Group;
-import com.codepath.edurelate.models.MockGroup;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,11 +19,10 @@ public class FriendsFragAdapter extends RecyclerView.Adapter<FriendsFragAdapter.
 
     Context context;
     List<Group> friends;
-    List<MockGroup> mockFriends;
 
-    public FriendsFragAdapter(Context context, List<MockGroup> mockFriends) {
+    public FriendsFragAdapter(Context context, List<Group> friends) {
         this.context = context;
-        this.mockFriends = mockFriends;
+        this.friends = friends;
     }
 
     @NonNull

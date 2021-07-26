@@ -8,9 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.codepath.edurelate.fragments.AboutUserFragment;
-import com.codepath.edurelate.fragments.FriendsFragment;
 import com.codepath.edurelate.fragments.GroupsFragment;
-import com.parse.Parse;
 import com.parse.ParseUser;
 
 public class ProfileFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -20,8 +18,7 @@ public class ProfileFragmentPagerAdapter extends FragmentPagerAdapter {
     ParseUser user;
 
     public interface ProfileFragPagerAdapterInterface {
-        public void newFriendsFragment(FriendsFragment friendsFragment);
-        public void newGroupsFragment(GroupsFragment groupsFragment);
+
     }
 
     final int PAGE_COUNT = 2;

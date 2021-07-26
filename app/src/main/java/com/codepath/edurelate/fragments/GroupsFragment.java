@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.codepath.edurelate.adapters.GroupsAdapter;
 import com.codepath.edurelate.databinding.FragmentGroupsBinding;
-import com.codepath.edurelate.interfaces.PeopleFragmentInterface;
 import com.codepath.edurelate.interfaces.ProfileFragmentInterface;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;

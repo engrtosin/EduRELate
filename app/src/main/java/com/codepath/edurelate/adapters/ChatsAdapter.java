@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.edurelate.databinding.ItemChatBinding;
-import com.codepath.edurelate.models.Chat;
-import com.codepath.edurelate.models.Friend;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.Message;

@@ -1,25 +1,18 @@
 package com.codepath.edurelate.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivitySignUpBinding;
-import com.codepath.edurelate.models.Friend;
-import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SignUpActivity extends LoginActivity {
 

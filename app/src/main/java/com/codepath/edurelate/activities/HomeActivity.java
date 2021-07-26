@@ -183,11 +183,6 @@ public class HomeActivity extends BaseActivity {
     }
 
     /* --------------------- intent navigation methods ------------------------ */
-    private void goPeopleActivity() {
-        Intent i = new Intent(HomeActivity.this, PeopleActivity.class);
-        this.startActivity(i);
-    }
-
     private void goProfileActivity(ParseUser owner) {
         Intent i = new Intent(HomeActivity.this, ProfileActivity.class);
         i.putExtra(User.KEY_USER,Parcels.wrap(owner));

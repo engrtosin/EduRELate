@@ -100,14 +100,6 @@ public class Group extends ParseObject {
         return getParseUser(KEY_OWNER);
     }
 
-    public List<Message> getMessages() {
-        return getList(KEY_MESSAGES);
-    }
-
-    public Chat getChat() {
-        return (Chat) get(KEY_CHAT);
-    }
-
     public List<ParseUser> getMembers() {
         return getList(KEY_MEMBERS);
     }

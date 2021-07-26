@@ -1,6 +1,5 @@
 package com.codepath.edurelate.activities;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Intent;
@@ -13,7 +12,6 @@ import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.UsersAdapter;
 import com.codepath.edurelate.databinding.ActivityAllUsersBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
-import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Member;
@@ -144,13 +142,6 @@ public class AllUsersActivity extends BaseActivity {
         });
     }
 
-    private Chat findFriendChat(ParseUser user) {
-        Chat chat = new Chat();
-        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
-        query.include(Chat.KEY_MESSAGES);
-        return chat;
-    }
-
     /* --------------------- adapter interface methods --------------------- */
     private void setAdapterInterface() {
         usersAdapter.setAdapterListener(new UsersAdapter.UsersAdapterInterface() {
@@ -162,8 +153,7 @@ public class AllUsersActivity extends BaseActivity {
 
             @Override
             public void chatClicked(ParseUser user) {
-                Chat chat = findFriendChat(user);
-                goChatActivity(chat);
+
             }
 
             @Override
@@ -202,9 +192,9 @@ public class AllUsersActivity extends BaseActivity {
         this.startActivity(i);
     }
 
-    private void goChatActivity(Chat chat) {
+    private void goChatActivity(Member member) {
         Intent i = new Intent(AllUsersActivity.this, ChatActivity.class);
-        i.putExtra(Chat.KEY_CHAT, Parcels.wrap(chat));
+        i.putExtra(Member.KEY_MEMBER, member);
         this.startActivity(i);
     }
 }

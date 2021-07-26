@@ -46,9 +46,7 @@ public class ProfileActivity extends BaseActivity implements ProfileFragmentInte
     public static final String TAG = "ProfileActivity";
 
     ActivityProfileBinding binding;
-    ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
-    Toolbar toolbar;
     ParseUser user;
     ProfileFragmentPagerAdapter adapter;
 
@@ -87,12 +85,6 @@ public class ProfileActivity extends BaseActivity implements ProfileFragmentInte
     }
 
     /* --------------------- intent methods to activities ----------------------- */
-    private void goPeopleActivity() {
-        Intent i = new Intent(ProfileActivity.this, PeopleActivity.class);
-        i.putExtra(User.KEY_USER, Parcels.wrap(user));
-        this.startActivity(i);
-    }
-
     private void goLoginActivity() {
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);

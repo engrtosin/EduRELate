@@ -2,35 +2,22 @@ package com.codepath.edurelate.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityGroupDetailsBinding;
-import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.AboutGroupFragment;
 import com.codepath.edurelate.fragments.ChatFragment;
 import com.codepath.edurelate.fragments.MembersFragment;
-import com.codepath.edurelate.fragments.NewPicDialogFragment;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
-import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Member;
@@ -39,7 +26,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -216,16 +202,8 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
     }
 
     /* ------------------ intent methods to activities ---------------- */
-    private void goAllMembersActivity() {
-        Intent i = new Intent(GroupDetailsActivity.this,AllMembersActivity.class);
-        i.putExtra(Group.KEY_GROUP,Parcels.wrap(group));
-        this.startActivity(i);
-    }
-
     private void goChatActivity(ParseUser owner) {
-        Intent i = new Intent(GroupDetailsActivity.this,ChatActivity.class);
-        i.putExtra(Chat.KEY_CHAT,Parcels.wrap(group.getChat()));
-        this.startActivity(i);
+
     }
 
     private void goProfileActivity(ParseUser owner) {

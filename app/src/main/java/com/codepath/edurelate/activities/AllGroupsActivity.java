@@ -1,6 +1,5 @@
 package com.codepath.edurelate.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -9,20 +8,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.GroupsAdapter;
-import com.codepath.edurelate.adapters.UsersAdapter;
 import com.codepath.edurelate.databinding.ActivityAllGroupsBinding;
-import com.codepath.edurelate.databinding.ActivityProfileBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.NewGroupDialogFragment;
-import com.codepath.edurelate.models.Chat;
 import com.codepath.edurelate.models.Group;
-import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.Request;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,7 +27,6 @@ import com.parse.ParseUser;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AllGroupsActivity extends BaseActivity {
