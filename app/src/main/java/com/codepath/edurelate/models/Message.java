@@ -31,16 +31,7 @@ public class Message extends ParseObject {
     public Message replyTo;
     public Group recipient;
 
-    public Message() {
-    }
-
-    public Message(ParseUser sender, String body, Message replyTo, Group recipient) {
-        this.sender = sender;
-        this.body = body;
-        this.replyTo = replyTo;
-        this.recipient = recipient;
-    }
-
+    /* ------------------------ GET METHODS ------------------------ */
     public String getBody(boolean isFull) {
         String body = getString(KEY_BODY);
         if (body.length() < TRUNCATED_BODY_LENGTH) {
@@ -72,6 +63,7 @@ public class Message extends ParseObject {
         return getUsersLikingThis().size();
     }
 
+    /* ------------------------ OTHER METHODS ------------------------ */
     public void unlikeThis(ParseUser user) {
         removeAll(KEY_USERS_LIKING_THIS, Collections.singleton(user));
     }

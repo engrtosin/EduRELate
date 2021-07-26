@@ -29,7 +29,8 @@ public class Notification extends ParseObject {
     public static final int MEMBER_LEFT_CODE = 40;
     public static final int YOU_LEFT_GROUP_CODE = 45;
 
-    public static Notification newInstance(ParseUser user, int notifType, String notifText, Invite invite) {
+    /* ------------------------ NEW NOTIFICATION METHODS ------------------------ */
+    public static Notification newNotification(ParseUser user, int notifType, String notifText, Invite invite) {
         Notification notification = new Notification();
         notification.put(KEY_USER,user);
         notification.put(KEY_NOTIF_TYPE,notifType);
@@ -48,7 +49,7 @@ public class Notification extends ParseObject {
         return notification;
     }
 
-    public static Notification newInstance(ParseUser user, int notifType, String notifText, Request request) {
+    public static Notification newNotification(ParseUser user, int notifType, String notifText, Request request) {
         Notification notification = new Notification();
         notification.put(KEY_USER,user);
         notification.put(KEY_NOTIF_TYPE,notifType);
@@ -67,7 +68,7 @@ public class Notification extends ParseObject {
         return notification;
     }
 
-    public static Notification newInstance(ParseUser user, int notifType, String notifText) {
+    public static Notification newNotification(ParseUser user, int notifType, String notifText) {
         Notification notification = new Notification();
         notification.put(KEY_USER,user);
         notification.put(KEY_NOTIF_TYPE,notifType);
@@ -85,6 +86,7 @@ public class Notification extends ParseObject {
         return notification;
     }
 
+    /* ------------------------ GET METHODS ------------------------ */
     public int getNotifType() {
         return getInt(KEY_NOTIF_TYPE);
     }

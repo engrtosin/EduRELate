@@ -32,6 +32,7 @@ public class Member extends ParseObject {
 
     }
 
+    /* ------------------------ NEW MEMBER METHODS ------------------------ */
     public static Member newMember(ParseUser user, Group group, boolean isFriendGroup, int roleCode) {
         Member member = new Member();
         member.put(KEY_USER,user);
@@ -69,6 +70,7 @@ public class Member extends ParseObject {
         return member;
     }
 
+    /* ------------------------ GET METHODS ------------------------ */
     public Group getGroup() {
         return (Group) getParseObject(KEY_GROUP);
     }

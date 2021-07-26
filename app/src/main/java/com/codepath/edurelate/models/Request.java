@@ -23,7 +23,8 @@ public class Request extends ParseObject {
     public static final String KEY_CREATOR = "creator";
     public static final String KEY_TO_GROUP = "toGroup";
 
-    public static Request newInstance(ParseUser creator, Group toGroup) {
+    /* ------------------------ NEW REQUEST METHODS ------------------------ */
+    public static Request newRequest(ParseUser creator, Group toGroup) {
         Request request = new Request();
         request.put(KEY_CREATOR,creator);
         request.put(KEY_TO_GROUP,toGroup);
@@ -40,6 +41,7 @@ public class Request extends ParseObject {
         return request;
     }
 
+    /* ------------------------ GET METHODS ------------------------ */
     public Group getToGroup() {
         return (Group) getParseObject(KEY_TO_GROUP);
     }
