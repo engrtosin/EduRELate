@@ -38,7 +38,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
     List<String> requestGroupIds;
 
     public interface GroupsAdapterInterface {
-        void groupClicked(Group group);
+        void groupClicked(Group group,View groupPic);
         void ownerClicked(ParseUser owner);
         void joinGroup(Group group);
     }
@@ -109,7 +109,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             itemGroupBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.groupClicked(group);
+                    mListener.groupClicked(group,itemGroupBinding.cvGroupPic);
                 }
             });
             itemGroupBinding.tvGroupOwner.setOnClickListener(new View.OnClickListener() {

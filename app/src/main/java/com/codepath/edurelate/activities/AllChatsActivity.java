@@ -3,8 +3,12 @@ package com.codepath.edurelate.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,7 +17,9 @@ import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.ChatsAdapter;
 import com.codepath.edurelate.databinding.ActivityAllChatsBinding;
+import com.codepath.edurelate.databinding.FragmentSearchBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
+import com.codepath.edurelate.fragments.SearchFragment;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,6 +28,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -33,6 +40,7 @@ public class AllChatsActivity extends BaseActivity {
     public static final int SPAN_COUNT = 1;
 
     ActivityAllChatsBinding binding;
+    FragmentSearchBinding fragBinding;
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
     List<Member> members = new ArrayList<>();
@@ -49,6 +57,7 @@ public class AllChatsActivity extends BaseActivity {
         setContentView(view);
         // TODO: Use string.xml value
         setupToolbar("Chats");
+
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
         members = new ArrayList<>();
@@ -67,10 +76,23 @@ public class AllChatsActivity extends BaseActivity {
         setClickListeners();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
+        menu.findItem(R.id.action_search).setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            switchToSearch();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
-
-//        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation,AllChatsActivity.this);
     }
 
@@ -108,6 +130,23 @@ public class AllChatsActivity extends BaseActivity {
         });
     }
 
+    /* -------------------------- SEARCH -------------------------------- */
+    private void switchToSearch() {
+        binding.rvChats.setVisibility(View.GONE);
+        binding.flContainer.setVisibility(View.VISIBLE);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        SearchFragment fragment = SearchFragment.newInstance(members);
+        fragment.setFragListener(new SearchFragment.SearchFragInterface() {
+            @Override
+            public void fragmentClosed() {
+                binding.rvChats.setVisibility(View.VISIBLE);
+                binding.flContainer.setVisibility(View.GONE);
+            }
+        });
+        ft.replace(R.id.flContainer,fragment);
+        ft.commit();
+    }
+
     /* --------------------- ADAPTER INTERFACE METHODS --------------------- */
     private void setAdapterInterface() {
         chatsAdapter.setAdapterListener(new ChatsAdapter.ChatsAdapterInterface() {
@@ -126,6 +165,10 @@ public class AllChatsActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void setFragInterface() {
+
     }
 
     /* --------------------- INTENT METHODS TO ACTIVITIES --------------------- */

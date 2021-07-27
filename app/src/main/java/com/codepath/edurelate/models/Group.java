@@ -153,6 +153,15 @@ public class Group extends ParseObject {
         Notification toUser = Notification.newNotification(user,Notification.NEW_GROUP_CODE,txtToUser);
     }
 
+    public void removeMember(Member member) {
+        ParseUser user = member.getUser();
+        member.deleteInBackground();
+        String txtToOwner = "You removed " + User.getFullName(user) + " from " + getGroupName();
+        Notification toOwner = Notification.newNotification(getOwner(),Notification.REMOVED_MEMBER_CODE,txtToOwner);
+        String txtToUser = User.getFullName(getOwner()) + " removed you from " + getGroupName();
+        Notification toUser = Notification.newNotification(user,Notification.REMOVED_FROM_GROUP,txtToUser);
+    }
+
     public void sendInvite(ParseUser user) {
         Invite invite = Invite.newGroupInvite(user,this);
         add(KEY_INVITEES,user);

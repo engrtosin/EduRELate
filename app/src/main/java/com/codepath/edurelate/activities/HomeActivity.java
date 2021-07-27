@@ -3,6 +3,7 @@ package com.codepath.edurelate.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.app.Activity;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.edurelate.BaseActivity;
+import com.codepath.edurelate.MainActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.GroupsAdapter;
 import com.codepath.edurelate.databinding.ActivityHomeBinding;
@@ -167,8 +169,8 @@ public class HomeActivity extends BaseActivity {
     private void setAdapterInterface() {
         groupsAdapter.setAdapterListener(new GroupsAdapter.GroupsAdapterInterface() {
             @Override
-            public void groupClicked(Group group) {
-                goGroupDetailsActivity(group);
+            public void groupClicked(Group group,View groupPic) {
+                goGroupDetailsActivity(group,groupPic);
             }
 
             @Override
@@ -189,10 +191,12 @@ public class HomeActivity extends BaseActivity {
         this.startActivity(i);
     }
 
-    private void goGroupDetailsActivity(Group group) {
+    private void goGroupDetailsActivity(Group group,View groupPic) {
         Intent i = new Intent(HomeActivity.this, GroupDetailsActivity.class);
         i.putExtra(Group.KEY_GROUP,Parcels.wrap(group));
-        this.startActivity(i);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(HomeActivity.this, groupPic, "groupPic");
+        this.startActivity(i,options.toBundle());
     }
 
     /* ------------------ static activity intent methods ----------------------- */

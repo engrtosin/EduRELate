@@ -1,5 +1,8 @@
 package com.codepath.edurelate.adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +37,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
     public interface MembersAdapterInterface {
         void memberClicked(ParseUser user);
         void chatClicked(ParseUser user);
+        void removeMember(Member member);
     }
 
     public void setAdapterListener(MembersAdapterInterface membersAdapterInterface) {
@@ -48,6 +52,12 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
     public void addAll(List<Member> objects) {
         members.addAll(objects);
         notifyDataSetChanged();
+    }
+
+    public void remove(Member member) {
+        int pos = members.indexOf(member);
+        members.remove(member);
+        notifyItemRemoved(pos);
     }
 
     public void clear() {
@@ -67,11 +77,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull @NotNull MembersAdapter.ViewHolder holder, int position) {
         Member member = members.get(position);
-        try {
-            holder.bind(member);
-        } catch (ParseException e) {
-            Log.e(TAG,"Error while binding: " + e.getMessage(),e);
-        }
+        holder.bind(member);
     }
 
     @Override
@@ -103,11 +109,45 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
                     mListener.chatClicked(member.getUser());
                 }
             });
+            itemMemberBinding.tvRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AnimatorSet shrink = new AnimatorSet();
+                    ObjectAnimator shrinkAnimY = ObjectAnimator.ofFloat(itemMemberBinding.getRoot(),
+                            View.SCALE_Y,0.2f);
+                    ObjectAnimator shrinkAnimX = ObjectAnimator.ofFloat(itemMemberBinding.getRoot(),
+                            View.SCALE_X,0.2f);
+                    shrink.playTogether(shrinkAnimX,shrinkAnimY);
+                    shrink.setDuration(2000);
+                    shrink.start();
+                    shrink.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mListener.removeMember(member);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+                }
+            });
         }
 
-        public void bind(Member member) throws ParseException {
+        public void bind(Member member) {
             this.member = member;
-            ParseFile image = member.getParseFile(User.KEY_USER_PIC);
+            ParseFile image = member.getUser().getParseFile(User.KEY_USER_PIC);
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(itemMemberBinding.ivUserPic);
             }

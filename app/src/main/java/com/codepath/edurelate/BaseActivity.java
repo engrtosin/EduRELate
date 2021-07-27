@@ -26,6 +26,7 @@ public class BaseActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
     public Toolbar toolbar;
     public TextView tvActivityTitle;
+    public Menu thisMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        invalidateOptionsMenu();
         setActivityTitle(title);
     }
 
@@ -68,7 +70,9 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        thisMenu = menu;
         getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
+        menu.findItem(R.id.action_search).setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 

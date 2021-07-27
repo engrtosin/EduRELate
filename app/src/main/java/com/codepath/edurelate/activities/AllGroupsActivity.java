@@ -146,7 +146,7 @@ public class AllGroupsActivity extends BaseActivity {
     private void setAdapterInterface() {
         groupsAdapter.setAdapterListener(new GroupsAdapter.GroupsAdapterInterface() {
             @Override
-            public void groupClicked(Group group) {
+            public void groupClicked(Group group,View groupPic) {
                 goGroupDetailsActivity(group);
             }
 

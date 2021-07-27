@@ -12,6 +12,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignTop="@id/tvSenderName"
         android:layout_marginStart="10dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="13dp" >
 
         <ImageView
@@ -45,6 +47,7 @@
         android:layout_below="@id/tvSenderName"
         android:layout_toEndOf="@id/ivLikeInMsg"
         android:layout_marginStart="5dp"
+        android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@color/incoming_green"
         app:cardCornerRadius="20dp" >
 

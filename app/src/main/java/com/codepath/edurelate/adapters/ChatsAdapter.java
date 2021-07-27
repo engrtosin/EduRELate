@@ -75,11 +75,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ChatsAdapter.ViewHolder holder, int position) {
         Member member = members.get(position);
-        try {
-            holder.bind(member);
-        } catch (ParseException e) {
-            Log.e(TAG,"Error binding view holder: " + e.getMessage(),e);
-        }
+        holder.bind(member);
     }
 
     @Override
@@ -111,7 +107,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             });
         }
 
-        public void bind(Member member) throws ParseException {
+        public void bind(Member member) {
             this.member = member;
             Group group = member.getGroup();
             Log.i(TAG,"binding group: " + group.getObjectId());
@@ -147,7 +143,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             });
         }
 
-        private void bindFriendGroup() throws ParseException {
+        private void bindFriendGroup() {
             ParseUser friend = member.getFriend();
             ParseFile image = friend.getParseFile(User.KEY_USER_PIC);
             if (image != null) {

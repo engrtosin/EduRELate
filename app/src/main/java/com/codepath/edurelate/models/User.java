@@ -160,4 +160,8 @@ public class User {
     public static boolean compareUsers(ParseUser user, ParseUser otherUser) {
         return user.getObjectId().equals(otherUser.getObjectId());
     }
+
+    public static ParseFile getUserPic(ParseUser friend) {
+        return friend.getParseFile(KEY_USER_PIC);
+    }
 }

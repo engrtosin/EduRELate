@@ -51,6 +51,10 @@ public class Message extends ParseObject {
         return getParseUser(KEY_RECIPIENT);
     }
 
+    public Group getGroup() {
+        return (Group) getParseObject(KEY_GROUP);
+    }
+
     public Message getReplyTo() {
         return (Message) getParseObject(KEY_REPLY_TO);
     }
