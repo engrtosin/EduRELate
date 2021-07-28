@@ -128,9 +128,16 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.toString().equals(queryTxt)) {
+                    binding.rvSearchItems.setAdapter(adapter);
+                    oldAdapter = null;
+                    oldResults = null;
+                    return;
+                }
                 if (results.size() != 0) {
                     Log.i(TAG,"text has changed to " + s);
-//                    textChanged(s.toString());
+                    textChanged(s.toString());
+                    return;
                 }
             }
         });
@@ -184,8 +191,9 @@ public class SearchFragment extends Fragment {
             }
         }
         newAdapter.setMsgHeaderPos(newResults.size());
+        newResults.add(messagesHeader);
         for (int i = oldMsgPos+1; i < oldResults.size(); i++) {
-            if (oldResults.get(i).getTitle().toLowerCase().contains(newQuery.toLowerCase())) {
+            if (oldResults.get(i).getLatestMsg().toLowerCase().contains(newQuery.toLowerCase())) {
                 newResults.add(oldResults.get(i));
             }
         }

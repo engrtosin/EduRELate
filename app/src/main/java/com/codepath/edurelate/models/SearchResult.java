@@ -28,7 +28,7 @@ public class SearchResult {
             return;
         }
         if (resultNum > 1) {
-            this.resultNumTxt = "1 result)";
+            this.resultNumTxt = "(1 result)";
             return;
         }
         this.resultNumTxt = "(" + resultNum + " results)";
@@ -68,7 +68,7 @@ public class SearchResult {
             return;
         }
         if (resultNum > 1) {
-            this.resultNumTxt = "1 result)";
+            this.resultNumTxt = "(1 result)";
             return;
         }
         this.resultNumTxt = "(" + resultNum + " results)";

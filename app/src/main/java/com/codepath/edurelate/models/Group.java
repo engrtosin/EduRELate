@@ -197,11 +197,12 @@ public class Group extends ParseObject {
                     Log.e(TAG,"Error saving new message: " + e.getMessage(),e);
                     return;
                 }
+                put(KEY_LATEST_MSG_DATE,message.getCreatedAt());
+                saveInBackground();
                 Log.i(TAG,"Message successfully saved.");
             }
         });
         put(KEY_LATEST_MSG,message);
-        put(KEY_LATEST_MSG_DATE,message.getCreatedAt());
         saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

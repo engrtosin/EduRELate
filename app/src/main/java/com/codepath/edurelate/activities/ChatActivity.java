@@ -52,6 +52,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         this.member = Parcels.unwrap(getIntent().getParcelableExtra(Member.KEY_MEMBER));
+        group = member.getGroup();
 
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
