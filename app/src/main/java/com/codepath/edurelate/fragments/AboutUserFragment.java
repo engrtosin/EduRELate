@@ -6,23 +6,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.bumptech.glide.Glide;
 import com.codepath.edurelate.R;
-import com.codepath.edurelate.activities.HomeActivity;
-import com.codepath.edurelate.activities.ProfileActivity;
-import com.codepath.edurelate.databinding.ActivityProfileBinding;
+import com.codepath.edurelate.adapters.CategoryAdapter;
 import com.codepath.edurelate.databinding.FragmentAboutUserBinding;
 import com.codepath.edurelate.interfaces.ProfileFragmentInterface;
+import com.codepath.edurelate.models.Category;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.hootsuite.nachos.chip.Chip;
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
+import com.hootsuite.nachos.validator.ChipifyingNachoValidator;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -30,9 +34,10 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
-import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class AboutUserFragment extends Fragment implements NewPicDialogFragment.NewPicInterface {
@@ -43,6 +48,13 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
     View rootView;
     ParseUser user;
     ProfileFragmentInterface mListener;
+    CategoryAdapter adapter;
+    LinearLayoutManager llManager;
+    List<Integer> categoryCodes = new ArrayList<>();
+    List<Category> interests = new ArrayList<>();
+    List<String> suggestions = new ArrayList<>();
+    HashMap<String, Category> categoryMap;
+    ArrayAdapter<String> nachoAdapter;
 
     /* ---------------- CONSTRUCTOR ---------------------- */
 
@@ -63,6 +75,7 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = getArguments().getParcelable(User.KEY_USER);
+            categoryCodes = User.getInterests(user);
         }
         Log.i(TAG,"in on create");
     }
@@ -72,7 +85,49 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
                              Bundle savedInstanceState) {
         binding = FragmentAboutUserBinding.inflate(inflater,container,false);
         rootView = binding.getRoot();
+        adapter = new CategoryAdapter(getContext(),interests);
+        binding.rvCategories.setAdapter(adapter);
+        llManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL,false);
+        binding.rvCategories.setLayoutManager(llManager);
+        categoryMap = new HashMap<>();
+        queryAllCategories();
         return rootView;
+    }
+
+    private void queryAllCategories() {
+        ParseQuery<Category> query = ParseQuery.getQuery(Category.class);
+        query.findInBackground(new FindCallback<Category>() {
+            @Override
+            public void done(List<Category> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while querying for categories: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Categories queried successfully. Size: " + objects.size());
+                int j = 0;
+                for (int i = 0; i < objects.size(); i++) {
+                    Category category = objects.get(i);
+                    if (categoryCodes.contains(category.getCode())) {
+                        interests.add(category);
+                        adapter.notifyDataSetChanged();
+                        continue;
+                    }
+                    suggestions.add(category.getTitle());
+                    categoryMap.put(suggestions.get(j),category);
+                    Log.i(TAG,"Suggestion at " + j + ": " + suggestions.get(j));
+                    j += 1;
+                }
+                setupNachoAdapter();
+            }
+        });
+    }
+
+    private void setupNachoAdapter() {
+        nachoAdapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item,suggestions);
+        binding.ntvInterests.setAdapter(nachoAdapter);
+        binding.ntvInterests.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+        binding.ntvInterests.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR);
+        binding.ntvInterests.setNachoValidator(new ChipifyingNachoValidator());
     }
 
     @Override
@@ -113,6 +168,22 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
 
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
+        binding.tvAddInterest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.rlWholePage.setVisibility(View.GONE);
+                binding.rlNewInterest.setVisibility(View.VISIBLE);
+            }
+        });
+        binding.ivDoneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Chip> chips = binding.ntvInterests.getAllChips();
+                addInterests(chips);
+                binding.rlWholePage.setVisibility(View.VISIBLE);
+                binding.rlNewInterest.setVisibility(View.GONE);
+            }
+        });
         binding.ivEditPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,6 +227,19 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
                 });
             }
         });
+    }
+
+    private void addInterests(List<Chip> chips) {
+        List<Integer> newInterests = new ArrayList<>();
+        for (int i = 0; i < chips.size(); i++) {
+            String chipTxt = chips.get(i).getText().toString();
+            if (suggestions.contains(chipTxt)) {
+                interests.add(categoryMap.get(chipTxt));
+                newInterests.add(categoryMap.get(chipTxt).getCode());
+            }
+        }
+        adapter.notifyDataSetChanged();
+        User.addNewInterests(user,newInterests);
     }
 
     /* -------------------- new pic methods ---------------------- */

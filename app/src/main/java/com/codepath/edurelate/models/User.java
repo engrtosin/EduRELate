@@ -167,6 +167,25 @@ public class User {
     }
 
     public static List<Integer> getInterests(ParseUser user) {
-        return user.getList(KEY_INTERESTS);
+        List<Integer> interests = new ArrayList<>();
+        try {
+            interests = user.fetchIfNeeded().getList(KEY_INTERESTS);
+        } catch (ParseException e) {
+            Log.e(TAG,"Error while getting interests: " + e.getMessage(),e);
+        }
+        return interests;
+    }
+
+    public static void addNewInterests(ParseUser user, List<Integer> newInterests) {
+        user.addAll(KEY_INTERESTS,newInterests);
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while saving interests: " + e.getMessage(),e);
+                    return;
+                }
+            }
+        });
     }
 }

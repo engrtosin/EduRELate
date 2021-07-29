@@ -10,8 +10,8 @@ import org.parceler.Parcel;
 public class Category extends ParseObject {
 
     public static final String TAG = "CategoryModel";
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_CODE = "code";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_CODE = "code";
 
     public String getTitle() {
         return getString(KEY_TITLE);

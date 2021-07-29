@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.edurelate.R;
+import com.codepath.edurelate.adapters.CategoryAdapter;
 import com.codepath.edurelate.databinding.FragmentAboutGroupBinding;
 import com.codepath.edurelate.databinding.ItemCategoryBinding;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
@@ -44,7 +45,6 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
     GroupDetailsInterface mListener;
     CategoryAdapter adapter;
     LinearLayoutManager llManager;
-
 
     public AboutGroupFragment() {
         // Required empty public constructor
@@ -182,44 +182,5 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
     @Override
     public void picSaved(ParseFile parseFile) {
         group.setGroupPic(parseFile);
-    }
-
-    public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-
-        Context context;
-        List<Category> categories;
-
-        public CategoryAdapter(Context context, List<Category> categories) {
-            this.context = context;
-            this.categories = categories;
-        }
-
-        @NonNull
-        @NotNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category,parent,false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull @NotNull AboutGroupFragment.CategoryAdapter.ViewHolder holder, int position) {
-            Category category = categories.get(position);
-            holder.tvTitle.setText(category.getTitle());
-        }
-
-        @Override
-        public int getItemCount() {
-            return categories.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView tvTitle;
-
-            public ViewHolder(@NonNull @NotNull View itemView) {
-                super(itemView);
-                tvTitle = itemView.findViewById(R.id.tvTitle);
-            }
-        }
     }
 }
