@@ -36,13 +36,15 @@ public class Group extends ParseObject {
     public static final String KEY_JOIN_REQUESTERS = "joinRequesters";
     public static final int OPEN_GROUP_CODE = 0;
     public static final int CLOSED_GROUP_CODE = 1;
+    public static final String KEY_CATEGORIES = "categories";
 
     /* ------------------- NEW GROUP METHODS -------------------------- */
-    public static Member newNonFriendGroup(String groupName,int groupAccess) throws ParseException {
+    public static Member newNonFriendGroup(String groupName,int groupAccess, List<Category> categories) {
         Group group = new Group();
         group.setGroupName(groupName);
         group.put(KEY_GROUP_ACCESS,groupAccess);
         group.put(KEY_IS_FRIEND_GROUP,false);
+        group.put(KEY_CATEGORIES,categories);
         group.setOwner(ParseUser.getCurrentUser());
         group.saveInBackground(new SaveCallback() {
             @Override
@@ -115,8 +117,8 @@ public class Group extends ParseObject {
         return getDate(KEY_LATEST_MSG_DATE);
     }
 
-    public List<ParseUser> getInvitees() {
-        return getList(KEY_INVITEES);
+    public List<Category> getCategories() {
+        return getList(KEY_CATEGORIES);
     }
 
     /* ------------------- SET METHODS -------------------------- */

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.codepath.edurelate.databinding.FragmentAboutGroupBinding;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
+import com.codepath.edurelate.models.Category;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
@@ -22,6 +23,8 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class AboutGroupFragment extends Fragment implements NewPicDialogFragment.NewPicInterface {
 
@@ -31,6 +34,7 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
     View rootView;
     Member member;
     Group group;
+    List<Category> categories;
     GroupDetailsInterface mListener;
 
 
@@ -52,6 +56,8 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
         if (getArguments() != null) {
             member = getArguments().getParcelable(Member.KEY_MEMBER);
             group = member.getGroup();
+            categories = group.getCategories();
+            Log.i(TAG,"Categories is " + categories.size());
         }
     }
 

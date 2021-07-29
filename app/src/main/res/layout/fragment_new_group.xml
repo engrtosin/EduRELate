@@ -32,18 +32,33 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/etGroupName"/>
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/swGroupAccess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/lblGroupAccess"
         android:text="Open Group" />
 
+    <TextView
+        android:id="@+id/lblCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/swGroupAccess"
+        android:text="Choose your categories" />
+
+    <com.hootsuite.nachos.NachoTextView
+        android:id="@+id/ntvCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblCategory"
+        app:chipTextColor="@color/white"
+        app:chipBackground="@color/edurelate_green" />
+
     <ImageView
         android:id="@+id/ivDone"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignEnd="@id/etGroupName"
-        android:layout_below="@id/swGroupAccess"
+        android:layout_below="@id/ntvCategories"
         app:srcCompat="@drawable/ic_baseline_done_24" />
 </RelativeLayout>

@@ -18,6 +18,7 @@ import com.codepath.edurelate.fragments.AboutGroupFragment;
 import com.codepath.edurelate.fragments.ChatFragment;
 import com.codepath.edurelate.fragments.MembersFragment;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
+import com.codepath.edurelate.models.Category;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Member;
@@ -151,6 +152,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
 
     private void queryMember() {
         ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
+        query.include(Member.KEY_GROUP+"."+Group.KEY_CATEGORIES);
         query.include(Member.KEY_GROUP+"."+Group.KEY_OWNER);
         query.include(Member.KEY_USER);
         query.whereEqualTo(Member.KEY_USER,ParseUser.getCurrentUser());
