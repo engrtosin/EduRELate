@@ -23,7 +23,6 @@ public class User {
     public static final String KEY_FIRST_NAME = "firstName";
     public static final String KEY_LAST_NAME = "lastName";
     public static final String KEY_USER_PIC = "userPic";
-    public static final String KEY_MAJOR = "major";
     public static final String KEY_USER = "user";
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String BOT_OBJECT_ID = "kJmCehSRZm";
@@ -37,6 +36,7 @@ public class User {
     public static List<Group> currUserGroups = new ArrayList<>();
     public static HashMap<Integer,Integer> groupStatsMap = new HashMap<>();
     public static List<Member> currUserMemberships = new ArrayList<>();
+    public static int categorySum = 0;
 
     /* ------------------- GET METHODS -------------------------- */
     public static String getFirstName(ParseUser user) {
@@ -87,6 +87,8 @@ public class User {
     public static void clearCurrUserData() {
         currUserGroups = null;
         currUserMemberships = null;
+        groupStatsMap = new HashMap<>();
+        categorySum = 0;
     }
 
     public static List<String> getCurrGroupIds() {
@@ -203,8 +205,10 @@ public class User {
                 }
                 int currSize = groupStatsMap.get(code);
                 groupStatsMap.put(code,currSize+1);
+                categorySum += 1;
             }
         }
         Log.i(TAG,"Map size: " + groupStatsMap.size());
+        Log.i(TAG,"Category sum: " + categorySum);
     }
 }

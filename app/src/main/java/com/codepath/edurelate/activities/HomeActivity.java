@@ -161,7 +161,6 @@ public class HomeActivity extends BaseActivity {
                 User.currUserMemberships.addAll(objects);
                 List<Group> extraGroups = Member.getGroups(objects);
                 User.updateCurrUserGroups(extraGroups);
-                User.currUserGroups.addAll(extraGroups);
                 groupsAdapter.addAll(extraGroups);
             }
         });

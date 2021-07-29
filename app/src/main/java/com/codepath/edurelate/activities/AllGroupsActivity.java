@@ -41,7 +41,7 @@ import java.util.List;
 public class AllGroupsActivity extends BaseActivity {
 
     public static final String TAG = "AllGroupsActivity";
-    public static final int SPAN_COUNT = 2;
+    public static final int SPAN_COUNT = 1;
 
     ActivityAllGroupsBinding binding;
     ToolbarMainBinding tbMainBinding;
@@ -207,8 +207,12 @@ public class AllGroupsActivity extends BaseActivity {
             double rank = 0;
             double relevanceRate = 0.8;
             for (int j = 0; j < categories.size(); j++) {
-                if (userInterests.contains(categories.get(j).getCode())) {
-                    rank += Math.pow(relevanceRate,j);
+                int code = categories.get(j).getCode();
+                if (userInterests.contains(code)) {
+                    rank += 10*Math.pow(relevanceRate,j);
+                }
+                if (User.groupStatsMap.containsKey(code)) {
+                    rank += 8*User.groupStatsMap.get(code)/User.categorySum;
                 }
             }
             addGroup(group,rank);
@@ -230,7 +234,6 @@ public class AllGroupsActivity extends BaseActivity {
         int end = ranks.size();
         while (start < end) {
             int mid = start + (end - start) / 2;
-            System.out.println(mid);
             if (ranks.get(mid) == rank) {
                 return mid + 1;
             }

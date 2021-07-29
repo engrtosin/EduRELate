@@ -81,7 +81,7 @@ public class GroupsFragment extends Fragment {
 
     /* ------------- fragment setup methods --------------- */
     private void setupRecyclerView() {
-        groups = new ArrayList<>();
+        groups = User.currUserGroups;
         queryExtraGroups();
         Log.i(TAG,"Number of all groups: " + groups.size());
         groupsAdapter = new GroupsAdapter(getContext(),groups,null);
@@ -118,8 +118,10 @@ public class GroupsFragment extends Fragment {
                     return;
                 }
                 Log.i(TAG,"Members queried successfully. Size: " + objects.size());
-                User.currUserGroups.addAll(Member.getGroups(objects));
-                groupsAdapter.addAll(User.currUserGroups);
+                User.currUserMemberships.addAll(objects);
+                List<Group> extraGroups = Member.getGroups(objects);
+                User.updateCurrUserGroups(extraGroups);
+                groupsAdapter.notifyDataSetChanged();
             }
         });
     }
