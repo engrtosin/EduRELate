@@ -1,19 +1,25 @@
 package com.codepath.edurelate.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.FragmentAboutGroupBinding;
+import com.codepath.edurelate.databinding.ItemCategoryBinding;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
 import com.codepath.edurelate.models.Category;
 import com.codepath.edurelate.models.Group;
@@ -36,6 +42,8 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
     Group group;
     List<Category> categories;
     GroupDetailsInterface mListener;
+    CategoryAdapter adapter;
+    LinearLayoutManager llManager;
 
 
     public AboutGroupFragment() {
@@ -66,6 +74,10 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
                              Bundle savedInstanceState) {
         binding = FragmentAboutGroupBinding.inflate(inflater,container,false);
         rootView = binding.getRoot();
+        adapter = new CategoryAdapter(getContext(),categories);
+        binding.rvCategories.setAdapter(adapter);
+        llManager = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
+        binding.rvCategories.setLayoutManager(llManager);
         return rootView;
     }
 
@@ -170,5 +182,44 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
     @Override
     public void picSaved(ParseFile parseFile) {
         group.setGroupPic(parseFile);
+    }
+
+    public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+
+        Context context;
+        List<Category> categories;
+
+        public CategoryAdapter(Context context, List<Category> categories) {
+            this.context = context;
+            this.categories = categories;
+        }
+
+        @NonNull
+        @NotNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category,parent,false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull @NotNull AboutGroupFragment.CategoryAdapter.ViewHolder holder, int position) {
+            Category category = categories.get(position);
+            holder.tvTitle.setText(category.getTitle());
+        }
+
+        @Override
+        public int getItemCount() {
+            return categories.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            TextView tvTitle;
+
+            public ViewHolder(@NonNull @NotNull View itemView) {
+                super(itemView);
+                tvTitle = itemView.findViewById(R.id.tvTitle);
+            }
+        }
     }
 }
