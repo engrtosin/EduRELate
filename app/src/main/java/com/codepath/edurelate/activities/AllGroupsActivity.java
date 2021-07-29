@@ -278,16 +278,14 @@ public class AllGroupsActivity extends BaseActivity {
 
     /* -------------------------- SEARCH -------------------------------- */
     private void switchToSearch() {
-        binding.tvActNewGroup.setVisibility(View.GONE);
-        binding.rvGroups.setVisibility(View.GONE);
+        binding.rlWholePage.setVisibility(View.GONE);
         binding.flContainer.setVisibility(View.VISIBLE);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         SearchGroupsFragment fragment = SearchGroupsFragment.newInstance(groups);
         fragment.setFragListener(new SearchGroupsFragment.SearchFragInterface() {
             @Override
             public void fragmentClosed() {
-                binding.tvActNewGroup.setVisibility(View.VISIBLE);
-                binding.rvGroups.setVisibility(View.VISIBLE);
+                binding.rlWholePage.setVisibility(View.VISIBLE);
                 binding.flContainer.setVisibility(View.GONE);
             }
         });
