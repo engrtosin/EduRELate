@@ -22,15 +22,13 @@ public class User {
     public static final String KEY_FIRST_NAME = "firstName";
     public static final String KEY_LAST_NAME = "lastName";
     public static final String KEY_USER_PIC = "userPic";
-    public static final String KEY_FRIENDS = "friends";
-    public static final String KEY_GROUPS = "groups";
-    public static final String KEY_NON_FRIEND_GROUPS = "nonFriendGroups";
     public static final String KEY_MAJOR = "major";
     public static final String KEY_USER = "user";
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String BOT_OBJECT_ID = "kJmCehSRZm";
     public static final String KEY_EMAIL = "email";
     public static final String GOOGLE_PASSWORD = "googlePassword";
+    public static final String KEY_INTERESTS = "interests";
 
     public static ParseUser currentUser;
     public static GoogleSignInAccount googleAccount;
@@ -166,5 +164,9 @@ public class User {
 
     public static ParseFile getUserPic(ParseUser friend) {
         return friend.getParseFile(KEY_USER_PIC);
+    }
+
+    public static List<Integer> getInterests(ParseUser user) {
+        return user.getList(KEY_INTERESTS);
     }
 }

@@ -1,7 +1,6 @@
 package com.codepath.edurelate.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
@@ -19,8 +20,8 @@ import com.codepath.edurelate.adapters.GroupsAdapter;
 import com.codepath.edurelate.databinding.ActivityAllGroupsBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.NewGroupDialogFragment;
-import com.codepath.edurelate.fragments.SearchChatsFragment;
 import com.codepath.edurelate.fragments.SearchGroupsFragment;
+import com.codepath.edurelate.models.Category;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Request;
 import com.codepath.edurelate.models.User;
@@ -34,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AllGroupsActivity extends BaseActivity {
@@ -45,9 +47,15 @@ public class AllGroupsActivity extends BaseActivity {
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
     List<Group> groups = new ArrayList<>();
+    List<Group> groupsByRank = new ArrayList<>();
+    List<Double> ranks = new ArrayList<>();
     List<String> requestIds;
     GroupsAdapter groupsAdapter;
     GridLayoutManager glManager;
+    ArrayAdapter<String> sortAdapter;
+    String[] sortOptions = new String[]{"Name (A-Z)","Name (Z-A)", "Recommended"};
+    GroupsAdapter byRankAdapter;
+    boolean groupsIsReversed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +67,9 @@ public class AllGroupsActivity extends BaseActivity {
         setContentView(view);
         setupToolbar("All Groups");
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
-
         groups = new ArrayList<>();
         requestIds = new ArrayList<>();
         queryCurrUserRequests();
-        Log.i(TAG,"Number of all users: " + groups.size());
         groupsAdapter = new GroupsAdapter(AllGroupsActivity.this,groups,requestIds);
         setAdapterInterface();
         glManager = new GridLayoutManager(AllGroupsActivity.this,SPAN_COUNT,
@@ -71,8 +77,54 @@ public class AllGroupsActivity extends BaseActivity {
         binding.rvGroups.setAdapter(groupsAdapter);
         binding.rvGroups.setLayoutManager(glManager);
         queryAllGroups();
-
+        byRankAdapter = new GroupsAdapter(this,groupsByRank,requestIds);
+        setupSortSpinner();
         setClickListeners();
+    }
+
+    /* ------------------- SPINNERS ------------------ */
+    private void setupSortSpinner() {
+        sortAdapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,sortOptions);
+        binding.spSortBy.setAdapter(sortAdapter);
+        binding.spSortBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sortItemSelected(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void sortItemSelected(int position) {
+        Log.i(TAG,"Sort item selected at " + position);
+        Log.i(TAG,"Position is new");
+        if (position == 0) {
+            binding.rvGroups.setAdapter(groupsAdapter);
+            if (groupsIsReversed) {
+                Log.i(TAG,"Groups is reversed");
+                Collections.reverse(groups);
+                groupsIsReversed = false;
+                groupsAdapter.notifyDataSetChanged();
+            }
+            return;
+        }
+        if (position == 1) {
+            binding.rvGroups.setAdapter(groupsAdapter);
+            if (!groupsIsReversed) {
+                Log.i(TAG,"Groups is not reversed");
+                Collections.reverse(groups);
+                groupsIsReversed = true;
+                groupsAdapter.notifyDataSetChanged();
+            }
+            return;
+        }
+        if (position == 2) {
+            binding.rvGroups.setAdapter(byRankAdapter);
+        }
     }
 
     @Override
@@ -92,9 +144,7 @@ public class AllGroupsActivity extends BaseActivity {
 
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
-
         HomeActivity.setBottomNavigationListener(bottomNavigation,AllGroupsActivity.this);
-
         binding.tvActNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,8 +178,10 @@ public class AllGroupsActivity extends BaseActivity {
     private void queryAllGroups() {
         ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
         query.include(Group.KEY_OWNER);
+        query.include(Group.KEY_CATEGORIES);
         query.whereNotEqualTo(Group.KEY_OWNER,User.edurelateBot);
         query.whereNotContainedIn(Group.KEY_OBJECT_ID,User.getCurrGroupIds());
+        query.orderByAscending(Group.KEY_GROUP_NAME);
         query.findInBackground(new FindCallback<Group>() {
             @Override
             public void done(List<Group> objects, ParseException e) {
@@ -140,8 +192,68 @@ public class AllGroupsActivity extends BaseActivity {
                 Log.i(TAG, "Groups successfully queried. Size: " + objects.size());
                 groupsAdapter.clear();
                 groupsAdapter.addAll(objects);
+                Log.i(TAG, "Groups adapter is updated");
+                rankGroups(objects);
             }
         });
+    }
+
+    private void rankGroups(List<Group> groups) {
+        List<Integer> userInterests = User.getInterests(ParseUser.getCurrentUser());
+        Log.i(TAG,"Current user has " + userInterests.size() + " interest(s)");
+        for (int i = 0; i < groups.size(); i++) {
+            Group group = groups.get(i);
+            List<Category> categories = group.getCategories();
+            double rank = 0;
+            double relevanceRate = 0.8;
+            for (int j = 0; j < categories.size(); j++) {
+                if (userInterests.contains(categories.get(j).getCode())) {
+                    rank += Math.pow(relevanceRate,j);
+                }
+            }
+            addGroup(group,rank);
+        }
+    }
+
+    private void addGroup(Group group, double rank) {
+        int pos = findNewPos(rank);
+        Log.i(TAG,"Group with rank: " + rank + " added at pos: " + pos);
+        groupsByRank.add(pos,group);
+        ranks.add(pos,rank);
+    }
+
+    private int findNewPos(double rank) {
+        if (ranks.size() == 0) {
+            return 0;
+        }
+        int start = 0;
+        int end = ranks.size();
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+            System.out.println(mid);
+            if (ranks.get(mid) == rank) {
+                return mid + 1;
+            }
+            if (ranks.get(mid) < rank) {
+                if (mid - 1 > 0) {
+                    if (ranks.get(mid-1) >= rank) {
+                        return mid;
+                    }
+                    end = mid - 1;
+                    continue;
+                }
+                return 0;
+            }
+            if (mid+1 < ranks.size()) {
+                if (ranks.get(mid+1) <= rank) {
+                    return mid+1;
+                }
+                start = mid + 1;
+                continue;
+            }
+            return ranks.size();
+        }
+        return ranks.size();
     }
 
     private void queryCurrUserRequests() {

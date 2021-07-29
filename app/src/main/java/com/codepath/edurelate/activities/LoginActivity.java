@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
         }
         if (ParseUser.getCurrentUser() != null) {
-            User.currentUser = ParseUser.getCurrentUser();
+            queryCurrUser();
             goHomeActivity();
         }
 
@@ -89,6 +89,22 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loginUserWithGoogle();
+            }
+        });
+    }
+
+    private void queryCurrUser() {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.include(User.KEY_INTERESTS);
+        query.getInBackground(ParseUser.getCurrentUser().getObjectId(), new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser object, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while querying for current user object: " + e.getMessage(),e);
+                    return;
+                }
+                Log.i(TAG,"Current user found");
+                User.currentUser = object;
             }
         });
     }
@@ -121,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e(TAG,"Login error occured",e);
                     return;
                 }
-                User.currentUser = ParseUser.getCurrentUser();
+                queryCurrUser();
                 User.currUserGroups = new ArrayList<>();
                 goHomeActivity();
                 Toast.makeText(LoginActivity.this,"Successful!",Toast.LENGTH_SHORT).show();
