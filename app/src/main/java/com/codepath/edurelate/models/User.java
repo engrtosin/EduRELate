@@ -12,6 +12,7 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class User {
@@ -34,6 +35,7 @@ public class User {
     public static GoogleSignInAccount googleAccount;
     public static ParseUser edurelateBot;
     public static List<Group> currUserGroups = new ArrayList<>();
+    public static HashMap<Integer,Integer> groupStatsMap = new HashMap<>();
     public static List<Member> currUserMemberships = new ArrayList<>();
 
     /* ------------------- GET METHODS -------------------------- */
@@ -187,5 +189,22 @@ public class User {
                 }
             }
         });
+    }
+
+    public static void updateCurrUserGroups(List<Group> extraGroups) {
+        currUserGroups.addAll(extraGroups);
+        for (int i = 0; i < extraGroups.size(); i++) {
+            List<Category> categories = extraGroups.get(i).getCategories();
+            for (int j = 0; j < categories.size(); j++) {
+                int code = categories.get(j).getCode();
+                if (!groupStatsMap.containsKey(code)) {
+                    groupStatsMap.put(code,1);
+                    continue;
+                }
+                int currSize = groupStatsMap.get(code);
+                groupStatsMap.put(code,currSize+1);
+            }
+        }
+        Log.i(TAG,"Map size: " + groupStatsMap.size());
     }
 }

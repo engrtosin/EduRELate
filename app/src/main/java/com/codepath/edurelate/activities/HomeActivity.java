@@ -145,7 +145,8 @@ public class HomeActivity extends BaseActivity {
     /* ------------------------- interface methods --------------------------- */
     private void queryExtraGroups() {
         ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
-        query.include(Member.KEY_GROUP);
+        query.include(Member.KEY_GROUP+"."+Group.KEY_OWNER);
+        query.include(Member.KEY_GROUP+"."+Group.KEY_CATEGORIES);
         query.whereEqualTo(Member.KEY_IS_FRIEND_GROUP,false);
         query.whereContainedIn(Member.KEY_USER, Arrays.asList(ParseUser.getCurrentUser()));
         query.whereNotContainedIn(Member.KEY_GROUP,User.currUserGroups);
@@ -158,8 +159,10 @@ public class HomeActivity extends BaseActivity {
                 }
                 Log.i(TAG,"Members queried successfully. Size: " + objects.size());
                 User.currUserMemberships.addAll(objects);
-                User.currUserGroups.addAll(Member.getGroups(objects));
-                groupsAdapter.addAll(User.currUserGroups);
+                List<Group> extraGroups = Member.getGroups(objects);
+                User.updateCurrUserGroups(extraGroups);
+                User.currUserGroups.addAll(extraGroups);
+                groupsAdapter.addAll(extraGroups);
             }
         });
     }
