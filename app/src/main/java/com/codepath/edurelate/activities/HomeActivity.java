@@ -63,7 +63,6 @@ public class HomeActivity extends BaseActivity {
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
         bottomNavigation.setSelectedItemId(R.id.action_home);
-//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
 
         groups = new ArrayList<>();
         groupsAdapter = new GroupsAdapter(HomeActivity.this,groups,null);

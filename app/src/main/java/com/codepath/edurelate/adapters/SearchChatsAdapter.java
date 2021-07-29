@@ -11,13 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ItemChatBinding;
 import com.codepath.edurelate.databinding.ItemSearchHeadingBinding;
 import com.codepath.edurelate.models.Group;
@@ -32,9 +30,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
+public class SearchChatsAdapter extends RecyclerView.Adapter<SearchChatsAdapter.ViewHolder> {
 
-    public static final String TAG = "SearchAdapter";
+    public static final String TAG = "SearchChatsAdapter";
 //    StyleSpan ORANGE = new StyleSpan(android.graphics.Color.rgb(255,200,0));
     int ORANGE = Color.rgb(255,155,0);
 
@@ -56,7 +54,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     /* -------------------- CONSTRUCTOR ------------------------- */
-    public SearchAdapter(Context context, List<SearchResult> results, String queryTxt) {
+    public SearchChatsAdapter(Context context, List<SearchResult> results, String queryTxt) {
         this.context = context;
         this.results = results;
         this.queryTxt = queryTxt;
@@ -96,15 +94,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         if (viewType == SearchResult.HEADING) {
             ItemSearchHeadingBinding binding = ItemSearchHeadingBinding.inflate(inflater,parent,false);
-            return new SearchAdapter.HeaderViewHolder(binding);
+            return new SearchChatsAdapter.HeaderViewHolder(binding);
         }
         ItemChatBinding itemChatBinding = ItemChatBinding.inflate(inflater,
                 parent, false);
-        return new SearchAdapter.ResultViewHolder(itemChatBinding);
+        return new SearchChatsAdapter.ResultViewHolder(itemChatBinding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull SearchAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull SearchChatsAdapter.ViewHolder holder, int position) {
         holder.bind(position);
     }
 

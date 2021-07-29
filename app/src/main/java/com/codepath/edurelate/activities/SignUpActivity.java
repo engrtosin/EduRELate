@@ -73,8 +73,6 @@ public class SignUpActivity extends LoginActivity {
         user.put(User.KEY_EMAIL,email);
         user.put(User.KEY_FIRST_NAME,firstName);
         user.put(User.KEY_LAST_NAME,lastName);
-        user.put(User.KEY_FRIENDS,new ArrayList<>());
-        user.put(User.KEY_GROUPS, new ArrayList<>());
         // Invoke signUpInBackground
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {

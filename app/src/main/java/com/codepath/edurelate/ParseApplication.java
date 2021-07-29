@@ -3,6 +3,7 @@ package com.codepath.edurelate;
 import android.app.Application;
 import android.widget.Toast;
 
+import com.codepath.edurelate.models.Category;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Member;
@@ -27,6 +28,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Member.class);
         ParseObject.registerSubclass(Notification.class);
         ParseObject.registerSubclass(Request.class);
+        ParseObject.registerSubclass(Category.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.applicationId))

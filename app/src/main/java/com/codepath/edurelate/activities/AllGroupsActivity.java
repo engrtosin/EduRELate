@@ -1,12 +1,16 @@
 package com.codepath.edurelate.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.codepath.edurelate.BaseActivity;
@@ -15,6 +19,8 @@ import com.codepath.edurelate.adapters.GroupsAdapter;
 import com.codepath.edurelate.databinding.ActivityAllGroupsBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.fragments.NewGroupDialogFragment;
+import com.codepath.edurelate.fragments.SearchChatsFragment;
+import com.codepath.edurelate.fragments.SearchGroupsFragment;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Request;
 import com.codepath.edurelate.models.User;
@@ -24,6 +30,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -41,7 +48,6 @@ public class AllGroupsActivity extends BaseActivity {
     List<String> requestIds;
     GroupsAdapter groupsAdapter;
     GridLayoutManager glManager;
-    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +58,6 @@ public class AllGroupsActivity extends BaseActivity {
         View view = binding.getRoot();
         setContentView(view);
         setupToolbar("All Groups");
-//        tbMainBinding = ToolbarMainBinding.inflate(getLayoutInflater(), (ViewGroup) view);
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
 
         groups = new ArrayList<>();
@@ -70,10 +75,24 @@ public class AllGroupsActivity extends BaseActivity {
         setClickListeners();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
+        menu.findItem(R.id.action_search).setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            switchToSearch();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setClickListeners() {
         Log.i(TAG,"click listeners to be set");
 
-//        setToolbarClickListeners();
         HomeActivity.setBottomNavigationListener(bottomNavigation,AllGroupsActivity.this);
 
         binding.tvActNewGroup.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +159,25 @@ public class AllGroupsActivity extends BaseActivity {
                 requestIds.addAll(Request.getGroupIds(objects));
             }
         });
+    }
+
+    /* -------------------------- SEARCH -------------------------------- */
+    private void switchToSearch() {
+        binding.tvActNewGroup.setVisibility(View.GONE);
+        binding.rvGroups.setVisibility(View.GONE);
+        binding.flContainer.setVisibility(View.VISIBLE);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        SearchGroupsFragment fragment = SearchGroupsFragment.newInstance(groups);
+        fragment.setFragListener(new SearchGroupsFragment.SearchFragInterface() {
+            @Override
+            public void fragmentClosed() {
+                binding.tvActNewGroup.setVisibility(View.VISIBLE);
+                binding.rvGroups.setVisibility(View.VISIBLE);
+                binding.flContainer.setVisibility(View.GONE);
+            }
+        });
+        ft.replace(R.id.flContainer, fragment);
+        ft.commit();
     }
 
     /* ------------------- interface methods ------------------ */

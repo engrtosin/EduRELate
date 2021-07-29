@@ -14,6 +14,10 @@ public class SearchResult {
     private ParseFile pic;
     private String resultNumTxt;
 
+    public SearchResult(Group group) {
+        this.group = group;
+    }
+
     public SearchResult(Group group, String title, String latestMsg, ParseFile pic) {
         this.group = group;
         this.title = title;

@@ -17,9 +17,8 @@ import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.ChatsAdapter;
 import com.codepath.edurelate.databinding.ActivityAllChatsBinding;
-import com.codepath.edurelate.databinding.FragmentSearchBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
-import com.codepath.edurelate.fragments.SearchFragment;
+import com.codepath.edurelate.fragments.SearchChatsFragment;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -40,7 +39,6 @@ public class AllChatsActivity extends BaseActivity {
     public static final int SPAN_COUNT = 1;
 
     ActivityAllChatsBinding binding;
-    FragmentSearchBinding fragBinding;
     ToolbarMainBinding tbMainBinding;
     BottomNavigationView bottomNavigation;
     List<Member> members = new ArrayList<>();
@@ -135,8 +133,8 @@ public class AllChatsActivity extends BaseActivity {
         binding.rvChats.setVisibility(View.GONE);
         binding.flContainer.setVisibility(View.VISIBLE);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        SearchFragment fragment = SearchFragment.newInstance(members);
-        fragment.setFragListener(new SearchFragment.SearchFragInterface() {
+        SearchChatsFragment fragment = SearchChatsFragment.newInstance(members);
+        fragment.setFragListener(new SearchChatsFragment.SearchFragInterface() {
             @Override
             public void fragmentClosed() {
                 binding.rvChats.setVisibility(View.VISIBLE);

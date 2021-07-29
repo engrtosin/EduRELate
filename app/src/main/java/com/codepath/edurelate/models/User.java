@@ -2,6 +2,7 @@ package com.codepath.edurelate.models;
 
 import android.util.Log;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -29,8 +30,10 @@ public class User {
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String BOT_OBJECT_ID = "kJmCehSRZm";
     public static final String KEY_EMAIL = "email";
+    public static final String GOOGLE_PASSWORD = "googlePassword";
 
     public static ParseUser currentUser;
+    public static GoogleSignInAccount googleAccount;
     public static ParseUser edurelateBot;
     public static List<Group> currUserGroups = new ArrayList<>();
     public static List<Member> currUserMemberships = new ArrayList<>();

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,9 +19,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import com.codepath.edurelate.R;
-import com.codepath.edurelate.adapters.SearchAdapter;
-import com.codepath.edurelate.databinding.FragmentSearchBinding;
+import com.codepath.edurelate.adapters.SearchChatsAdapter;
+import com.codepath.edurelate.databinding.FragmentSearchChatsBinding;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.Message;
@@ -38,14 +36,13 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class SearchChatsFragment extends Fragment {
 
-    public static final String TAG = "SearchFragment";
+    public static final String TAG = "SearchChatsFragment";
 
-    FragmentSearchBinding binding;
+    FragmentSearchChatsBinding binding;
     View rootView;
     SearchFragInterface mListener;
     String queryTxt;
@@ -55,8 +52,8 @@ public class SearchFragment extends Fragment {
     List<SearchResult> oldResults;
     SearchResult chatsHeader;
     SearchResult messagesHeader;
-    SearchAdapter adapter;
-    SearchAdapter oldAdapter;
+    SearchChatsAdapter adapter;
+    SearchChatsAdapter oldAdapter;
     LinearLayoutManager llManager;
 
     /* ------------------- INTERFACE -------------------------- */
@@ -69,12 +66,12 @@ public class SearchFragment extends Fragment {
     }
 
     /* ---------------- CONSTRUCTOR -------------------------- */
-    public SearchFragment() {
+    public SearchChatsFragment() {
         // Required empty public constructor
     }
 
-    public static SearchFragment newInstance(List<Member> members) {
-        SearchFragment fragment = new SearchFragment();
+    public static SearchChatsFragment newInstance(List<Member> members) {
+        SearchChatsFragment fragment = new SearchChatsFragment();
         Bundle args = new Bundle();
         args.putParcelable(Member.KEY_MEMBER, Parcels.wrap(members));
         fragment.setArguments(args);
@@ -94,7 +91,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSearchBinding.inflate(inflater,container,false);
+        binding = FragmentSearchChatsBinding.inflate(inflater,container,false);
         rootView = binding.getRoot();
         return rootView;
     }
@@ -105,7 +102,7 @@ public class SearchFragment extends Fragment {
         chatsHeader = new SearchResult("Chats",0);
         messagesHeader = new SearchResult("Messages",0);
         results = new ArrayList<>();
-        adapter = new SearchAdapter(getContext(),results,"");
+        adapter = new SearchChatsAdapter(getContext(),results,"");
         binding.rvSearchItems.setAdapter(adapter);
         llManager = new LinearLayoutManager(getContext());
         binding.rvSearchItems.setLayoutManager(llManager);
@@ -176,13 +173,13 @@ public class SearchFragment extends Fragment {
             oldAdapter = adapter;
         }
         List<SearchResult> newResults = new ArrayList<>();
-        SearchAdapter newAdapter = new SearchAdapter(getContext(),newResults,newQueryTxt);
+        SearchChatsAdapter newAdapter = new SearchChatsAdapter(getContext(),newResults,newQueryTxt);
         getNewResults(newResults,newAdapter,newQueryTxt);
         binding.rvSearchItems.setAdapter(newAdapter);
         oldAdapter = newAdapter;
     }
 
-    private void getNewResults(List<SearchResult> newResults, SearchAdapter newAdapter, String newQuery) {
+    private void getNewResults(List<SearchResult> newResults, SearchChatsAdapter newAdapter, String newQuery) {
         newResults.add(chatsHeader);
         int oldMsgPos = oldAdapter.getMsgHeaderPos();
         for (int i = 1; i < oldMsgPos; i++) {

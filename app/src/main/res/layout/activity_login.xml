@@ -83,6 +83,19 @@
             android:background="@drawable/rounded_signup_rectangle"
             android:text="Sign Up"
             android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnLoginGoogle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_signup_rectangle"
+            android:text="Login with Google"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </RelativeLayout>

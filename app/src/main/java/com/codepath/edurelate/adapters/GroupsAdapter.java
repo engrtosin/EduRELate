@@ -72,18 +72,13 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         ItemGroupBinding itemGroupBinding = ItemGroupBinding.inflate(LayoutInflater.from(context),
                 parent, false);
-//        View view = itemGroupBinding.getRoot();
         return new ViewHolder(itemGroupBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull GroupsAdapter.ViewHolder holder, int position) {
         Group group = groups.get(position);
-        try {
-            holder.bind(group);
-        } catch (ParseException e) {
-            Log.e(TAG,"Error while binding: " + e.getMessage(),e);
-        }
+        holder.bind(group);
     }
 
     @Override
@@ -127,7 +122,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             });
         }
 
-        public void bind(Group group) throws ParseException {
+        public void bind(Group group) {
             this.group = group;
             ParseFile image = group.getGroupPic();
             if (image != null) {
