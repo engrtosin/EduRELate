@@ -28,15 +28,14 @@ public class Group extends ParseObject {
     public static final String KEY_GROUP = "group";
     public static final String KEY_MEMBERS = "members";
     public static final String KEY_GROUP_PIC = "groupPic";
-    public static final String KEY_MESSAGES = "messages";
+    public static final String KEY_CATEGORIES = "categories";
+    public static final String KEY_GROUP_SIZE = "groupSize";
     public static final String KEY_LATEST_MSG = "latestMsg";
     public static final String KEY_GROUP_ACCESS = "groupAccess";
     public static final String KEY_LATEST_MSG_DATE = "latestMsgDate";
     public static final String KEY_INVITEES = "invitees";
-    public static final String KEY_JOIN_REQUESTERS = "joinRequesters";
     public static final int OPEN_GROUP_CODE = 0;
     public static final int CLOSED_GROUP_CODE = 1;
-    public static final String KEY_CATEGORIES = "categories";
 
     /* ------------------- NEW GROUP METHODS -------------------------- */
     public static Member newNonFriendGroup(String groupName,int groupAccess, List<Category> categories) {
@@ -45,6 +44,7 @@ public class Group extends ParseObject {
         group.put(KEY_GROUP_ACCESS,groupAccess);
         group.put(KEY_IS_FRIEND_GROUP,false);
         group.put(KEY_CATEGORIES,categories);
+        group.put(KEY_GROUP_SIZE,1);
         group.setOwner(ParseUser.getCurrentUser());
         group.saveInBackground(new SaveCallback() {
             @Override
@@ -66,6 +66,7 @@ public class Group extends ParseObject {
         group.setGroupName(user1.getObjectId() + " and " + user2.getObjectId());
         group.put(KEY_GROUP_ACCESS,CLOSED_GROUP_CODE);
         group.put(KEY_IS_FRIEND_GROUP,true);
+        group.put(KEY_GROUP_SIZE,2);
         group.setOwner(User.edurelateBot);
         group.saveInBackground(new SaveCallback() {
             @Override
@@ -148,6 +149,9 @@ public class Group extends ParseObject {
 
     /* ------------- OTHER METHODS ------------------- */
     public void addMember(ParseUser user) {
+        int size = getInt(KEY_GROUP_SIZE);
+        put(KEY_GROUP_SIZE,size+1);
+        saveInBackground();
         Member member = Member.newMember(user,this,getIsFriendGroup(),Member.MEMBER_CODE);
         String txtToOwner = "You added " + User.getFullName(user) + " to " + getGroupName();
         Notification toOwner = Notification.newNotification(getOwner(),Notification.NEW_MEMBER_CODE,txtToOwner);
@@ -156,6 +160,9 @@ public class Group extends ParseObject {
     }
 
     public void removeMember(Member member) {
+        int size = getInt(KEY_GROUP_SIZE);
+        put(KEY_GROUP_SIZE,size-1);
+        saveInBackground();
         ParseUser user = member.getUser();
         member.deleteInBackground();
         String txtToOwner = "You removed " + User.getFullName(user) + " from " + getGroupName();
