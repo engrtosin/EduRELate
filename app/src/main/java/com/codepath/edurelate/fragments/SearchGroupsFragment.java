@@ -1,14 +1,13 @@
 package com.codepath.edurelate.fragments;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -19,24 +18,19 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.codepath.edurelate.adapters.SearchChatsAdapter;
+import com.codepath.edurelate.R;
+import com.codepath.edurelate.activities.AllGroupsActivity;
 import com.codepath.edurelate.adapters.SearchGroupsAdapter;
 import com.codepath.edurelate.databinding.FragmentSearchGroupsBinding;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
-import com.codepath.edurelate.models.Message;
 import com.codepath.edurelate.models.SearchResult;
-import com.codepath.edurelate.models.User;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchGroupsFragment extends Fragment {
@@ -48,10 +42,12 @@ public class SearchGroupsFragment extends Fragment {
     SearchFragInterface mListener;
     String queryTxt;
     List<Member> members;
-    List<Group> groups;
-    List<SearchResult> results;
-    List<SearchResult> oldResults;
-    SearchGroupsAdapter adapter;
+    List<Group> groupsByName;
+    List<Group> groupsByRank;
+    List<SearchResult> resultsByName;
+    List<SearchResult> resultsByRank;
+    SearchGroupsAdapter groupsAdapter;
+    SearchGroupsAdapter byRankAdapter;
     LinearLayoutManager llManager;
     ArrayAdapter<String> sortAdapter;
     String[] sortOptions = new String[]{"Name (A-Z)","Name (Z-A)", "Recommended"};
@@ -71,10 +67,11 @@ public class SearchGroupsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static SearchGroupsFragment newInstance(List<Group> groups) {
+    public static SearchGroupsFragment newInstance(List<Group> groupsByName,List<Group> groupsByRank) {
         SearchGroupsFragment fragment = new SearchGroupsFragment();
         Bundle args = new Bundle();
-        args.putParcelable(Group.KEY_GROUP,Parcels.wrap(groups));
+        args.putParcelable(AllGroupsActivity.GROUPS_BY_NAME,Parcels.wrap(groupsByName));
+        args.putParcelable(AllGroupsActivity.GROUPS_BY_RANK,Parcels.wrap(groupsByRank));
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,7 +81,8 @@ public class SearchGroupsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         queryTxt = "";
         if (getArguments() != null) {
-            groups = Parcels.unwrap(getArguments().getParcelable(Group.KEY_GROUP));
+            groupsByName = Parcels.unwrap(getArguments().getParcelable(AllGroupsActivity.GROUPS_BY_NAME));
+            groupsByRank = Parcels.unwrap(getArguments().getParcelable(AllGroupsActivity.GROUPS_BY_RANK));
         }
     }
 
@@ -99,15 +97,63 @@ public class SearchGroupsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        results = new ArrayList<>();
-        adapter = new SearchGroupsAdapter(getContext(),results,"");
-        binding.rvSearchItems.setAdapter(adapter);
+        resultsByName = new ArrayList<>();
+        resultsByRank = new ArrayList<>();
+        groupsAdapter = new SearchGroupsAdapter(getContext(), resultsByName,"");
+        byRankAdapter = new SearchGroupsAdapter(getContext(), resultsByRank,"");
+        binding.rvSearchItems.setAdapter(groupsAdapter);
         llManager = new LinearLayoutManager(getContext());
         binding.rvSearchItems.setLayoutManager(llManager);
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         binding.rvSearchItems.addItemDecoration(itemDecoration);
+        setupSortSpinner();
         setListeners();
+    }
+
+    /* ------------------- SPINNERS ------------------ */
+    private void setupSortSpinner() {
+        sortAdapter = new ArrayAdapter<>(getContext(), R.layout.support_simple_spinner_dropdown_item,sortOptions);
+        binding.spSortBy.setAdapter(sortAdapter);
+        binding.spSortBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sortItemSelected(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void sortItemSelected(int position) {
+        Log.i(TAG,"Sort item selected at " + position);
+        Log.i(TAG,"Position is new");
+        if (position == 0) {
+            binding.rvSearchItems.setAdapter(groupsAdapter);
+            if (groupsIsReversed) {
+                Log.i(TAG,"Groups is reversed");
+                Collections.reverse(groupsByName);
+                groupsIsReversed = false;
+                groupsAdapter.notifyDataSetChanged();
+            }
+            return;
+        }
+        if (position == 1) {
+            binding.rvSearchItems.setAdapter(groupsAdapter);
+            if (!groupsIsReversed) {
+                Log.i(TAG,"Groups is not reversed");
+                Collections.reverse(groupsByName);
+                groupsIsReversed = true;
+                groupsAdapter.notifyDataSetChanged();
+            }
+            return;
+        }
+        if (position == 2) {
+            binding.rvSearchItems.setAdapter(byRankAdapter);
+        }
     }
 
     private void setListeners() {
@@ -140,58 +186,36 @@ public class SearchGroupsFragment extends Fragment {
         });
     }
 
-    private void textChanged(String newQueryTxt) {
-        if (oldResults == null) {
-            oldResults = new ArrayList<>(results);
-        }
-        List<SearchResult> newResults = new ArrayList<>();
-        SearchChatsAdapter newAdapter = new SearchChatsAdapter(getContext(),newResults,newQueryTxt);
-        getNewResults(newResults,newAdapter,newQueryTxt);
-        binding.rvSearchItems.setAdapter(newAdapter);
-    }
-
-    private void getNewResults(List<SearchResult> newResults, SearchChatsAdapter newAdapter, String newQuery) {
-        int oldMsgPos = 0;
-        for (int i = 1; i < oldMsgPos; i++) {
-            if (oldResults.get(i).getTitle().toLowerCase().contains(newQuery.toLowerCase())) {
-                newResults.add(oldResults.get(i));
-            }
-        }
-        for (int i = oldMsgPos+1; i < oldResults.size(); i++) {
-            if (oldResults.get(i).getLatestMsg().toLowerCase().contains(newQuery.toLowerCase())) {
-                newResults.add(oldResults.get(i));
-            }
-        }
-        newAdapter.notifyDataSetChanged();
-    }
-
     private void startSearch() {
-        results.clear();
+        resultsByName.clear();
         queryTxt = binding.etSearchTxt.getText().toString();
         queryTxt = queryTxt.trim();
         binding.etSearchTxt.setText(queryTxt);
         if (!queryTxt.isEmpty()) {
-            adapter.setQueryTxt(queryTxt);
+            groupsAdapter.setQueryTxt(queryTxt);
             createResults();
         }
     }
 
-    private void queryGroups() {
-
-    }
-
     private void createResults() {
-        for (int i = 0; i < groups.size(); i++) {
-            Log.i(TAG,i + ": Group: " + groups.get(i).getGroupName());
-            Group group = groups.get(i);
+        for (int i = 0; i < groupsByName.size(); i++) {
+            Log.i(TAG,i + ": Group: " + groupsByName.get(i).getGroupName());
+            Group group = groupsByName.get(i);
             String groupName = group.getGroupName();
             if (groupName.toLowerCase().contains(queryTxt.toLowerCase())) {
                 SearchResult result = new SearchResult(group);
-                results.add(result);
-                adapter.notifyItemChanged(results.size()-1);
+                resultsByName.add(result);
+                groupsAdapter.notifyItemChanged(resultsByName.size()-1);
+            }
+            group = groupsByRank.get(i);
+            groupName = group.getGroupName();
+            if (groupName.toLowerCase().contains(queryTxt.toLowerCase())) {
+                SearchResult result = new SearchResult(group);
+                resultsByRank.add(result);
+                byRankAdapter.notifyItemChanged(resultsByRank.size()-1);
             }
         }
-        adapter.notifyDataSetChanged();
+        groupsAdapter.notifyDataSetChanged();
     }
 
     private void clearAllData() {

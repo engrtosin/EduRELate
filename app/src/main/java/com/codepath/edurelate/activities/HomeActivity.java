@@ -77,6 +77,11 @@ public class HomeActivity extends BaseActivity {
         setClickListeners();
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
     private void initializeViews() {
         ParseFile image = ParseUser.getCurrentUser().getParseFile(User.KEY_USER_PIC);
         Log.i(TAG, ParseUser.getCurrentUser().getUsername());
@@ -87,6 +92,8 @@ public class HomeActivity extends BaseActivity {
         }
         binding.tvName.setText(User.getFullName(ParseUser.getCurrentUser()));
         binding.tvUsername.setText("@" + ParseUser.getCurrentUser().getUsername());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
     }
 
     private void setClickListeners() {

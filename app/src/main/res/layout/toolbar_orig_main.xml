@@ -7,7 +7,7 @@
         android:id="@+id/tbOrigMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/edurelate_green"
+        android:background="@color/boundary_gray"
         android:gravity="center"
         android:minHeight="?attr/actionBarSize"
         app:menu="@menu/menu_toolbar_main">
@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Activity"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="24sp" />
 
     </androidx.appcompat.widget.Toolbar>

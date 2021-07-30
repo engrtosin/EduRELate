@@ -42,6 +42,8 @@ public class AllGroupsActivity extends BaseActivity {
 
     public static final String TAG = "AllGroupsActivity";
     public static final int SPAN_COUNT = 1;
+    public static final String GROUPS_BY_NAME = "groupsByName";
+    public static final String GROUPS_BY_RANK = "groupsByRank";
 
     ActivityAllGroupsBinding binding;
     ToolbarMainBinding tbMainBinding;
@@ -283,7 +285,7 @@ public class AllGroupsActivity extends BaseActivity {
         binding.rlWholePage.setVisibility(View.GONE);
         binding.flContainer.setVisibility(View.VISIBLE);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        SearchGroupsFragment fragment = SearchGroupsFragment.newInstance(groups);
+        SearchGroupsFragment fragment = SearchGroupsFragment.newInstance(groups,groupsByRank);
         fragment.setFragListener(new SearchGroupsFragment.SearchFragInterface() {
             @Override
             public void fragmentClosed() {
