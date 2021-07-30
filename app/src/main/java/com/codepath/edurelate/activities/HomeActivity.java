@@ -71,10 +71,17 @@ public class HomeActivity extends BaseActivity {
                 GridLayoutManager.VERTICAL,false);
         binding.rvGroups.setAdapter(groupsAdapter);
         binding.rvGroups.setLayoutManager(glManager);
-        queryExtraGroups();
+//        queryExtraGroups();
 
         initializeViews();
         setClickListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initializeViews();
+        queryExtraGroups();
     }
 
     @Override

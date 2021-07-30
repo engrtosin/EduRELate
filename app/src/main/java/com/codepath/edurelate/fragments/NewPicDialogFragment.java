@@ -85,7 +85,7 @@ public class NewPicDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         photoFile = getPhotoFileUri(PHOTO_FILE_NAME);
         fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider.Edurelate", photoFile);
-        mListener = (NewPicInterface) getActivity();
+        mListener = (NewPicInterface) getParentFragment();
         setOnClickListeners();
     }
 

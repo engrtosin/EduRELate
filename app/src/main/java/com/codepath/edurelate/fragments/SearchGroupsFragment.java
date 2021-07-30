@@ -191,6 +191,7 @@ public class SearchGroupsFragment extends Fragment {
         queryTxt = binding.etSearchTxt.getText().toString();
         queryTxt = queryTxt.trim();
         binding.etSearchTxt.setText(queryTxt);
+        binding.etSearchTxt.setSelection(queryTxt.length());
         if (!queryTxt.isEmpty()) {
             groupsAdapter.setQueryTxt(queryTxt);
             createResults();

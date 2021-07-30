@@ -22,10 +22,19 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsAdapter.
     public static final String TAG = "SuggestionsAdapter";
     Context context;
     List<SmartReplySuggestion> suggestions;
+    SuggestionsAdapterListener mListener;
 
     public SuggestionsAdapter(Context context, List<SmartReplySuggestion> suggestions) {
         this.context = context;
         this.suggestions = suggestions;
+    }
+
+    public interface SuggestionsAdapterListener {
+        void suggestionSelected(String suggestedText);
+    }
+
+    public void setAdapterListener(SuggestionsAdapterListener listener) {
+        mListener = listener;
     }
 
     @NonNull
@@ -52,8 +61,13 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsAdapter.
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            itemView.setBackgroundColor(context.getColor(R.color.announcement_text_gray));
             tvTitle = itemView.findViewById(R.id.tvTitle);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.suggestionSelected(tvTitle.getText().toString());
+                }
+            });
         }
     }
 }

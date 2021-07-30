@@ -202,6 +202,7 @@ public class SearchChatsFragment extends Fragment {
         queryTxt = binding.etSearchTxt.getText().toString();
         queryTxt = queryTxt.trim();
         binding.etSearchTxt.setText(queryTxt);
+        binding.etSearchTxt.setSelection(queryTxt.length());
         if (!queryTxt.isEmpty()) {
             adapter.setQueryTxt(queryTxt);
             queryChats();

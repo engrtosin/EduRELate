@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -37,10 +38,14 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -66,14 +71,11 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.member = Parcels.unwrap(getIntent().getParcelableExtra(Member.KEY_MEMBER));
         group = member.getGroup();
-
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
         messages = new ArrayList<>();
         messageIds = new ArrayList<>();
         adapter = new MessagesAdapter(this,messages);
@@ -86,7 +88,7 @@ public class ChatActivity extends AppCompatActivity {
         suggestionsAdapter = new SuggestionsAdapter(this,suggestions);
         binding.rvSuggestions.setAdapter(suggestionsAdapter);
         binding.rvSuggestions.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL,false));
-
+        setSuggestionsAdapterListener();
         initializeViews();
         setClickListeners();
     }
@@ -161,13 +163,46 @@ public class ChatActivity extends AppCompatActivity {
                 binding.rlReply.setVisibility(View.GONE);
             }
         });
-        binding.etNewMessage.setOnClickListener(new View.OnClickListener() {
+        binding.etNewMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (binding.etNewMessage.hasFocus()) {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
                     suggestNewReplies();
                 }
+                hideSuggestions();
             }
+        });
+    }
+
+    private void setupLiveQuery() {
+        String websocketUrl = "wss://PASTE_SERVER_WEBSOCKET_URL_HERE"; // ⚠️ TYPE IN A VALID WSS:// URL HERE
+
+        ParseLiveQueryClient parseLiveQueryClient = null;
+        try {
+            parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient(new URI(websocketUrl));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+        // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
+        // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
+
+        // Connect to Parse server
+        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+
+        // Listen for CREATE events on the Message class
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, (query, object) -> {
+            messages.add(object);
+            messageIds.add(object.getObjectId());
+            updateConversation(Arrays.asList(object));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                    binding.rvMessages.scrollToPosition(0);
+                }
+            });
         });
     }
 
@@ -198,7 +233,14 @@ public class ChatActivity extends AppCompatActivity {
             binding.rlSuggestions.setVisibility(View.VISIBLE);
             return;
         }
+    }
+
+    private void hideSuggestions() {
         binding.rlSuggestions.setVisibility(View.GONE);
+        if (newReplyTo == null) {
+            binding.vDemarcate1.setVisibility(View.GONE);
+        }
+        return;
     }
 
     /* ------------------------- PARSE METHODS -------------------------------- */
@@ -266,11 +308,24 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    private void setSuggestionsAdapterListener() {
+        suggestionsAdapter.setAdapterListener(new SuggestionsAdapter.SuggestionsAdapterListener() {
+            @Override
+            public void suggestionSelected(String suggestedText) {
+                binding.etNewMessage.setText(suggestedText);
+                binding.etNewMessage.setSelection(suggestedText.length());
+            }
+        });
+    }
+
     private void bindNewReply() {
         binding.vDemarcate1.setVisibility(View.VISIBLE);
         binding.rlReply.setVisibility(View.VISIBLE);
         binding.tvReplySender.setText(User.getFullName(newReplyTo.getSender()));
         binding.tvReplyMsg.setText(newReplyTo.getBody(false));
+        binding.etNewMessage.requestFocus();
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     /* ------------------------- INTENT METHODS TO ACTIVITIES -------------------------------- */

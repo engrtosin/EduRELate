@@ -66,4 +66,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation "com.hootsuite.android:nachos:1.1.1"
     implementation 'com.google.mlkit:smart-reply:16.1.1'
+    implementation 'com.github.parse-community:ParseLiveQuery-Android:1.1.0'
 }

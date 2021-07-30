@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="40dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="5dp"
     android:layout_marginHorizontal="5dp"
-    app:cardCornerRadius="15dp"
-    android:backgroundTint="@color/announcement_background">
+    android:background="@color/white" >
 
-    <TextView
-        android:id="@+id/tvTitle"
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="5dp"
-        android:text="Thank you"
-        android:textSize="20sp"
-        android:textColor="@color/black" />
+        android:layout_height="40dp"
+        app:cardCornerRadius="15dp"
+        android:background="@color/white"
+        android:backgroundTint="@color/announcement_background" >
 
-</androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="5dp"
+            android:text="Thank you"
+            android:textSize="20sp"
+            android:textColor="@color/black" />
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
