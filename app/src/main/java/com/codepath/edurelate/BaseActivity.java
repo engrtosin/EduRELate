@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,10 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.codepath.edurelate.activities.HomeActivity;
-import com.codepath.edurelate.activities.LoginActivity;
-import com.codepath.edurelate.activities.ProfileActivity;
 import com.codepath.edurelate.databinding.ActivityProfileBinding;
-import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BaseActivity extends AppCompatActivity {

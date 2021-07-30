@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityLoginBinding;
 import com.codepath.edurelate.models.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -35,7 +34,6 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
-    public static final String KEY_CURRENT_USER = "current_user";
     String ALPHANUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             + "0123456789"
             + "abcdefghijklmnopqrstuvxyz";
@@ -52,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.googleClientId))
                 .requestEmail()
                 .build();
         googleClient = GoogleSignIn.getClient(this,gso);
@@ -115,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goSignUpActivity(String username, String password) {
-        Intent i = new Intent(LoginActivity.this,SignUpActivity.class);
+        Intent i = new Intent(LoginActivity.this, SignUpActivity.class);
         i.putExtra("username",username);
         i.putExtra("password",password);
         startActivity(i);
@@ -222,6 +219,7 @@ public class LoginActivity extends AppCompatActivity {
                     String username = objects.get(0).getUsername();
                     String password = objects.get(0).getString(User.GOOGLE_PASSWORD);
                     loginUser(username,password);
+                    return;
                 }
                 signUpWithParse(googleAccount);
             }
@@ -236,8 +234,12 @@ public class LoginActivity extends AppCompatActivity {
         newGoogleUser.setUsername(username);
         newGoogleUser.setPassword(password);
         newGoogleUser.setEmail(googleAccount.getEmail());
-        newGoogleUser.put(User.KEY_FIRST_NAME,googleAccount.getDisplayName());
-        newGoogleUser.put(User.KEY_LAST_NAME,googleAccount.getFamilyName());
+        String familyName = googleAccount.getFamilyName();
+        String displayName = googleAccount.getDisplayName();
+        int nameLength = displayName.length();
+        String firstName = displayName.substring(0,nameLength-familyName.length());
+        newGoogleUser.put(User.KEY_FIRST_NAME,firstName);
+        newGoogleUser.put(User.KEY_LAST_NAME,familyName);
         newGoogleUser.put(User.GOOGLE_PASSWORD,password);
         newGoogleUser.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {

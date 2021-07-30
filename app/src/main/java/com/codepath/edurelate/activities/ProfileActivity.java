@@ -1,45 +1,22 @@
 package com.codepath.edurelate.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.ProfileFragmentPagerAdapter;
 import com.codepath.edurelate.databinding.ActivityProfileBinding;
-import com.codepath.edurelate.databinding.ToolbarMainBinding;
-import com.codepath.edurelate.fragments.NewGroupDialogFragment;
-import com.codepath.edurelate.fragments.NewPicDialogFragment;
 import com.codepath.edurelate.interfaces.ProfileFragmentInterface;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class ProfileActivity extends BaseActivity implements ProfileFragmentInterface {
 
@@ -70,7 +47,7 @@ public class ProfileActivity extends BaseActivity implements ProfileFragmentInte
 
     @Override
     public void logout() {
-        goLoginActivity();
+        LoginActivity.logoutUser(this);
     }
 
     /* -------------------- FRAGMENT INTERFACE METHODS ---------------------- */

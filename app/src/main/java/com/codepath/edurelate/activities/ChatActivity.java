@@ -1,7 +1,9 @@
 package com.codepath.edurelate.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +16,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.MessagesAdapter;
+import com.codepath.edurelate.adapters.SuggestionsAdapter;
 import com.codepath.edurelate.databinding.ActivityAllChatsBinding;
 import com.codepath.edurelate.databinding.ActivityChatBinding;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.Message;
 import com.codepath.edurelate.models.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.mlkit.nl.smartreply.SmartReply;
+import com.google.mlkit.nl.smartreply.SmartReplyGenerator;
+import com.google.mlkit.nl.smartreply.SmartReplySuggestion;
+import com.google.mlkit.nl.smartreply.SmartReplySuggestionResult;
+import com.google.mlkit.nl.smartreply.TextMessage;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
@@ -28,10 +38,12 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
@@ -46,6 +58,10 @@ public class ChatActivity extends AppCompatActivity {
     MessagesAdapter adapter;
     MessagesAdapter.MessagesAdapterInterface adapterListener;
     Message newReplyTo;
+    List<TextMessage> conversation = new ArrayList<>();
+    SmartReplyGenerator smartReplyGen = SmartReply.getClient();
+    SuggestionsAdapter suggestionsAdapter;
+    List<SmartReplySuggestion> suggestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +82,10 @@ public class ChatActivity extends AppCompatActivity {
         setAdapterListener();
         queryMessages();
         Log.i(TAG,"messages size: "+messages.size());
+        suggestions = new ArrayList<>();
+        suggestionsAdapter = new SuggestionsAdapter(this,suggestions);
+        binding.rvSuggestions.setAdapter(suggestionsAdapter);
+        binding.rvSuggestions.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL,false));
 
         initializeViews();
         setClickListeners();
@@ -141,6 +161,43 @@ public class ChatActivity extends AppCompatActivity {
                 binding.rlReply.setVisibility(View.GONE);
             }
         });
+        binding.etNewMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.etNewMessage.hasFocus()) {
+                    suggestNewReplies();
+                }
+            }
+        });
+    }
+
+    private void suggestNewReplies() {
+        smartReplyGen.suggestReplies(conversation).addOnSuccessListener(new OnSuccessListener<SmartReplySuggestionResult>() {
+            @Override
+            public void onSuccess(SmartReplySuggestionResult result) {
+                if (result.getStatus() == SmartReplySuggestionResult.STATUS_NOT_SUPPORTED_LANGUAGE) {
+
+                } else if (result.getStatus() == SmartReplySuggestionResult.STATUS_SUCCESS) {
+                    suggestions.clear();
+                    suggestions.addAll(result.getSuggestions());
+                    showSuggestions(suggestions);
+                }
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Log.e(TAG,"Error while suggesting replies: " + e.getMessage(),e);
+            }
+        });
+    }
+
+    private void showSuggestions(List<SmartReplySuggestion> suggestions) {
+        if (suggestions.size() > 0) {
+            binding.rlSuggestions.setVisibility(View.VISIBLE);
+            return;
+        }
+        binding.rlSuggestions.setVisibility(View.GONE);
     }
 
     /* ------------------------- PARSE METHODS -------------------------------- */
@@ -150,6 +207,7 @@ public class ChatActivity extends AppCompatActivity {
         query.include(Message.KEY_SENDER);
         query.include(Message.KEY_USERS_LIKING_THIS);
         query.include(Message.KEY_REPLY_TO);
+        query.orderByAscending(Message.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Message>() {
             @Override
             public void done(List<Message> objects, ParseException e) {
@@ -159,8 +217,23 @@ public class ChatActivity extends AppCompatActivity {
                 adapter.addAll(objects);
                 binding.rvMessages.smoothScrollToPosition(messages.size());
                 updateMessageIds(objects);
+                updateConversation(objects);
             }
         });
+    }
+
+    private void updateConversation(List<Message> messages) {
+        for (int i = 0; i < messages.size(); i++) {
+            Message message = messages.get(i);
+            ParseUser sender = message.getSender();
+            String body = message.getBody(true);
+            long createdAt = message.getCreatedAt().getTime();
+            if (User.compareUsers(sender,ParseUser.getCurrentUser())) {
+                conversation.add(TextMessage.createForLocalUser(body,createdAt));
+                continue;
+            }
+            conversation.add(TextMessage.createForRemoteUser(body,createdAt,sender.getObjectId()));
+        }
     }
 
     private void updateMessageIds(List<Message> messages) {

@@ -12,8 +12,6 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import java.util.ArrayList;
-
 public class SignUpActivity extends LoginActivity {
 
     public static final String TAG = "SignUpActivity";

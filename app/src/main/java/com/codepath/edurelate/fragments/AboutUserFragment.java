@@ -193,7 +193,6 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
         binding.ivLogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseUser.logOut();
                 mListener.logout();
             }
         });
