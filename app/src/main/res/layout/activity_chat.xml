@@ -112,15 +112,6 @@
         android:layout_above="@id/rlReply"
         android:visibility="gone" >
 
-        <View
-            android:id="@+id/vDemarcate3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_above="@id/rvSuggestions"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="5dp"
-            android:background="#c0c0c0" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSuggestions"
             android:layout_width="match_parent"

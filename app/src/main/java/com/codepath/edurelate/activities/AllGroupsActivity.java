@@ -204,17 +204,19 @@ public class AllGroupsActivity extends BaseActivity {
         for (int i = 0; i < groups.size(); i++) {
             Group group = groups.get(i);
             List<Category> categories = group.getCategories();
-            double rank = 0;
-            double relevanceRate = 0.8;
+            double interestRank = 0;
+            double currGroupsRank = 0;
             for (int j = 0; j < categories.size(); j++) {
                 int code = categories.get(j).getCode();
                 if (userInterests.contains(code)) {
-                    rank += 10*Math.pow(relevanceRate,j);
+                    interestRank += 1.0/userInterests.size();
+                    Log.i(TAG,"User has interest " + categories.get(j).getTitle());
                 }
                 if (User.groupStatsMap.containsKey(code)) {
-                    rank += 8*User.groupStatsMap.get(code)/User.categorySum;
+                    currGroupsRank += 1.0 * User.groupStatsMap.get(code)/User.categorySum;
                 }
             }
+            double rank = interestRank * 10 + currGroupsRank * 8;
             addGroup(group,rank);
         }
     }

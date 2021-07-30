@@ -194,6 +194,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void showSuggestions(List<SmartReplySuggestion> suggestions) {
         if (suggestions.size() > 0) {
+            binding.vDemarcate1.setVisibility(View.VISIBLE);
             binding.rlSuggestions.setVisibility(View.VISIBLE);
             return;
         }

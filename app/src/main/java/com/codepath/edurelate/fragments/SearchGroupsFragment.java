@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,9 @@ public class SearchGroupsFragment extends Fragment {
     List<SearchResult> oldResults;
     SearchGroupsAdapter adapter;
     LinearLayoutManager llManager;
+    ArrayAdapter<String> sortAdapter;
+    String[] sortOptions = new String[]{"Name (A-Z)","Name (Z-A)", "Recommended"};
+    boolean groupsIsReversed = false;
 
     /* ------------------- INTERFACE -------------------------- */
     public interface SearchFragInterface {

@@ -201,6 +201,7 @@ public class User {
                 int code = categories.get(j).getCode();
                 if (!groupStatsMap.containsKey(code)) {
                     groupStatsMap.put(code,1);
+                    categorySum += 1;
                     continue;
                 }
                 int currSize = groupStatsMap.get(code);

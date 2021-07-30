@@ -136,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 queryCurrUser();
                 User.currUserGroups = new ArrayList<>();
+                User.currUserMemberships = new ArrayList<>();
                 goHomeActivity();
                 Toast.makeText(LoginActivity.this,"Successful!",Toast.LENGTH_SHORT).show();
             }
