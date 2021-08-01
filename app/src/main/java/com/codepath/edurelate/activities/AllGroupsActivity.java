@@ -202,12 +202,16 @@ public class AllGroupsActivity extends BaseActivity {
 
     private void rankGroups(List<Group> groups) {
         List<Integer> userInterests = User.getInterests(ParseUser.getCurrentUser());
-        Log.i(TAG,"Current user has " + userInterests.size() + " interest(s)");
+        Log.i(TAG,"Mean: " + User.meanGroupSize);
+        Log.i(TAG,"StdDev: " + User.groupSizeStdDev);
+        Log.i(TAG,"Pdf at mean: " + pdf(User.meanGroupSize,User.meanGroupSize,User.groupSizeStdDev));
         for (int i = 0; i < groups.size(); i++) {
             Group group = groups.get(i);
             List<Category> categories = group.getCategories();
             double interestRank = 0;
             double currGroupsRank = 0;
+            double sizeRank = pdf(group.getSize(),User.meanGroupSize,User.groupSizeStdDev);
+            Log.i(TAG,"Size rank: " + sizeRank + " with group size: " + group.getSize());
             for (int j = 0; j < categories.size(); j++) {
                 int code = categories.get(j).getCode();
                 if (userInterests.contains(code)) {
@@ -218,9 +222,14 @@ public class AllGroupsActivity extends BaseActivity {
                     currGroupsRank += 1.0 * User.groupStatsMap.get(code)/User.categorySum;
                 }
             }
-            double rank = interestRank * 10 + currGroupsRank * 8;
+            double rank = interestRank * 10 + currGroupsRank * 8 + sizeRank * 3;
             addGroup(group,rank);
         }
+    }
+
+    public static double pdf(double x, double mu, double sigma) {
+        double z = (x - mu) / sigma;
+        return Math.exp(-z*z / 2);
     }
 
     private void addGroup(Group group, double rank) {

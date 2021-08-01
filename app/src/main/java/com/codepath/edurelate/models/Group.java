@@ -122,6 +122,10 @@ public class Group extends ParseObject {
         return getList(KEY_CATEGORIES);
     }
 
+    public int getSize() {
+        return getInt(KEY_GROUP_SIZE);
+    }
+
     /* ------------------- SET METHODS -------------------------- */
     public void setGroupName(String groupName) {
         put(KEY_GROUP_NAME,groupName);
@@ -263,5 +267,11 @@ public class Group extends ParseObject {
         String txtToUser = User.getFullName(getOwner()) + " rejected your request to join " + getGroupName();
         Notification toUser = Notification.newNotification(user,Notification.NEW_GROUP_CODE,txtToUser);
         request.deleteInBackground();
+    }
+
+    public void memberLeft() {
+        int size = getSize();
+        put(KEY_GROUP_SIZE,size-1);
+        saveInBackground();
     }
 }

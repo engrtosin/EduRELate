@@ -159,7 +159,9 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 newReplyTo = null;
-                binding.vDemarcate1.setVisibility(View.GONE);
+                if (!(binding.rlSuggestions.getVisibility() == View.VISIBLE)) {
+                    binding.vDemarcate1.setVisibility(View.GONE);
+                }
                 binding.rlReply.setVisibility(View.GONE);
             }
         });
