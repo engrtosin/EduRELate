@@ -209,6 +209,9 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void suggestNewReplies() {
+        if (conversation.size() == 0) {
+            return;
+        }
         smartReplyGen.suggestReplies(conversation).addOnSuccessListener(new OnSuccessListener<SmartReplySuggestionResult>() {
             @Override
             public void onSuccess(SmartReplySuggestionResult result) {
