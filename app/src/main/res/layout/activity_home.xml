@@ -81,7 +81,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
                 android:text="@string/groups_you_re_in"
-                android:textSize="20sp" />
+                android:textSize="17sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvGroups"
@@ -101,6 +101,17 @@
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
                 android:text="@string/most_recent_notif"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tvNotifText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvRecentNotif"
+                android:layout_marginHorizontal="10dp"
+                android:text="@string/you_have_no_notif"
+                android:textStyle="italic"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
 
         </RelativeLayout>

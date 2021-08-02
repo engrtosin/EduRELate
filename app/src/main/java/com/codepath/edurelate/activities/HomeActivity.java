@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -25,9 +26,11 @@ import com.codepath.edurelate.databinding.TitleActivityBinding;
 import com.codepath.edurelate.databinding.ToolbarMainBinding;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
+import com.codepath.edurelate.models.Notification;
 import com.codepath.edurelate.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -51,6 +54,7 @@ public class HomeActivity extends BaseActivity {
     List<Group> groups;
     GroupsAdapter groupsAdapter;
     GridLayoutManager glManager;
+    Notification latestNotif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +75,6 @@ public class HomeActivity extends BaseActivity {
                 GridLayoutManager.VERTICAL,false);
         binding.rvGroups.setAdapter(groupsAdapter);
         binding.rvGroups.setLayoutManager(glManager);
-//        queryExtraGroups();
-
         initializeViews();
         setClickListeners();
     }
@@ -82,6 +84,7 @@ public class HomeActivity extends BaseActivity {
         super.onResume();
         initializeViews();
         queryExtraGroups();
+        queryNotification();
     }
 
     @Override
@@ -107,6 +110,12 @@ public class HomeActivity extends BaseActivity {
         Log.i(TAG,"click listeners to be set");
         setBottomNavigationListener(bottomNavigation, HomeActivity.this);
         setUserClickListeners();
+        binding.tvNotifText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goNotificationsActivity(HomeActivity.this);
+            }
+        });
     }
 
     public static void setBottomNavigationListener(BottomNavigationView bottomNavigation, Activity activity) {
@@ -156,7 +165,14 @@ public class HomeActivity extends BaseActivity {
         });
     }
 
-    /* ------------------------- interface methods --------------------------- */
+    private void updateLatestNotif() {
+        if (latestNotif != null) {
+            binding.tvNotifText.setTypeface(null, Typeface.NORMAL);
+            binding.tvNotifText.setText(latestNotif.getNotifText());
+        }
+    }
+
+    /* ------------------------- PARSE QUERIES --------------------------- */
     private void queryExtraGroups() {
         ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
         query.include(Member.KEY_GROUP+"."+Group.KEY_OWNER);
@@ -175,12 +191,32 @@ public class HomeActivity extends BaseActivity {
                 User.currUserMemberships.addAll(objects);
                 List<Group> extraGroups = Member.getGroups(objects);
                 User.updateCurrUserGroups(extraGroups);
+                groups.clear();
                 if (User.currUserGroups.size() >= 4) {
-                    groupsAdapter.addAll(User.currUserGroups.subList(0,4));
+                    groups.addAll(User.currUserGroups.subList(0,4));
+                    groupsAdapter.notifyDataSetChanged();
                     return;
                 }
                 int size = User.currUserGroups.size();
-                groupsAdapter.addAll(User.currUserGroups.subList(0,size));
+                groups.addAll(User.currUserGroups.subList(0,size));
+                groupsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void queryNotification() {
+        ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
+        query.whereEqualTo(Notification.KEY_USER,ParseUser.getCurrentUser());
+        query.orderByDescending(Notification.KEY_CREATED_AT);
+        query.getFirstInBackground(new GetCallback<Notification>() {
+            @Override
+            public void done(Notification object, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Error while getting notification: " + e.getMessage(),e);
+                    return;
+                }
+                latestNotif = object;
+                updateLatestNotif();
             }
         });
     }

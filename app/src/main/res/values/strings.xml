@@ -16,4 +16,5 @@
     <string name="group_files">Files</string>
     <string name="groups_you_re_in">Groups you\'re in</string>
     <string name="most_recent_notif">Most recent notification</string>
+    <string name="you_have_no_notif">You have no notifications</string>
 </resources>
