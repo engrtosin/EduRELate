@@ -50,9 +50,10 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
         // Required empty public constructor
     }
 
-    public static AboutGroupFragment newInstance(Member member) {
+    public static AboutGroupFragment newInstance(Member member,Group group) {
         AboutGroupFragment fragment = new AboutGroupFragment();
         Bundle args = new Bundle();
+        args.putParcelable(Group.KEY_GROUP,group);
         args.putParcelable(Member.KEY_MEMBER,member);
         fragment.setArguments(args);
         return fragment;
@@ -62,9 +63,12 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            member = getArguments().getParcelable(Member.KEY_MEMBER);
-            group = member.getGroup();
+            group = getArguments().getParcelable(Group.KEY_GROUP);
             categories = group.getCategories();
+            member = getArguments().getParcelable(Member.KEY_MEMBER);
+            if (member == null) {
+
+            }
             Log.i(TAG,"Categories is " + categories.size());
         }
     }

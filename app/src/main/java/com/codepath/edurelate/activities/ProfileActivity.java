@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.core.app.ActivityOptionsCompat;
+
 import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.ProfileFragmentPagerAdapter;
@@ -61,10 +63,16 @@ public class ProfileActivity extends BaseActivity implements ProfileFragmentInte
         HomeActivity.goAllGroupsActivity(this);
     }
 
+    @Override
+    public void goToGroup(Group group) {
+        goGroupActivity(group);
+    }
+
     /* --------------------- intent methods to activities ----------------------- */
-    private void goLoginActivity() {
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
+    private void goGroupActivity(Group group) {
+        Intent i = new Intent(ProfileActivity.this, GroupDetailsActivity.class);
+        i.putExtra(Group.KEY_GROUP,Parcels.wrap(group));
+        this.startActivity(i);
     }
 
     private void goChatActivity(Group group) {

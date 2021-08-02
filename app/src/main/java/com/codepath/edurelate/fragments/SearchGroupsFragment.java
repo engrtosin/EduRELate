@@ -20,11 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.activities.AllGroupsActivity;
+import com.codepath.edurelate.adapters.GroupsAdapter;
 import com.codepath.edurelate.adapters.SearchGroupsAdapter;
 import com.codepath.edurelate.databinding.FragmentSearchGroupsBinding;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.SearchResult;
+import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
@@ -44,10 +46,13 @@ public class SearchGroupsFragment extends Fragment {
     List<Member> members;
     List<Group> groupsByName;
     List<Group> groupsByRank;
-    List<SearchResult> resultsByName;
-    List<SearchResult> resultsByRank;
-    SearchGroupsAdapter groupsAdapter;
-    SearchGroupsAdapter byRankAdapter;
+    List<String> requestIds;
+    GroupsAdapter byNameAdapter;
+    GroupsAdapter byRankAdapter;
+    List<Group> resultsByName;
+    List<Group> resultsByRank;
+//    SearchGroupsAdapter groupsAdapter;
+//    SearchGroupsAdapter byRankAdapter;
     LinearLayoutManager llManager;
     ArrayAdapter<String> sortAdapter;
     String[] sortOptions = new String[]{"Name (A-Z)","Name (Z-A)", "Recommended"};
@@ -56,6 +61,8 @@ public class SearchGroupsFragment extends Fragment {
     /* ------------------- INTERFACE -------------------------- */
     public interface SearchFragInterface {
         void fragmentClosed();
+        void joinGroup(Group group);
+        void goToGroup(Group group);
     }
 
     public void setFragListener(SearchFragInterface listener) {
@@ -67,11 +74,12 @@ public class SearchGroupsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static SearchGroupsFragment newInstance(List<Group> groupsByName,List<Group> groupsByRank) {
+    public static SearchGroupsFragment newInstance(List<Group> groupsByName,List<Group> groupsByRank, List<String> requestIds) {
         SearchGroupsFragment fragment = new SearchGroupsFragment();
         Bundle args = new Bundle();
         args.putParcelable(AllGroupsActivity.GROUPS_BY_NAME,Parcels.wrap(groupsByName));
         args.putParcelable(AllGroupsActivity.GROUPS_BY_RANK,Parcels.wrap(groupsByRank));
+        args.putParcelable(AllGroupsActivity.REQUEST_IDS,Parcels.wrap(requestIds));
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,6 +91,7 @@ public class SearchGroupsFragment extends Fragment {
         if (getArguments() != null) {
             groupsByName = Parcels.unwrap(getArguments().getParcelable(AllGroupsActivity.GROUPS_BY_NAME));
             groupsByRank = Parcels.unwrap(getArguments().getParcelable(AllGroupsActivity.GROUPS_BY_RANK));
+            requestIds = Parcels.unwrap(getArguments().getParcelable(AllGroupsActivity.REQUEST_IDS));
         }
     }
 
@@ -99,9 +108,11 @@ public class SearchGroupsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         resultsByName = new ArrayList<>();
         resultsByRank = new ArrayList<>();
-        groupsAdapter = new SearchGroupsAdapter(getContext(), resultsByName,"");
-        byRankAdapter = new SearchGroupsAdapter(getContext(), resultsByRank,"");
-        binding.rvSearchItems.setAdapter(groupsAdapter);
+//        groupsAdapter = new SearchGroupsAdapter(getContext(), resultsByName,"");
+//        byRankAdapter = new SearchGroupsAdapter(getContext(), resultsByRank,"");
+        byNameAdapter = new GroupsAdapter(getContext(),resultsByName,requestIds);
+        byRankAdapter = new GroupsAdapter(getContext(),resultsByRank,requestIds);
+        binding.rvSearchItems.setAdapter(byNameAdapter);
         llManager = new LinearLayoutManager(getContext());
         binding.rvSearchItems.setLayoutManager(llManager);
         RecyclerView.ItemDecoration itemDecoration = new
@@ -109,6 +120,7 @@ public class SearchGroupsFragment extends Fragment {
         binding.rvSearchItems.addItemDecoration(itemDecoration);
         setupSortSpinner();
         setListeners();
+        setAdapterListeners();
     }
 
     /* ------------------- SPINNERS ------------------ */
@@ -132,22 +144,22 @@ public class SearchGroupsFragment extends Fragment {
         Log.i(TAG,"Sort item selected at " + position);
         Log.i(TAG,"Position is new");
         if (position == 0) {
-            binding.rvSearchItems.setAdapter(groupsAdapter);
+            binding.rvSearchItems.setAdapter(byNameAdapter);
             if (groupsIsReversed) {
                 Log.i(TAG,"Groups is reversed");
                 Collections.reverse(groupsByName);
                 groupsIsReversed = false;
-                groupsAdapter.notifyDataSetChanged();
+                byNameAdapter.notifyDataSetChanged();
             }
             return;
         }
         if (position == 1) {
-            binding.rvSearchItems.setAdapter(groupsAdapter);
+            binding.rvSearchItems.setAdapter(byNameAdapter);
             if (!groupsIsReversed) {
                 Log.i(TAG,"Groups is not reversed");
                 Collections.reverse(groupsByName);
                 groupsIsReversed = true;
-                groupsAdapter.notifyDataSetChanged();
+                byNameAdapter.notifyDataSetChanged();
             }
             return;
         }
@@ -193,32 +205,71 @@ public class SearchGroupsFragment extends Fragment {
         binding.etSearchTxt.setText(queryTxt);
         binding.etSearchTxt.setSelection(queryTxt.length());
         if (!queryTxt.isEmpty()) {
-            groupsAdapter.setQueryTxt(queryTxt);
             createResults();
         }
     }
 
     private void createResults() {
+        resultsByRank.clear();
+        resultsByName.clear();
         for (int i = 0; i < groupsByName.size(); i++) {
             Log.i(TAG,i + ": Group: " + groupsByName.get(i).getGroupName());
             Group group = groupsByName.get(i);
             String groupName = group.getGroupName();
             if (groupName.toLowerCase().contains(queryTxt.toLowerCase())) {
-                SearchResult result = new SearchResult(group);
-                resultsByName.add(result);
-                groupsAdapter.notifyItemChanged(resultsByName.size()-1);
+//                SearchResult result = new SearchResult(group);
+                resultsByName.add(group);
+                byNameAdapter.notifyItemInserted(resultsByName.size()-1);
             }
             group = groupsByRank.get(i);
             groupName = group.getGroupName();
             if (groupName.toLowerCase().contains(queryTxt.toLowerCase())) {
-                SearchResult result = new SearchResult(group);
-                resultsByRank.add(result);
+//                SearchResult result = new SearchResult(group);
+                resultsByRank.add(group);
                 byRankAdapter.notifyItemChanged(resultsByRank.size()-1);
             }
         }
-        groupsAdapter.notifyDataSetChanged();
+//        groupsAdapter.notifyDataSetChanged();
+        byNameAdapter.notifyDataSetChanged();
+        byRankAdapter.notifyDataSetChanged();
     }
 
     private void clearAllData() {
+    }
+
+    /* ------------------- SET ADAPTER LISTENERS ------------------ */
+    private void setAdapterListeners() {
+        byNameAdapter.setAdapterListener(new GroupsAdapter.GroupsAdapterInterface() {
+            @Override
+            public void groupClicked(Group group, View groupPic) {
+                mListener.goToGroup(group);
+            }
+
+            @Override
+            public void ownerClicked(ParseUser owner) {
+
+            }
+
+            @Override
+            public void joinGroup(Group group) {
+
+            }
+        });
+        byRankAdapter.setAdapterListener(new GroupsAdapter.GroupsAdapterInterface() {
+            @Override
+            public void groupClicked(Group group, View groupPic) {
+                mListener.goToGroup(group);
+            }
+
+            @Override
+            public void ownerClicked(ParseUser owner) {
+
+            }
+
+            @Override
+            public void joinGroup(Group group) {
+
+            }
+        });
     }
 }

@@ -38,12 +38,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.Double.NaN;
+
 public class AllGroupsActivity extends BaseActivity {
 
     public static final String TAG = "AllGroupsActivity";
     public static final int SPAN_COUNT = 1;
     public static final String GROUPS_BY_NAME = "groupsByName";
     public static final String GROUPS_BY_RANK = "groupsByRank";
+    public static final String REQUEST_IDS = "requestIds";
 
     ActivityAllGroupsBinding binding;
     ToolbarMainBinding tbMainBinding;
@@ -210,16 +213,20 @@ public class AllGroupsActivity extends BaseActivity {
             List<Category> categories = group.getCategories();
             double interestRank = 0;
             double currGroupsRank = 0;
-            double sizeRank = pdf(group.getSize(),User.meanGroupSize,User.groupSizeStdDev);
+            double sizeRank = 0;
+            if (User.groupSizeStdDev != 0) {
+                sizeRank = pdf(group.getSize(),User.meanGroupSize,User.groupSizeStdDev);
+            }
             Log.i(TAG,"Size rank: " + sizeRank + " with group size: " + group.getSize());
             for (int j = 0; j < categories.size(); j++) {
                 int code = categories.get(j).getCode();
                 if (userInterests.contains(code)) {
                     interestRank += 1.0/userInterests.size();
-                    Log.i(TAG,"User has interest " + categories.get(j).getTitle());
+                    Log.i(TAG,"User has interest " + categories.get(j).getTitle() + " with rank: " + interestRank);
                 }
                 if (User.groupStatsMap.containsKey(code)) {
                     currGroupsRank += 1.0 * User.groupStatsMap.get(code)/User.categorySum;
+                    Log.i(TAG,"User's groups have category " + categories.get(j).getTitle() + " with rank: " + currGroupsRank);
                 }
             }
             double rank = interestRank * 10 + currGroupsRank * 8 + sizeRank * 3;
@@ -294,12 +301,22 @@ public class AllGroupsActivity extends BaseActivity {
         binding.rlWholePage.setVisibility(View.GONE);
         binding.flContainer.setVisibility(View.VISIBLE);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        SearchGroupsFragment fragment = SearchGroupsFragment.newInstance(groups,groupsByRank);
+        SearchGroupsFragment fragment = SearchGroupsFragment.newInstance(groups,groupsByRank,requestIds);
         fragment.setFragListener(new SearchGroupsFragment.SearchFragInterface() {
             @Override
             public void fragmentClosed() {
                 binding.rlWholePage.setVisibility(View.VISIBLE);
                 binding.flContainer.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void joinGroup(Group group) {
+
+            }
+
+            @Override
+            public void goToGroup(Group group) {
+                goGroupDetailsActivity(group);
             }
         });
         ft.replace(R.id.flContainer, fragment);
@@ -327,9 +344,9 @@ public class AllGroupsActivity extends BaseActivity {
     }
 
     /* --------------------- intent methods to activities --------------------- */
-    private void goProfileActivity(ParseUser owner) {
+    private void goProfileActivity(ParseUser user) {
         Intent i = new Intent(AllGroupsActivity.this, ProfileActivity.class);
-        i.putExtra(User.KEY_USER, Parcels.wrap(owner));
+        i.putExtra(User.KEY_USER, Parcels.wrap(user));
         this.startActivity(i);
     }
 

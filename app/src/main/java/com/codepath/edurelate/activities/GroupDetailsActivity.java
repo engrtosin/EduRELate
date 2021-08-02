@@ -55,8 +55,8 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
         super.onCreate(savedInstanceState);
 
         group = Parcels.unwrap(getIntent().getParcelableExtra(Group.KEY_GROUP));
+        Log.i(TAG,"Group: " + group.getGroupName());
         queryMember();
-
         binding = ActivityGroupDetailsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -104,7 +104,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     if (item.getItemId() == R.id.action_about) {
                         binding.tvFragTitle.setText(getString(R.string.about));
-                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member,group));
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;
@@ -125,14 +125,14 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                     }
                     if (item.getItemId() == R.id.action_forum) {
                         binding.tvFragTitle.setText(getString(R.string.group_forum));
-                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member,group));
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;
                     }
                     if (item.getItemId() == R.id.action_files) {
                         binding.tvFragTitle.setText(getString(R.string.group_files));
-                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
+                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member,group));
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;
@@ -169,11 +169,12 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                 if (objects.size() > 0) {
                     Log.i(TAG,"Member queried successfully");
                     member = objects.get(0);
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    binding.tvFragTitle.setText(getString(R.string.about));
-                    ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member));
-                    ft.commit();
                 }
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                binding.tvFragTitle.setText(getString(R.string.about));
+                ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member,group));
+                ft.commit();
+                Log.i(TAG,"Member queried successfully");
             }
         });
     }

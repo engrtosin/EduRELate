@@ -93,6 +93,22 @@ public class GroupsFragment extends Fragment {
     }
 
     private void setAdapterInterface() {
+        groupsAdapter.setAdapterListener(new GroupsAdapter.GroupsAdapterInterface() {
+            @Override
+            public void groupClicked(Group group, View groupPic) {
+                mListener.goToGroup(group);
+            }
+
+            @Override
+            public void ownerClicked(ParseUser owner) {
+
+            }
+
+            @Override
+            public void joinGroup(Group group) {
+
+            }
+        });
     }
 
     private void setClickListeners() {
@@ -117,11 +133,13 @@ public class GroupsFragment extends Fragment {
                     Log.e(TAG,"Error while querying for members: " + e.getMessage(),e);
                     return;
                 }
-                Log.i(TAG,"Members queried successfully. Size: " + objects.size());
-                User.currUserMemberships.addAll(objects);
-                List<Group> extraGroups = Member.getGroups(objects);
-                User.updateCurrUserGroups(extraGroups);
-                groupsAdapter.notifyDataSetChanged();
+                if (objects.size() > 0) {
+                    Log.i(TAG, "Members queried successfully. Size: " + objects.size());
+                    User.currUserMemberships.addAll(objects);
+                    List<Group> extraGroups = Member.getGroups(objects);
+                    User.updateCurrUserGroups(extraGroups);
+                    groupsAdapter.notifyDataSetChanged();
+                }
             }
         });
     }
