@@ -1,0 +1,15 @@
+{
+  "client_id" : "673afcd7-256a-41a9-9bbb-e9151bdbf11a",
+  "redirect_uri" : "msauth://com.codepath.edurelate/callback",
+  "broker_redirect_uri_registered": false,
+  "account_mode": "SINGLE",
+  "authorities" : [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADandPersonalMicrosoftAccount"
+      },
+      "default": true
+    }
+  ]
+}

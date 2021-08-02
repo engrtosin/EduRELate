@@ -175,7 +175,12 @@ public class HomeActivity extends BaseActivity {
                 User.currUserMemberships.addAll(objects);
                 List<Group> extraGroups = Member.getGroups(objects);
                 User.updateCurrUserGroups(extraGroups);
-                groupsAdapter.addAll(extraGroups);
+                if (User.currUserGroups.size() >= 4) {
+                    groupsAdapter.addAll(User.currUserGroups.subList(0,4));
+                    return;
+                }
+                int size = User.currUserGroups.size();
+                groupsAdapter.addAll(User.currUserGroups.subList(0,size));
             }
         });
     }

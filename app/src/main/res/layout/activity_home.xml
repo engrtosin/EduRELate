@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".activities.HomeActivity" >
 
     <include
@@ -13,73 +13,102 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvUserPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@id/tbOrigMain"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="30dp"
-        app:cardCornerRadius="25dp" >
+        android:layout_above="@id/bottomNavigation">
 
-        <ImageView
-            android:id="@+id/ivUserPic"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/default_user_avatar" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".activities.HomeActivity" >
 
-    </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvUserPic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="75dp" >
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/cvUserPic"
-        android:layout_marginStart="11dp"
-        android:layout_toEndOf="@id/cvUserPic"
-        android:text="Oluwatosin Ajibola" />
+                <ImageView
+                    android:id="@+id/ivUserPic"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/default_user_avatar" />
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvName"
-        android:layout_toEndOf="@id/cvUserPic"
-        android:layout_marginTop="5dp"
-        android:layout_alignStart="@id/tvName"
-        android:text="/@oluwatosin" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/cvUserPic"
+                android:layout_marginTop="5dp"
+                android:text="Oluwatosin Ajibola"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:text="/@oluwatosin"
+                android:textSize="15sp" />
+
+            <include
+                layout="@layout/line_demarcation"
+                android:id="@+id/vDemarcate"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/tvUsername"
+                android:layout_marginTop="5dp"
+                android:visibility="invisible"/>
+
+            <TextView
+                android:id="@+id/tvYourGroups"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/vDemarcate"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/groups_you_re_in"
+                android:textSize="20sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvGroups"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvYourGroups"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="0dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
+
+            <TextView
+                android:id="@+id/tvRecentNotif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rvGroups"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/most_recent_notif"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+    </ScrollView>
 
     <include
-        layout="@layout/line_demarcation"
-        android:id="@+id/vDemarcate"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/tvUsername"
-        android:layout_marginTop="5dp"
-        android:visibility="invisible"/>
-
-    <TextView
-        android:id="@+id/tvYourGroups"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/vDemarcate"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:text="Groups you're in" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvGroups"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvYourGroups"
-        android:layout_above="@id/bottomNavigation"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp" />
-
-    <include
-        layout="@layout/bottom_navigation" />
-
+        layout="@layout/bottom_navigation"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

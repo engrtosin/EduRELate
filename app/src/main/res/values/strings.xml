@@ -14,4 +14,6 @@
     <string name="group_members">Members</string>
     <string name="group_forum">Forum</string>
     <string name="group_files">Files</string>
+    <string name="groups_you_re_in">Groups you\'re in</string>
+    <string name="most_recent_notif">Most recent notification</string>
 </resources>
