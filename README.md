@@ -28,48 +28,39 @@ The aim of this app is to make communication in a school community very easy. It
 
 **Required Must-have Stories**
 
-* User can login
-* User can register a new account.
-  * User can specify their role.
-* There should be persistence in logged in user
-* User can logout
-* User can login with Google
-* User can see all friends and groups in people screen.
-* User can send messages to people.
-* User can reply to a message
-* User can like a message.
-* Users can create new groups.
-* A group owner can invite a user
-  * A user can accept or reject an invite.
-* User can leave a group
-* Users can send and accept friend requests
-* ...
+- [x] User can login
+- [x] User can register a new account.
+- [x] There should be persistence in logged in user
+- [x] User can logout
+- [x] User can login with (and logout from) Google
+- [x] User can see all groups user participates in in profile screen.
+- [x] User can send DMs to members of a group.
+- [x] User can reply to a message
+- [x] User can double tap to reply to a message.
+- [x] Users can create new groups.
+  - [x] Owner can specify what categories group belongs to
+- [x] A group owner can add a user
+- [x] A user can request to join a group
+  - [x] A group owner can accept or reject a request to join a group
+- [x] User can leave a group
+- [x] User can specify their interests
+- [x] User can get recommendations on which group
+  - [x] Recommendations can be based on user's interests, current group participation, and size current groups user is in
+- [x] User can have reply suggestions in a chat
 
 **Optional Nice-to-have Stories**
-* User can add optional profile picture.
-* User cannot use a used username.
-* User can change profile details.
-* User can hide a chat from all chats.
-  * User can see hidden chats.
-  * User can show a chat.
-* Groups in the Home screen are arranged according to the most used
-* User can double tap to reply to a message.
-* Users can create events
-* Events can be synced with Google Calendar
-* Users can send files and photos.
-    * Files and images in messages can be previewed.
-* User can see who is typing in chat.
-* User can give different reactions to a message.
-  * User can hold the like button to see the different reactions.
-* Students can set up office hours with their instructors.
-    * Students can see the available spaces
-    * Students or instructors can cancel an appointment two hours earlier
-        * Anyone canceling should send a private message to other individuals involved
-* Students can search for other students using the app by name.
-    * Students can search for other students by major.
-* Users can make video calls on the app
-* If a list is empty, show a message "No <items> yet".
-* ...
+- [x] User can add optional profile picture
+- [ ] Members of a group can create or edit notes
+- [ ] User can change profile details
+- [ ] User can  hide a chat from all chats
+  - [ ] User can see hidden chats
+  - [ ] User can show a chat
+- [ ] Users can send files and photos
+    - [ ] Files and images in messages can be previewed
+- [ ] Messages are queried live
+- [ ] User can see who is typing in chat
+- [ ] Users can make video calls on the app
+- [ ] If a list is empty, show a message "No <items> yet"
 
 ### 2. Screen Archetypes
 
