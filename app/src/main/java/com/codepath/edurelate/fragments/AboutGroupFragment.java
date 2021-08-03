@@ -31,6 +31,7 @@ import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
 import java.util.List;
 
 public class AboutGroupFragment extends Fragment implements NewPicDialogFragment.NewPicInterface {
@@ -107,6 +108,16 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
             Glide.with(this).load(image.getUrl()).into(binding.ivGroupPic);
         }
         Log.i(TAG,"Created on: " + group.getCreatedAt());
+        String createdDate = getDate(group.getCreatedAt());
+        binding.tvCreatedAt.setText(createdDate);
+        if (User.compareUsers(ParseUser.getCurrentUser(),group.getOwner())) {
+            binding.ivEditPic.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private String getDate(Date createdAt) {
+        String[] dateList = createdAt.toString().split(" ");
+        return "Created on " + dateList[0] + " " + dateList[1] + " " + dateList[2] + ", " + dateList[5];
     }
 
     private void initializeOwnerSection() {
@@ -123,8 +134,10 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
 
     private void setIconVisibility() {
         if (User.compareUsers(group.getOwner(),ParseUser.getCurrentUser())) {
-            binding.ivOwnerChat.setVisibility(View.INVISIBLE);
+            binding.ivOwnerChat.setVisibility(View.GONE);
             binding.ivEditPic.setVisibility(View.VISIBLE);
+            binding.tvActInvite.setVisibility(View.VISIBLE);
+            binding.tvLeave.setVisibility(View.GONE);
             return;
         }
     }
@@ -148,12 +161,6 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
             @Override
             public void onClick(View v) {
                 showNewPicDialog();
-            }
-        });
-        binding.ivGroupChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
         binding.ivOwnerChat.setOnClickListener(new View.OnClickListener() {

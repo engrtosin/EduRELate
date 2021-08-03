@@ -42,18 +42,8 @@
         android:layout_toEndOf="@id/cvGroupPic"
         android:layout_alignTop="@id/cvGroupPic"
         android:layout_marginStart="10dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:srcCompat="@drawable/outline_edit_24" />
-
-    <ImageView
-        android:id="@+id/ivGroupChat"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_toEndOf="@id/cvGroupPic"
-        android:layout_below="@id/ivEditPic"
-        android:layout_alignStart="@id/ivEditPic"
-        android:layout_marginTop="5dp"
-        app:srcCompat="@drawable/outline_chat_bubble_outline_24" />
 
     <LinearLayout
         android:id="@+id/llProfileActions"
