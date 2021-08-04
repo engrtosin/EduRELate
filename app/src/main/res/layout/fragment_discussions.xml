@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.DiscussionsFragment" >
+
+    <RelativeLayout
+        android:id="@+id/rlNewPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tvAskAnything"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="@string/ask_anything"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvNewTopic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/discussion_topic"
+            android:layout_marginHorizontal="10dp"
+            android:layout_below="@id/tvAskAnything" />
+
+        <EditText
+            android:id="@+id/etNewPostTopic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_below="@id/tvNewTopic"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvNewBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/discussion_body"
+            android:layout_marginHorizontal="10dp"
+            android:layout_below="@id/etNewPostTopic" />
+
+        <EditText
+            android:id="@+id/etNewPostBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_below="@id/tvNewBody" />
+
+        <Button
+            android:id="@+id/btnPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:insetTop="0dp"
+            android:layout_below="@id/etNewPostBody"
+            android:layout_marginStart="5dp"
+            android:textAllCaps="false"
+            android:text="@string/post" />
+
+        <View
+            android:id="@+id/vDemarcate"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/btnPost"
+            android:background="@color/boundary_gray" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPosts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlNewPost" />
+
+</RelativeLayout>

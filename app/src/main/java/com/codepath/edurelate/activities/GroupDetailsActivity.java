@@ -18,6 +18,7 @@ import com.codepath.edurelate.R;
 import com.codepath.edurelate.databinding.ActivityGroupDetailsBinding;
 import com.codepath.edurelate.fragments.AboutGroupFragment;
 import com.codepath.edurelate.fragments.ChatFragment;
+import com.codepath.edurelate.fragments.DiscussionsFragment;
 import com.codepath.edurelate.fragments.MembersFragment;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
 import com.codepath.edurelate.models.Category;
@@ -47,6 +48,10 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
     BottomNavigationView bottomNavigation;
     Member member;
     Group group;
+    AboutGroupFragment aboutGroupFragment;
+    MembersFragment membersFragment;
+    ChatFragment chatFragment;
+    DiscussionsFragment discussionsFragment;
     MenuItem currItem;
     boolean drawerState = false;
 
@@ -104,28 +109,40 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     if (item.getItemId() == R.id.action_about) {
                         binding.tvFragTitle.setText(getString(R.string.about));
-                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member,group));
+                        if (aboutGroupFragment == null) {
+                            aboutGroupFragment = AboutGroupFragment.newInstance(member,group);
+                        }
+                        ft.replace(R.id.flContainer,aboutGroupFragment);
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;
                     }
                     if (item.getItemId() == R.id.action_members) {
                         binding.tvFragTitle.setText(getString(R.string.members));
-                        ft.replace(R.id.flContainer, MembersFragment.newInstance(group));
+                        if (membersFragment == null) {
+                            membersFragment = MembersFragment.newInstance(group);
+                        }
+                        ft.replace(R.id.flContainer, membersFragment);
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;
                     }
                     if (item.getItemId() == R.id.action_chat) {
                         binding.tvFragTitle.setText(getString(R.string.group_chat));
-                        ft.replace(R.id.flContainer, ChatFragment.newInstance(group));
+                        if (chatFragment == null) {
+                            chatFragment = ChatFragment.newInstance(group);
+                        }
+                        ft.replace(R.id.flContainer, chatFragment);
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;
                     }
                     if (item.getItemId() == R.id.action_forum) {
-                        binding.tvFragTitle.setText(getString(R.string.group_forum));
-                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member,group));
+                        binding.tvFragTitle.setText(getString(R.string.group_discussions));
+                        if (discussionsFragment == null) {
+                            discussionsFragment = DiscussionsFragment.newInstance();
+                        }
+                        ft.replace(R.id.flContainer,discussionsFragment);
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;
@@ -172,7 +189,10 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                 }
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 binding.tvFragTitle.setText(getString(R.string.about));
-                ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member,group));
+                if (aboutGroupFragment == null) {
+                    aboutGroupFragment = AboutGroupFragment.newInstance(member,group);
+                }
+                ft.replace(R.id.flContainer,aboutGroupFragment);
                 ft.commit();
                 Log.i(TAG,"Member queried successfully");
             }
