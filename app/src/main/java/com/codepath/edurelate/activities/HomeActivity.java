@@ -116,6 +116,13 @@ public class HomeActivity extends BaseActivity {
                 goNotificationsActivity(HomeActivity.this);
             }
         });
+        binding.ivNewNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this,NoteEditorActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     public static void setBottomNavigationListener(BottomNavigationView bottomNavigation, Activity activity) {
