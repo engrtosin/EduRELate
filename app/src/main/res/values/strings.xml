@@ -22,4 +22,5 @@
     <string name="discussion_topic">Topic</string>
     <string name="discussion_body">Body</string>
     <string name="group_discussions">Discussions</string>
+    <string name="post_by">Post by</string>
 </resources>

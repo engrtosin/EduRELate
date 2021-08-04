@@ -4,11 +4,13 @@ import android.app.Application;
 import android.widget.Toast;
 
 import com.codepath.edurelate.models.Category;
+import com.codepath.edurelate.models.Comment;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Member;
 import com.codepath.edurelate.models.Message;
 import com.codepath.edurelate.models.Notification;
+import com.codepath.edurelate.models.Post;
 import com.codepath.edurelate.models.Request;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -21,7 +23,6 @@ public class ParseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         ParseObject.registerSubclass(Group.class);
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Invite.class);
@@ -29,7 +30,8 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Notification.class);
         ParseObject.registerSubclass(Request.class);
         ParseObject.registerSubclass(Category.class);
-
+        ParseObject.registerSubclass(Post.class);
+        ParseObject.registerSubclass(Comment.class);
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.applicationId))
                 .clientKey(getString(R.string.clientKey))
