@@ -140,7 +140,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                     if (item.getItemId() == R.id.action_forum) {
                         binding.tvFragTitle.setText(getString(R.string.group_discussions));
                         if (discussionsFragment == null) {
-                            discussionsFragment = DiscussionsFragment.newInstance();
+                            discussionsFragment = DiscussionsFragment.newInstance(group);
                         }
                         ft.replace(R.id.flContainer,discussionsFragment);
                         ft.commit();

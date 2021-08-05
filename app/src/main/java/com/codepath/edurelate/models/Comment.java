@@ -10,4 +10,14 @@ import org.parceler.Parcel;
 public class Comment extends ParseObject {
 
     public static final String TAG = "Comment";
+    private static final String KEY_COMMENT_BODY = "commentBody";
+    private static final int SHORTENED_BODY_LENGTH = 60;
+
+    public String getBody(boolean isFull) {
+        String body = getString(KEY_COMMENT_BODY);
+        if (!isFull && body.length() > SHORTENED_BODY_LENGTH) {
+            body = body.substring(0,SHORTENED_BODY_LENGTH) + " ...";
+        }
+        return body;
+    }
 }
