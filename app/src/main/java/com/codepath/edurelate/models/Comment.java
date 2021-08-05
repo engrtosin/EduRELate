@@ -10,6 +10,8 @@ import org.parceler.Parcel;
 public class Comment extends ParseObject {
 
     public static final String TAG = "Comment";
+    public static final String KEY_COMMENT_OWNER = "commentOwner";
+    public static final String KEY_TO_POST = "toPost";
     private static final String KEY_COMMENT_BODY = "commentBody";
     private static final int SHORTENED_BODY_LENGTH = 60;
 

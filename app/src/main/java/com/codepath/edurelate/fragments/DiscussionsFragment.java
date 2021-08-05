@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -151,8 +152,24 @@ public class DiscussionsFragment extends Fragment {
         adapter.setAdapterListener(new PostAdapter.PostAdapterListener() {
             @Override
             public void postClicked(Post post) {
-
+                goToPostDetails(post);
             }
         });
+    }
+
+    private void goToPostDetails(Post post) {
+        binding.rlDiscussions.setVisibility(View.GONE);
+        binding.flChildFragment.setVisibility(View.VISIBLE);
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        PostDetailsFragment fragment = PostDetailsFragment.newInstance(post);
+        fragment.setFragListener(new SearchChatsFragment.SearchFragInterface() {
+            @Override
+            public void fragmentClosed() {
+                binding.rlDiscussions.setVisibility(View.VISIBLE);
+                binding.flChildFragment.setVisibility(View.GONE);
+            }
+        });
+        ft.replace(R.id.flChildFragment,fragment);
+        ft.commit();
     }
 }

@@ -7,119 +7,132 @@
     android:layout_height="match_parent"
     tools:context=".fragments.DiscussionsFragment" >
 
-    <LinearLayout
-        android:id="@+id/llNewPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:id="@+id/ivNewPost"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/outline_add_circle_24" />
-
-        <TextView
-            android:id="@+id/tvNewDiscussion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:text="@string/new_post"
-            android:textStyle="bold"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/vDemarcate1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/llNewPost"
-        android:background="@color/boundary_gray" />
-
     <RelativeLayout
-        android:id="@+id/rlNewPost"
+        android:id="@+id/rlDiscussions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/vDemarcate1"
-        android:visibility="gone" >
+        android:layout_height="match_parent" >
 
-        <TextView
-            android:id="@+id/tvAskAnything"
+        <LinearLayout
+            android:id="@+id/llNewPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="@string/ask_anything"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
 
-        <ImageView
-            android:id="@+id/ivCancelNewPost"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
-            app:srcCompat="@drawable/outline_close_24" />
+            <ImageView
+                android:id="@+id/ivNewPost"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:srcCompat="@drawable/outline_add_circle_24" />
 
-        <TextView
-            android:id="@+id/tvNewTopic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/discussion_topic"
-            android:layout_marginHorizontal="10dp"
-            android:layout_below="@id/tvAskAnything" />
+            <TextView
+                android:id="@+id/tvNewDiscussion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:text="@string/new_post"
+                android:textStyle="bold"
+                android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/etNewPostTopic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_below="@id/tvNewTopic"
-            android:textStyle="bold"
-            android:maxLines="1" />
-
-        <TextView
-            android:id="@+id/tvNewBody"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/discussion_body"
-            android:layout_marginHorizontal="10dp"
-            android:layout_below="@id/etNewPostTopic" />
-
-        <EditText
-            android:id="@+id/etNewPostBody"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_below="@id/tvNewBody" />
-
-        <Button
-            android:id="@+id/btnPost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:insetTop="0dp"
-            android:layout_below="@id/etNewPostBody"
-            android:layout_marginStart="5dp"
-            android:textAllCaps="false"
-            android:text="@string/post" />
+        </LinearLayout>
 
         <View
-            android:id="@+id/vDemarcate"
+            android:id="@+id/vDemarcate1"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_below="@id/btnPost"
+            android:layout_height="1dp"
+            android:layout_below="@+id/llNewPost"
             android:background="@color/boundary_gray" />
+
+        <RelativeLayout
+            android:id="@+id/rlNewPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vDemarcate1"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/tvAskAnything"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/ask_anything"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/ivCancelNewPost"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                app:srcCompat="@drawable/outline_close_24" />
+
+            <TextView
+                android:id="@+id/tvNewTopic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/discussion_topic"
+                android:layout_marginHorizontal="10dp"
+                android:layout_below="@id/tvAskAnything" />
+
+            <EditText
+                android:id="@+id/etNewPostTopic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_below="@id/tvNewTopic"
+                android:textStyle="bold"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/tvNewBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/discussion_body"
+                android:layout_marginHorizontal="10dp"
+                android:layout_below="@id/etNewPostTopic" />
+
+            <EditText
+                android:id="@+id/etNewPostBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_below="@id/tvNewBody" />
+
+            <Button
+                android:id="@+id/btnPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:insetTop="0dp"
+                android:layout_below="@id/etNewPostBody"
+                android:layout_marginStart="5dp"
+                android:textAllCaps="false"
+                android:text="@string/post" />
+
+            <View
+                android:id="@+id/vDemarcate"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/btnPost"
+                android:background="@color/boundary_gray" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPosts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/rlNewPost" />
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPosts"
+    <FrameLayout
+        android:id="@+id/flChildFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/rlNewPost" />
+        android:visibility="gone" />
 
 </RelativeLayout>
