@@ -59,4 +59,11 @@ public class Post extends ParseObject {
     public ParseUser getPostOwner() {
         return getParseUser(KEY_POST_OWNER);
     }
+
+    public void setTopRatedComment(Comment comment) {
+        if (getTopRatedComment() != null) {
+            return;
+        }
+        put(KEY_TOP_RATED_COMMENT,comment);
+    }
 }

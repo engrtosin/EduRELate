@@ -111,6 +111,12 @@ public class PostDetailsFragment extends Fragment {
                 mListener.fragmentClosed();
             }
         });
+        binding.ivSendComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitComment();
+            }
+        });
     }
 
     private void queryComments() {
@@ -131,5 +137,18 @@ public class PostDetailsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void submitComment() {
+        String text = binding.etNewComment.getText().toString();
+        if (text.isEmpty()) {
+            return;
+        }
+        Comment comment = Comment.newComment(post,text);
+        binding.etNewComment.setText("");
+        adapter.add(comments.size(),comment);
+        if (comments.size() == 0) {
+            post.setTopRatedComment(comment);
+        }
     }
 }
