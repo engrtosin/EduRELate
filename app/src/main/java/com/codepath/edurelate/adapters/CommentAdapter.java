@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.edurelate.databinding.ItemCommentBinding;
 import com.codepath.edurelate.models.Comment;
+import com.codepath.edurelate.models.User;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -65,10 +66,27 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
 
         private void setClickListeners() {
+            binding.ivUpvote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    comment.upvote();
+                    binding.tvVoteCount.setText(comment.getVoteCountString());
+                }
+            });
+            binding.ivDownvote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    comment.downvote();
+                    binding.tvVoteCount.setText(comment.getVoteCountString());
+                }
+            });
         }
 
         public void bind(Comment comment) {
             this.comment = comment;
+            binding.tvCommentBody.setText(comment.getBody(true));
+            binding.tvVoteCount.setText(comment.getVoteCountString());
+            binding.tvUser.setText(User.getFullName(comment.getCommentOwner()));
         }
     }
 }

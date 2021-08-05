@@ -27,7 +27,7 @@
         tools:text="Most important comment to this post" />
 
     <TextView
-        android:id="@+id/tvUpvoteCount"
+        android:id="@+id/tvVoteCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="15" />
@@ -36,15 +36,8 @@
         android:id="@+id/ivUpvote"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_toEndOf="@id/tvUpvoteCount"
+        android:layout_toEndOf="@id/tvVoteCount"
         app:srcCompat="@drawable/outline_expand_less_24" />
-
-    <TextView
-        android:id="@+id/tvDownvoteCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvUpvoteCount"
-        tools:text="3" />
 
     <ImageView
         android:id="@+id/ivDownvote"
