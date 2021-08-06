@@ -1,6 +1,7 @@
 package com.codepath.edurelate.fragments;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +45,8 @@ public class FilesFragment extends Fragment {
     FilesListener mListener;
     GroupDetailsActivity pActivity;
     File newPdf;
+    byte[] picByteArray;
+    Bitmap newBitmap;
 
     public interface FilesListener {
         void intentToFiles();
@@ -95,6 +99,12 @@ public class FilesFragment extends Fragment {
                 mListener.intentToFiles();
             }
         });
+        binding.btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
     }
 
     private void setPDFTransferListener() {
@@ -107,15 +117,20 @@ public class FilesFragment extends Fragment {
             @Override
             public void pdfResult(Uri pdfUri) {
                 Log.i(TAG,"Receiving file from activity");
+                binding.tvNewFile.setVisibility(View.GONE);
+                binding.llNewFile.setVisibility(View.VISIBLE);
+                generateImageFromPdf(pdfUri);
                 String uriString = pdfUri.toString();
                 newPdf = new File(uriString);
+                binding.ivPreview.setImageBitmap(newBitmap);
+                binding.tvFileTitle.setText(getFileName(pdfUri));
             }
         });
     }
 
     private ParseObject uploadPDFToParse(File PDFFile, ParseObject po, String columnName){
         if (PDFFile != null){
-            Log.d("EB", "PDFFile is not NULL: " + PDFFile.toString());
+            Log.d(TAG, "PDFFile is not NULL: " + PDFFile.toString());
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             BufferedInputStream in = null;
             try {
@@ -160,34 +175,36 @@ public class FilesFragment extends Fragment {
             pdfiumCore.openPage(pdfDocument, pageNumber);
             int width = pdfiumCore.getPageWidthPoint(pdfDocument, pageNumber);
             int height = pdfiumCore.getPageHeightPoint(pdfDocument, pageNumber);
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            pdfiumCore.renderPageBitmap(pdfDocument, bmp, pageNumber, 0, 0, width, height);
-            saveImage(bmp);
+            newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            pdfiumCore.renderPageBitmap(pdfDocument, newBitmap, pageNumber, 0, 0, width, height);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            picByteArray = stream.toByteArray();
             pdfiumCore.closeDocument(pdfDocument); // important!
         } catch(Exception e) {
             Log.e(TAG,"Error while getting image");
         }
     }
 
-    public final static String FOLDER = Environment.getExternalStorageDirectory() + "/PDF";
-    private void saveImage(Bitmap bmp) {
-        FileOutputStream out = null;
-        try {
-            File folder = new File(FOLDER);
-            if(!folder.exists())
-                folder.mkdirs();
-            File file = new File(folder, "PDF.png");
-            out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-        } catch (Exception e) {
-            //todo with exception
-        } finally {
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContext().getContentResolver().query(uri, null, null, null, null);
             try {
-                if (out != null)
-                    out.close();
-            } catch (Exception e) {
-                //todo with exception
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
             }
         }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 }

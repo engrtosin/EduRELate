@@ -26,4 +26,5 @@
     <string name="new_post">New discussion</string>
     <string name="new_comment">New comment</string>
     <string name="upload_a_new_file">Upload a file</string>
+    <string name="upload">Upload</string>
 </resources>
