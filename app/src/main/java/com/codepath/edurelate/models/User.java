@@ -240,4 +240,8 @@ public class User {
         variance /= currUserGroups.size();
         groupSizeStdDev = Math.pow(variance,0.5);
     }
+
+    public static String getEmail(ParseUser user) {
+        return user.getEmail();
+    }
 }

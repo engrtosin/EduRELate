@@ -27,4 +27,6 @@
     <string name="new_comment">New comment</string>
     <string name="upload_a_new_file">Upload a file</string>
     <string name="upload">Upload</string>
+    <string name="add_a_new_user">Add a new user</string>
+    <string name="join_a_new_group">Join a new group</string>
 </resources>

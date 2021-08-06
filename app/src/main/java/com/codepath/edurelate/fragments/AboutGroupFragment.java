@@ -136,7 +136,6 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
         if (User.compareUsers(group.getOwner(),ParseUser.getCurrentUser())) {
             binding.ivOwnerChat.setVisibility(View.GONE);
             binding.ivEditPic.setVisibility(View.VISIBLE);
-            binding.tvActInvite.setVisibility(View.VISIBLE);
             binding.tvLeave.setVisibility(View.GONE);
             return;
         }

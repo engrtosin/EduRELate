@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,17 +150,19 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
             Glide.with(this).load(image.getUrl()).into(binding.ivUserPic);
         }
         // TODO: Use User static method.
-        binding.tvUsername.setText(user.getUsername());
-        binding.tvPassword.setText(user.getString(User.KEY_PASSWORD));
-        binding.tvFirstName.setText(User.getFirstName(user));
-        binding.tvLastName.setText(User.getLastName(user));
+        String username = "<b>Username</b>: " + user.getUsername();
+        binding.tvUsername.setText(Html.fromHtml(username));
+        String firstName = "<b>First Name</b>: " + User.getFirstName(user);
+        binding.tvFirstName.setText(Html.fromHtml(firstName));
+        String lastName = "<b>Last Name</b>: " + User.getLastName(user);
+        binding.tvLastName.setText(Html.fromHtml(lastName));
+        String email = "<b>Email</b>: " + User.getEmail(user);
+        binding.tvEmail.setText(Html.fromHtml(email));
     }
 
     private void setIconVisibilities() {
         if (User.compareUsers(user,ParseUser.getCurrentUser())) {
             binding.ivEditPic.setVisibility(View.VISIBLE);
-            binding.tvDescPassword.setVisibility(View.VISIBLE);
-            binding.tvPassword.setVisibility(View.VISIBLE);
             binding.ivChat.setVisibility(View.GONE);
             binding.tvActInvite.setVisibility(View.GONE);
             binding.tvActSendMsg.setVisibility(View.GONE);

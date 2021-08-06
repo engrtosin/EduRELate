@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/days_one"
         android:text="@string/leave_group" />
 
     <androidx.cardview.widget.CardView
@@ -53,6 +54,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:text="Created on 5 March, 2021"
+        android:textStyle="italic"
+        android:textSize="16dp"
         android:layout_marginEnd="5dp"/>
 
     <include
@@ -76,6 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:fontFamily="@font/fredoka_one"
             android:text="Owner"
             android:textStyle="bold" />
 
@@ -105,6 +109,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
+            android:fontFamily="@font/kavoon"
             android:text="Oluwatosin Ajibola" />
     </RelativeLayout>
 
@@ -132,7 +137,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:text="Categories" />
+        android:fontFamily="@font/fredoka_one"
+        android:text="Topics"
+        android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCategories"

@@ -115,82 +115,57 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvDescUsername"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/llUserInfo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/llProfileActions"
-            android:layout_marginTop="10dp"
-            android:text="Username" />
+            android:layout_marginStart="15dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/tvDescUsername"
-            android:layout_alignTop="@id/tvDescUsername"
-            android:layout_marginStart="10dp"
-            android:text="oluwatosin" />
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="17sp"
+                android:text="Username: oluwatosin" />
 
-        <TextView
-            android:id="@+id/tvDescPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvDescUsername"
-            android:visibility="gone"
-            android:layout_marginTop="10dp"
-            android:text="Password" />
+            <TextView
+                android:id="@+id/tvFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="17sp"
+                android:text="First Name: Oluwatosin" />
 
-        <TextView
-            android:id="@+id/tvPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/tvDescPassword"
-            android:layout_alignTop="@id/tvDescPassword"
-            android:layout_marginStart="10dp"
-            android:visibility="gone"
-            android:password="true"
-            android:text="oluwatosin" />
+            <TextView
+                android:id="@+id/tvLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="17sp"
+                android:text="Last Name: Ajibola" />
 
-        <TextView
-            android:id="@+id/tvDescFirstName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvDescPassword"
-            android:layout_marginTop="10dp"
-            android:text="First Name:" />
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="17sp"
+                android:text="Email: oluwatosin@gmail.com" />
 
-        <TextView
-            android:id="@+id/tvFirstName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/tvDescFirstName"
-            android:layout_alignTop="@id/tvDescFirstName"
-            android:layout_marginStart="10dp"
-            android:text="Oluwatosin" />
-
-        <TextView
-            android:id="@+id/tvDescLastName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvDescFirstName"
-            android:layout_marginTop="10dp"
-            android:text="Last Name" />
-
-        <TextView
-            android:id="@+id/tvLastName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/tvDescLastName"
-            android:layout_alignTop="@id/tvDescLastName"
-            android:layout_marginStart="10dp"
-            android:text="Ajibola" />
+        </LinearLayout>
 
         <View
             android:id="@+id/vDemarcate"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/tvLastName"
+            android:layout_below="@id/llUserInfo"
             android:layout_marginTop="5dp"
             android:background="#c0c0c0" />
 
@@ -202,7 +177,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:text="Interests" />
+            android:fontFamily="@font/fredoka_one"
+            android:text="Interests"
+            android:textSize="20sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCategories"
@@ -227,11 +204,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/rvCategories"
-            android:layout_toEndOf="@id/ivAddInterest"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/ivAddInterest"
+            android:fontFamily="@font/fredoka_one"
             android:text="Add Interests"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <RelativeLayout

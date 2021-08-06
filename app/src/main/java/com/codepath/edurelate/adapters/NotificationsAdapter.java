@@ -1,6 +1,7 @@
 package com.codepath.edurelate.adapters;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,7 +113,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         public void bind(Notification notification) {
             this.notification = notification;
             Log.i(TAG,"binding notification: " + notification.getObjectId());
-            binding.tvNotifText.setText(notification.getNotifText());
+            bindText();
             if (notification.getNotifType() == Notification.INVITEE_CODE) {
                 Invite invite = notification.getInvite();
                 if (invite.getStatus() == Invite.STATUS_NONE) {
@@ -131,6 +132,36 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 }
                 return;
             }
+        }
+
+        private void bindText() {
+            // TODO: Each of the if-statements should be in different methods for different kinds of notifications
+            String notifText = notification.getNotifText();
+            String[] split = notifText.split(": ");
+            if (split.length > 1) {
+                String action = split[0];
+                String group = split[1];
+                notifText = action + ": " + "<b>" + group + "</b>";
+                binding.tvNotifText.setText(Html.fromHtml(notifText));
+                return;
+            }
+            split = notifText.split(" to ");
+            if (split.length > 1) {
+                String action = split[0];
+                String group = split[1];
+                notifText = action + " to " + "<b>" + group + "</b>";
+                binding.tvNotifText.setText(Html.fromHtml(notifText));
+                return;
+            }
+            split = notifText.split(" to join ");
+            if (split.length > 1) {
+                String action = split[0];
+                String group = split[1];
+                notifText = action + " to join " + "<b>" + group + "</b>";
+                binding.tvNotifText.setText(Html.fromHtml(notifText));
+                return;
+            }
+            binding.tvNotifText.setText(notifText);
         }
 
         private void bindInviteeNotif() {
