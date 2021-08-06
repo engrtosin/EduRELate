@@ -238,7 +238,7 @@ public class LoginActivity extends AppCompatActivity {
         String familyName = googleAccount.getFamilyName();
         String displayName = googleAccount.getDisplayName();
         int nameLength = displayName.length();
-        String firstName = displayName.substring(0,nameLength-familyName.length());
+        String firstName = displayName.substring(0,nameLength-familyName.length()-1).trim();
         newGoogleUser.put(User.KEY_FIRST_NAME,firstName);
         newGoogleUser.put(User.KEY_LAST_NAME,familyName);
         newGoogleUser.put(User.GOOGLE_PASSWORD,password);
