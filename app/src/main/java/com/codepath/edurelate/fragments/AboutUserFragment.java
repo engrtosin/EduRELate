@@ -251,6 +251,6 @@ public class AboutUserFragment extends Fragment implements NewPicDialogFragment.
     @Override
     public void picSaved(ParseFile parseFile) {
         User.setUserPic(user,parseFile);
-        initializeViews();
+        Glide.with(this).load(parseFile.getUrl()).into(binding.ivUserPic);
     }
 }

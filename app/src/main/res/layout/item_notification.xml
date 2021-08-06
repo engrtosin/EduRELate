@@ -10,9 +10,10 @@
         android:id="@+id/tvNotifText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/artifika"
         android:text="You were invited to join Group 1"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"

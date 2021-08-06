@@ -82,6 +82,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        groupsAdapter.notifyDataSetChanged();
         initializeViews();
         queryExtraGroups();
         queryNotification();

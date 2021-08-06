@@ -45,30 +45,11 @@
         android:visibility="gone"
         app:srcCompat="@drawable/outline_edit_24" />
 
-    <LinearLayout
-        android:id="@+id/llProfileActions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cvGroupPic"
-        android:layout_centerHorizontal="true">
-
-        <TextView
-            android:id="@+id/tvActInvite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cvGroupPic"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:visibility="gone"
-            android:text="@string/invite_a_user" />
-
-    </LinearLayout>
-
     <TextView
         android:id="@+id/tvCreatedAt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/llProfileActions"
+        android:layout_below="@id/cvGroupPic"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:text="Created on 5 March, 2021"

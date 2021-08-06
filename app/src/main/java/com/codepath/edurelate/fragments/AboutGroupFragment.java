@@ -187,5 +187,6 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
     @Override
     public void picSaved(ParseFile parseFile) {
         group.setGroupPic(parseFile);
+        Glide.with(this).load(parseFile.getUrl()).into(binding.ivGroupPic);
     }
 }
