@@ -115,9 +115,6 @@ public class SearchGroupsFragment extends Fragment {
         binding.rvSearchItems.setAdapter(byNameAdapter);
         llManager = new LinearLayoutManager(getContext());
         binding.rvSearchItems.setLayoutManager(llManager);
-        RecyclerView.ItemDecoration itemDecoration = new
-                DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        binding.rvSearchItems.addItemDecoration(itemDecoration);
         setupSortSpinner();
         setListeners();
         setAdapterListeners();
