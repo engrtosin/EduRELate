@@ -67,4 +67,5 @@ dependencies {
     implementation "com.hootsuite.android:nachos:1.1.1"
     implementation 'com.google.mlkit:smart-reply:16.1.1'
     implementation 'com.github.parse-community:ParseLiveQuery-Android:1.1.0'
+    implementation 'com.github.barteksc:pdfium-android:1.9.0'
 }

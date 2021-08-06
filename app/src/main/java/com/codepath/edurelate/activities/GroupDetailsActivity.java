@@ -272,12 +272,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
         }
         if (data != null && requestCode == PDF_CODE) {
             Uri uri = data.getData();
-            String uriString = uri.toString();
-            File pdfFile = new File(uriString);
-            String path = pdfFile.getAbsolutePath();
-            Log.d("uri",uriString + " " + path);
-            Log.i(TAG,"Sending file to fragment");
-            pdfListener.pdfResult(pdfFile);
+            pdfListener.pdfResult(uri);
         }
     }
 
@@ -296,7 +291,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
             }
 
             @Override
-            public void pdfResult(File pdfFile) {
+            public void pdfResult(Uri pdfUri) {
 
             }
         });
