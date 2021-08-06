@@ -35,7 +35,7 @@ public class ProfileActivity extends BaseActivity implements ProfileFragmentInte
 
         user = Parcels.unwrap(getIntent().getParcelableExtra(User.KEY_USER));
 
-        Log.i(TAG,"in on create");
+        Log.i(TAG,"in on create: " + user);
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);

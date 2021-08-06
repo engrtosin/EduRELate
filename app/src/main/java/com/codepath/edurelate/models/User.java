@@ -55,12 +55,8 @@ public class User {
     public static String getFullName(ParseUser user) {
         String firstName = null;
         String lastName = null;
-        try {
-            firstName = user.fetchIfNeeded().getString(KEY_FIRST_NAME);
-            lastName = user.fetchIfNeeded().getString(KEY_LAST_NAME);
-        } catch (ParseException e) {
-            Log.e(TAG,"Error while getting first and last names: " + e.getMessage(),e);
-        }
+        firstName = user.getString(KEY_FIRST_NAME);
+        lastName = user.getString(KEY_LAST_NAME);
         return firstName + " " + lastName;
     }
 

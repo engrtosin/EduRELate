@@ -120,6 +120,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         }
 
         public void bind(ParseUser user) {
+            this.user = user;
             if (User.compareUsers(group.getOwner(),ParseUser.getCurrentUser())) {
                 if (!User.compareUsers(user,group.getOwner())) {
                     if (!membersId.contains(user.getObjectId())) {

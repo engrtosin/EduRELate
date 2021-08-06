@@ -186,9 +186,9 @@ public class AllUsersActivity extends BaseActivity {
     }
 
     /* --------------------- intents to activities ------------------ */
-    private void goProfileActivity(ParseUser owner) {
+    private void goProfileActivity(ParseUser user) {
         Intent i = new Intent(AllUsersActivity.this, ProfileActivity.class);
-        i.putExtra(User.KEY_USER, Parcels.wrap(owner));
+        i.putExtra(User.KEY_USER, Parcels.wrap(user));
         this.startActivity(i);
     }
 
