@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.codepath.edurelate.models.Category;
 import com.codepath.edurelate.models.Comment;
+import com.codepath.edurelate.models.CustomFile;
 import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Member;
@@ -32,6 +33,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Category.class);
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Comment.class);
+        ParseObject.registerSubclass(CustomFile.class);
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.applicationId))
                 .clientKey(getString(R.string.clientKey))

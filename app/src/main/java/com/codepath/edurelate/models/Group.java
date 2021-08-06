@@ -149,6 +149,7 @@ public class Group extends ParseObject {
 
     public void setGroupPic(ParseFile groupPic) {
         put(KEY_GROUP_PIC,groupPic);
+        saveInBackground();
     }
 
     /* ------------- OTHER METHODS ------------------- */

@@ -22,7 +22,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activities.HomeActivity" >
+            tools:context=".activities.HomeActivity">
 
             <ImageView
                 android:id="@+id/ivNewNote"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvName"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="0dp"
                 android:text="/@oluwatosin"
                 android:textSize="15sp" />
 
@@ -78,16 +78,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/tvUsername"
-                android:layout_marginTop="5dp"
-                android:visibility="invisible"/>
+                android:layout_marginTop="15dp"
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/tvYourGroups"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/vDemarcate"
-                android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/fredoka_one"
                 android:text="@string/groups_you_re_in"
                 android:textSize="17sp" />
 
@@ -101,13 +102,23 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp" />
 
+            <include
+                layout="@layout/line_demarcation"
+                android:id="@+id/vDemarcate1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/rvGroups"
+                android:layout_marginTop="15dp"
+                android:visibility="visible"/>
+
             <TextView
                 android:id="@+id/tvRecentNotif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rvGroups"
-                android:layout_marginTop="10dp"
+                android:layout_below="@id/vDemarcate1"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/fredoka_one"
                 android:text="@string/most_recent_notif"
                 android:textSize="17sp" />
 
@@ -117,10 +128,21 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvRecentNotif"
                 android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/artifika"
                 android:text="@string/you_have_no_notif"
-                android:textStyle="italic"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="18sp"
+                android:textStyle="italic"
+                android:foreground="?android:attr/selectableItemBackground" />
+
+            <include
+                layout="@layout/line_demarcation"
+                android:id="@+id/vDemarcate2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/tvNotifText"
+                android:layout_marginTop="5dp"
+                android:visibility="visible"/>
 
         </RelativeLayout>
     </ScrollView>
@@ -129,5 +151,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/bottom_navigation"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="5dp" />
 </RelativeLayout>

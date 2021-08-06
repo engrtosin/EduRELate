@@ -132,12 +132,13 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
                 itemGroupBinding.ivGroupPic.setImageResource(R.drawable.outline_groups_24);
             }
             itemGroupBinding.tvGroupName.setText(group.getGroupName());
-            itemGroupBinding.tvGroupOwner.setText(User.getFullName(group.getOwner()));
             bindForJoiningGroup();
         }
 
         private void bindForJoiningGroup() {
             if (requestGroupIds != null) {
+                String owner = "Owner: " + User.getFullName(group.getOwner());
+                itemGroupBinding.tvGroupOwner.setText(owner);
                 itemGroupBinding.tvActRequestJoin.setVisibility(View.VISIBLE);
                 if (requestGroupIds.contains(group.getObjectId())) {
                     itemGroupBinding.tvActRequestJoin.setText("Request sent");
@@ -145,30 +146,6 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
                 }
                 itemGroupBinding.tvActRequestJoin.setText("Send a request");
             }
-        }
-
-        private boolean isGroupMember() {
-            ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
-            query.include(Member.KEY_USER);
-            query.whereContainedIn(Member.KEY_USER, Arrays.asList(ParseUser.getCurrentUser()));
-            query.whereEqualTo(Member.KEY_GROUP,group);
-            final boolean[] memberExists = new boolean[1];
-            query.getFirstInBackground(new GetCallback<Member>() {
-                @Override
-                public void done(Member object, ParseException e) {
-                    if (e != null) {
-                        Log.e(TAG,"Error while getting member: " + e.getMessage(),e);
-                        return;
-                    }
-                    Log.i(TAG,"Member successfully queried: " + group.getObjectId());
-                    if (object != null) {
-                        memberExists[0] = true;
-                        return;
-                    }
-                    memberExists[0] = false;
-                }
-            });
-            return memberExists[0];
         }
     }
 }

@@ -174,7 +174,6 @@ public class HomeActivity extends BaseActivity {
 
     private void updateLatestNotif() {
         if (latestNotif != null) {
-            binding.tvNotifText.setTypeface(null, Typeface.NORMAL);
             binding.tvNotifText.setText(latestNotif.getNotifText());
         }
     }

@@ -151,12 +151,6 @@ public class AboutGroupFragment extends Fragment implements NewPicDialogFragment
                 mListener.leave();
             }
         });
-        binding.tvActInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.inviteUser();
-            }
-        });
         binding.ivEditPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
