@@ -186,7 +186,7 @@ public class AllGroupsActivity extends BaseActivity {
         query.include(Group.KEY_CATEGORIES);
         query.whereNotEqualTo(Group.KEY_OWNER,User.edurelateBot);
         query.whereNotContainedIn(Group.KEY_OBJECT_ID,User.getCurrGroupIds());
-        query.orderByAscending(Group.KEY_GROUP_NAME);
+        query.orderByAscending(Group.KEY_GROUP_NAME_LOWER);
         query.findInBackground(new FindCallback<Group>() {
             @Override
             public void done(List<Group> objects, ParseException e) {

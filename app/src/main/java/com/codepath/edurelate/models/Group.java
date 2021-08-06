@@ -36,11 +36,13 @@ public class Group extends ParseObject {
     public static final String KEY_INVITEES = "invitees";
     public static final int OPEN_GROUP_CODE = 0;
     public static final int CLOSED_GROUP_CODE = 1;
+    public static final String KEY_GROUP_NAME_LOWER = "groupNameLower";
 
     /* ------------------- NEW GROUP METHODS -------------------------- */
     public static Member newNonFriendGroup(String groupName,int groupAccess, List<Category> categories) {
         Group group = new Group();
         group.setGroupName(groupName);
+        group.put(KEY_GROUP_NAME_LOWER,groupName.toLowerCase());
         group.put(KEY_GROUP_ACCESS,groupAccess);
         group.put(KEY_IS_FRIEND_GROUP,false);
         group.put(KEY_CATEGORIES,categories);

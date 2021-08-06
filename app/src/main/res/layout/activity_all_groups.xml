@@ -35,7 +35,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvActNewGroup"
             android:layout_marginStart="20dp"
-            android:text="Sort by:" />
+            android:text="Sort by:"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
 
         <Spinner
             android:id="@+id/spSortBy"
@@ -43,13 +46,21 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/lblSortBy"
             android:layout_alignTop="@id/lblSortBy"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginTop="-10dp"
+            android:layout_marginStart="0dp"/>
+
+        <View
+            android:id="@+id/vDemarcate"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/spSortBy"
+            android:background="@color/boundary_gray" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvGroups"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/lblSortBy"
+            android:layout_below="@id/vDemarcate"
             android:padding="10dp"
             android:layout_marginTop="10dp"/>
 
