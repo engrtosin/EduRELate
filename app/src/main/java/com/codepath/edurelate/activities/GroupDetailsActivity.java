@@ -19,6 +19,7 @@ import com.codepath.edurelate.databinding.ActivityGroupDetailsBinding;
 import com.codepath.edurelate.fragments.AboutGroupFragment;
 import com.codepath.edurelate.fragments.ChatFragment;
 import com.codepath.edurelate.fragments.DiscussionsFragment;
+import com.codepath.edurelate.fragments.FilesFragment;
 import com.codepath.edurelate.fragments.MembersFragment;
 import com.codepath.edurelate.interfaces.GroupDetailsInterface;
 import com.codepath.edurelate.models.Category;
@@ -52,6 +53,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
     MembersFragment membersFragment;
     ChatFragment chatFragment;
     DiscussionsFragment discussionsFragment;
+    FilesFragment filesFragment;
     MenuItem currItem;
     boolean drawerState = false;
 
@@ -149,7 +151,10 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                     }
                     if (item.getItemId() == R.id.action_files) {
                         binding.tvFragTitle.setText(getString(R.string.group_files));
-                        ft.replace(R.id.flContainer,AboutGroupFragment.newInstance(member,group));
+                        if (filesFragment == null) {
+                            filesFragment = FilesFragment.newInstance();
+                        }
+                        ft.replace(R.id.flContainer,filesFragment);
                         ft.commit();
                         binding.drawerLayout.close();
                         return true;
