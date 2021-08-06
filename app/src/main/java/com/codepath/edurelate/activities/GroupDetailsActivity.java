@@ -8,6 +8,7 @@ import androidx.transition.Transition;
 import androidx.transition.TransitionInflater;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -37,6 +38,7 @@ import com.parse.ParseUser;
 import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
 
     public static final String TAG = "GroupDetailsActivity";
     private static final int GO_ALL_USERS_CODE = 20;
+    public static final int PDF_CODE = 65;
 
     ActivityGroupDetailsBinding binding;
     BottomNavigationView bottomNavigation;
@@ -55,6 +58,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
     DiscussionsFragment discussionsFragment;
     FilesFragment filesFragment;
     MenuItem currItem;
+    FilesFragment.FilesListener pdfListener;
     boolean drawerState = false;
 
     @Override
@@ -153,6 +157,7 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
                         binding.tvFragTitle.setText(getString(R.string.group_files));
                         if (filesFragment == null) {
                             filesFragment = FilesFragment.newInstance();
+                            setFilesListener();
                         }
                         ft.replace(R.id.flContainer,filesFragment);
                         ft.commit();
@@ -265,5 +270,35 @@ public class GroupDetailsActivity extends BaseActivity implements GroupDetailsIn
         if (requestCode == GO_ALL_USERS_CODE) {
 
         }
+        if (data != null && requestCode == PDF_CODE) {
+            Uri uri = data.getData();
+            String uriString = uri.toString();
+            File pdfFile = new File(uriString);
+            String path = pdfFile.getAbsolutePath();
+            Log.d("uri",uriString + " " + path);
+            Log.i(TAG,"Sending file to fragment");
+            pdfListener.pdfResult(pdfFile);
+        }
+    }
+
+    public void setPDFTransferInterface(FilesFragment.FilesListener listener) {
+        pdfListener = listener;
+    }
+
+    public void setFilesListener() {
+        filesFragment.setListener(new FilesFragment.FilesListener() {
+            @Override
+            public void intentToFiles() {
+                Intent intent = new Intent();
+                intent.setType("application/pdf");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Pdf"),PDF_CODE);
+            }
+
+            @Override
+            public void pdfResult(File pdfFile) {
+
+            }
+        });
     }
 }
