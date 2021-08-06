@@ -38,8 +38,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static java.lang.Double.NaN;
-
 public class AllGroupsActivity extends BaseActivity {
 
     public static final String TAG = "AllGroupsActivity";
@@ -216,6 +214,9 @@ public class AllGroupsActivity extends BaseActivity {
             double sizeRank = 0;
             if (User.groupSizeStdDev != 0) {
                 sizeRank = pdf(group.getSize(),User.meanGroupSize,User.groupSizeStdDev);
+            }
+            if (Double.isNaN(sizeRank)) {
+                sizeRank = 0;
             }
             Log.i(TAG,"Size rank: " + sizeRank + " with group size: " + group.getSize());
             for (int j = 0; j < categories.size(); j++) {
