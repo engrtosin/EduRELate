@@ -339,6 +339,24 @@ public class AllGroupsActivity extends BaseActivity {
 
             @Override
             public void joinGroup(Group group) {
+                Log.i(TAG,"Send a request to join group: " + group);
+                User.sendGroupRequest(group);
+            }
+        });
+        byRankAdapter.setAdapterListener(new GroupsAdapter.GroupsAdapterInterface() {
+            @Override
+            public void groupClicked(Group group,View groupPic) {
+                goGroupDetailsActivity(group);
+            }
+
+            @Override
+            public void ownerClicked(ParseUser owner) {
+                goProfileActivity(owner);
+            }
+
+            @Override
+            public void joinGroup(Group group) {
+                Log.i(TAG,"Send a request to join group: " + group);
                 User.sendGroupRequest(group);
             }
         });
