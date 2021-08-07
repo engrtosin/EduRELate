@@ -122,7 +122,8 @@ public class GroupsFragment extends Fragment {
 
     private void queryExtraGroups() {
         ParseQuery<Member> query = ParseQuery.getQuery(Member.class);
-        query.include(Member.KEY_GROUP);
+        query.include(Member.KEY_GROUP+"."+Group.KEY_OWNER);
+        query.include(Member.KEY_GROUP+"."+Group.KEY_CATEGORIES);
         query.whereEqualTo(Member.KEY_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(Member.KEY_IS_FRIEND_GROUP,false);
         query.whereNotContainedIn(Member.KEY_GROUP,User.currUserGroups);
