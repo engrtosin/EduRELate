@@ -74,13 +74,13 @@ public class AllGroupsActivity extends BaseActivity {
         requestIds = new ArrayList<>();
         queryCurrUserRequests();
         groupsAdapter = new GroupsAdapter(AllGroupsActivity.this,groups,requestIds);
+        byRankAdapter = new GroupsAdapter(this,groupsByRank,requestIds);
         setAdapterInterface();
         glManager = new GridLayoutManager(AllGroupsActivity.this,SPAN_COUNT,
                 GridLayoutManager.VERTICAL,false);
         binding.rvGroups.setAdapter(groupsAdapter);
         binding.rvGroups.setLayoutManager(glManager);
         queryAllGroups();
-        byRankAdapter = new GroupsAdapter(this,groupsByRank,requestIds);
         setupSortSpinner();
         setClickListeners();
     }

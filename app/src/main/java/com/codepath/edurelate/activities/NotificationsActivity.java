@@ -16,6 +16,7 @@ import com.codepath.edurelate.BaseActivity;
 import com.codepath.edurelate.R;
 import com.codepath.edurelate.adapters.NotificationsAdapter;
 import com.codepath.edurelate.databinding.ActivityNotificationsBinding;
+import com.codepath.edurelate.models.Group;
 import com.codepath.edurelate.models.Invite;
 import com.codepath.edurelate.models.Notification;
 import com.codepath.edurelate.models.Request;
@@ -82,7 +83,8 @@ public class NotificationsActivity extends BaseActivity {
     private void queryNotifications() {
         ParseQuery<Notification> query = ParseQuery.getQuery(Notification.class);
         query.include(Notification.KEY_INVITE);
-        query.include(Notification.KEY_REQUEST+"."+Request.KEY_TO_GROUP);
+        query.include(Notification.KEY_REQUEST+"."+Request.KEY_TO_GROUP+"."+ Group.KEY_OWNER);
+        query.include(Notification.KEY_REQUEST+"."+Request.KEY_CREATOR);
         query.include(Notification.KEY_USER);
         query.whereEqualTo(Notification.KEY_USER,ParseUser.getCurrentUser());
         query.orderByDescending(Notification.KEY_CREATED_AT);
