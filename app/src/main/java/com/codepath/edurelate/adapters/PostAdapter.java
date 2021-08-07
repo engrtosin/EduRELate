@@ -17,6 +17,7 @@ import com.codepath.edurelate.models.User;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
@@ -99,7 +100,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             binding.tvPostTitle.setText(post.getTitle());
             binding.tvPostBody.setText(post.getBody(false));
             String fullName = "<b>" + User.getFullName(post.getPostOwner()) + "</b>";
-            String createdAt = post.getCreatedAt().toString();
+            Date creationDate = post.getCreatedAt();
+            String createdAt = "";
+            if (creationDate != null) {
+                createdAt = creationDate.toString();
+            }
+            else {
+                createdAt = new Date().toString();
+            }
             String[] dateList = createdAt.split(" ");
             createdAt =  dateList[0] + " " + dateList[1] + " " + dateList[2] + ", " + dateList[5] +
             " | " + dateList[3].substring(0,5);

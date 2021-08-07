@@ -68,6 +68,7 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_login_rectangle"
+            android:backgroundTint="@color/login_blue"
             android:text="Login"
             android:textColor="@color/white" />
 
@@ -81,6 +82,7 @@
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_signup_rectangle"
+            android:backgroundTint="@color/signup_green"
             android:text="Sign Up"
             android:textColor="@color/white" />
 
